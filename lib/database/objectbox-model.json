@@ -1,0 +1,165 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:3753969085187834715",
+      "lastPropertyId": "4:8911839718158500614",
+      "name": "Album",
+      "properties": [
+        {
+          "id": "1:6793528873903971774",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1996543169184153104",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:2389012060959067104",
+          "name": "picture",
+          "type": 23
+        },
+        {
+          "id": "4:8911839718158500614",
+          "name": "artistId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "1:2403088141832592711",
+          "relationTarget": "Artist"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:4729627340817172911",
+      "lastPropertyId": "3:1141855647864400535",
+      "name": "Artist",
+      "properties": [
+        {
+          "id": "1:6521791777869840391",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4007955896124351483",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:1141855647864400535",
+          "name": "picture",
+          "type": 23
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:2106505394272298166",
+      "lastPropertyId": "3:7353579647072852157",
+      "name": "Genre",
+      "properties": [
+        {
+          "id": "1:7739092095824926247",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3835786940586414800",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:7353579647072852157",
+          "name": "picture",
+          "type": 23
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:8496794660331941598",
+      "lastPropertyId": "10:6376765681133665625",
+      "name": "Song",
+      "properties": [
+        {
+          "id": "1:7177794810790779745",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:6174174371052304555",
+          "name": "title",
+          "type": 9
+        },
+        {
+          "id": "3:1957551580538011014",
+          "name": "path",
+          "type": 9
+        },
+        {
+          "id": "4:2938931899495651044",
+          "name": "picture",
+          "type": 23
+        },
+        {
+          "id": "5:4353517935591229210",
+          "name": "artistId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "2:8938190836539803908",
+          "relationTarget": "Artist"
+        },
+        {
+          "id": "6:8702351926890062935",
+          "name": "albumId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "3:5111472700926710710",
+          "relationTarget": "Album"
+        },
+        {
+          "id": "8:645802691372003559",
+          "name": "genreId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "5:1164243167884953154",
+          "relationTarget": "Genre"
+        },
+        {
+          "id": "9:2132772723654386675",
+          "name": "duration",
+          "type": 6
+        },
+        {
+          "id": "10:6376765681133665625",
+          "name": "year",
+          "type": 6
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "4:8496794660331941598",
+  "lastIndexId": "5:1164243167884953154",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [
+    2475274630606279602
+  ],
+  "retiredPropertyUids": [
+    229436917259459677
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}
