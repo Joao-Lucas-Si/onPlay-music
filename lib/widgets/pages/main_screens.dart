@@ -9,6 +9,7 @@ import 'package:myapp/widgets/pages/genres.dart';
 import 'package:myapp/widgets/pages/home.dart';
 import 'package:myapp/widgets/pages/Playlists.dart';
 import 'package:myapp/widgets/pages/albums.dart';
+import 'package:myapp/widgets/pages/player_screen.dart';
 import 'package:myapp/widgets/pages/songs.dart';
 import 'package:provider/provider.dart';
 
@@ -71,7 +72,7 @@ class _MainScreensState extends State<MainScreens> {
               Playlist(),
             ],
           ),
-          player.playingSong != null ? MiniPlayer() : const Stack()
+          player.playingSong != null ? PlayerScreen() : const Stack()
         ],
       ),
       appBar: AppBar(

@@ -16,7 +16,7 @@ class ArtistScreen extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(),
-        body: Expanded(
+        body: SingleChildScrollView(
             child: Column(
           children: [
             artist.picture != null
@@ -28,18 +28,8 @@ class ArtistScreen extends StatelessWidget {
               artist.name,
               textAlign: TextAlign.center,
             ),
-            Expanded(
-              child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: artist.songs.length,
-                  itemBuilder: (context, index) {
-                    final song = artist.songs[index];
-
-                    return SongCard(song: song, playlist: artist.songs,);
-                  }),
-            )
-          ],
-        )));
+            ...artist.songs.map((song) => SongCard(song: song, playlist: artist.songs,)).toList()
+          ]
+      )));
   }
 }

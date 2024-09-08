@@ -17,40 +17,35 @@ class Player extends StatelessWidget {
     final player = Provider.of<PlayerService>(context);
     final playerStore = Provider.of<PlayerStore>(context);
 
-    return Dismissible(
-        key: UniqueKey(),
-        direction: DismissDirection.down,
-        onDismissed: (_) {
-          GoRouter.of(context).pop();
-        },
-        child: Container(
-          color: colorStore.info?.lightMutedColor?.color,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              playerStore.playingSong?.picture != null
-                  ? Image.memory(playerStore.playingSong!.picture!)
-                  : const Icon(Icons.music_off),
-              Text(
-                playerStore.playingSong?.title ?? "",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    decoration: TextDecoration.none,
-                    color: colorStore.info?.darkVibrantColor?.color,
-                    fontSize: 20),
-              ),
-              Wrap(
-                alignment: WrapAlignment.center,
-                spacing: 20,
-                children: [PreviousButton(), PlayButton(), NextButton()],
-              ),
-              LinearProgressIndicator(
-                backgroundColor: colorStore.lightColor,
-                value: playerStore.position / (playerStore.playingSong?.duration ?? 0),
-                color: colorStore.darkColor ?? const Color(0xffffffff),
-              )
-            ],
+    return Container(
+      color: colorStore.info?.lightMutedColor?.color,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          playerStore.playingSong?.picture != null
+              ? Image.memory(playerStore.playingSong!.picture!)
+              : const Icon(Icons.music_off),
+          Text(
+            playerStore.playingSong?.title ?? "",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                decoration: TextDecoration.none,
+                color: colorStore.info?.darkVibrantColor?.color,
+                fontSize: 20),
           ),
-        ));
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 20,
+            children: [PreviousButton(), PlayButton(), NextButton()],
+          ),
+          LinearProgressIndicator(
+            backgroundColor: colorStore.lightColor,
+            value:
+                playerStore.position / (playerStore.playingSong?.duration ?? 0),
+            color: colorStore.darkColor ?? const Color(0xffffffff),
+          )
+        ],
+      ),
+    );
   }
 }
