@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/models/User.dart';
+import 'package:onPlay/models/User.dart';
 
 class UserForm extends StatefulWidget {
   @override

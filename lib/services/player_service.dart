@@ -1,12 +1,6 @@
-import 'dart:ffi';
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:metadata_god/metadata_god.dart';
-import 'package:myapp/dto/song.dart';
-import 'package:myapp/store/player_store.dart';
-import 'package:myapp/store/song_store.dart';
-import 'package:myapp/widgets/pages/Playlists.dart';
+import 'package:onPlay/store/player_store.dart';
 
 class PlayerService extends ChangeNotifier {
   final AudioPlayer _player = AudioPlayer();
@@ -22,6 +16,14 @@ class PlayerService extends ChangeNotifier {
   //   _player.play(DeviceFileSource(song.path));
   // }
 
+  setPosition(int seconds) {
+    print(store?.playingSong?.path);
+    if (store?.playingSong != null) {
+      _player.play(DeviceFileSource(store!.playingSong!.path),
+          position: Duration(seconds: seconds));
+    }
+  }
+
   pause() {
     _player.pause();
   }
@@ -31,6 +33,7 @@ class PlayerService extends ChangeNotifier {
   }
 
   update(PlayerStore store) {
+    this.store = store;
     if (store.playlist.isEmpty) {
       _player.stop();
     } else if (store.playingSong != null) {

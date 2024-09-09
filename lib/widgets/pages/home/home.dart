@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/widgets/components/layouts/user_header.dart';
+import 'package:onPlay/widgets/components/layouts/user_header.dart';
 
 class Home extends StatelessWidget {
   @override

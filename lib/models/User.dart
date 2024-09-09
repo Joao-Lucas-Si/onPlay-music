@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:myapp/constants/preferences_keys.dart';
+import 'package:onPlay/constants/preferences_keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserModel {

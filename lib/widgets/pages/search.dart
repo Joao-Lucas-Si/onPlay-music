@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:myapp/dto/artist.dart';
-import 'package:myapp/dto/genre.dart';
-import 'package:myapp/dto/song.dart';
-import 'package:myapp/dto/album.dart';
-import 'package:myapp/store/song_store.dart';
-import 'package:myapp/widgets/components/album_card.dart';
-import 'package:myapp/widgets/components/artist_card.dart';
-import 'package:myapp/widgets/components/genre_card.dart';
-import 'package:myapp/widgets/components/song_card.dart';
+import 'package:onPlay/dto/artist.dart';
+import 'package:onPlay/dto/genre.dart';
+import 'package:onPlay/dto/song.dart';
+import 'package:onPlay/dto/album.dart';
+import 'package:onPlay/store/song_store.dart';
+import 'package:onPlay/widgets/components/album_card.dart';
+import 'package:onPlay/widgets/components/artist_card.dart';
+import 'package:onPlay/widgets/components/genre_card.dart';
+import 'package:onPlay/widgets/components/song_card.dart';
 import 'package:provider/provider.dart';
 
 class Search extends StatefulWidget {

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/dto/artist.dart';
-import 'package:myapp/dto/genre.dart';
-import 'package:myapp/dto/song.dart';
-import 'package:myapp/dto/album.dart';
-import 'package:myapp/services/FilesService.dart';
+import 'package:onPlay/database/objectbox.dart';
+import 'package:onPlay/database/objectbox.g.dart';
+import 'package:onPlay/dto/artist.dart';
+import 'package:onPlay/dto/genre.dart';
+import 'package:onPlay/dto/song.dart';
+import 'package:onPlay/dto/album.dart';
+import 'package:onPlay/services/FilesService.dart';
 import 'package:collection/collection.dart';
+import 'package:path_provider/path_provider.dart';
 
 class SongStore extends ChangeNotifier {
   List<Song> _songs = [];
+  late ObjectBox _objectBox;
   String _loading = "";
   List<Artist> _artists = [];
   String _sort = "modification_date";
@@ -84,8 +88,9 @@ class SongStore extends ChangeNotifier {
     _setLoading("procurando artistas");
     List<Artist> artists = [];
     for (final song in songs) {
-      var artist = artists.firstWhereOrNull(
-          (value) => value.name == (song.metadata?.artist ?? "desconhecido"));
+      var artist = artists.firstWhereOrNull((value) =>
+          value.name.toLowerCase() ==
+          (song.metadata?.artist?.toLowerCase() ?? "desconhecido"));
       if (artist != null) {
         if (artist.picture == null && song.picture != null) {
           artist.picture = song.picture;
@@ -120,6 +125,7 @@ class SongStore extends ChangeNotifier {
         genre = Genre(
             name: song.metadata?.genre ?? "desconhecido",
             picture: song.picture);
+        genre.songs.add(song);
         genres.add(genre);
       }
     }
@@ -134,15 +140,17 @@ class SongStore extends ChangeNotifier {
     for (final song in songs) {
       var album = albums.firstWhereOrNull((value) =>
           value.name == (song.metadata?.album ?? "desconhecido") &&
-          value.artist.target?.name == song.artist.target?.name);
+          value.artist.target?.name.toLowerCase() ==
+              song.artist.target?.name.toLowerCase());
       if (album != null) {
         if (album.picture == null && song.picture != null) {
           album.picture = song.picture;
         }
         album.songs.add(song);
       } else {
-        final artist = artists.firstWhereOrNull(
-            (artist) => artist.name == song.metadata?.albumArtist);
+        final artist = artists.firstWhereOrNull((artist) =>
+            artist.name.toLowerCase() ==
+            song.artist.target?.name.toLowerCase());
 
         album = Album(
             name: song.metadata?.album ?? "desconhecido",
@@ -158,13 +166,50 @@ class SongStore extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<bool> _getDataFromDb() async {
+    _objectBox = await ObjectBox.create();
+
+    final songBox = _objectBox.boxSong;
+    final albumBox = _objectBox.albumBox;
+    final artistBox = _objectBox.artistBox;
+    final genreBox = _objectBox.genreBox;
+
+    print(songBox.count());
+    if (songBox.count() == 0) {
+      return false;
+    } else {
+      _songs = songBox.getAll();
+      _albums = albumBox.getAll();
+      _artists = artistBox.getAll();
+      _genres = genreBox.getAll();
+      return true;
+    }
+  }
+
+  _saveToDb() {
+    final songBox = _objectBox.boxSong;
+    final albumBox = _objectBox.albumBox;
+    final artistBox = _objectBox.artistBox;
+    final genreBox = _objectBox.genreBox;
+
+    songBox.removeAll();
+    albumBox.removeAll();
+    artistBox.removeAll();
+    genreBox.removeAll();
+    songBox.putMany(_songs);
+    albumBox.putMany(_albums);
+    artistBox.putMany(_artists);
+    genreBox.putMany(_genres);
+  }
+
   _getDataFromFiles() {
-    FilesService.getAllMusics(_setLoading).then((songs) {
+    FilesService.getAllMusics(_setLoading).then((songs) async {
       _songs = songs;
       notifyListeners();
       _getArtists();
       _getGenres();
       _getAlbums();
+      await _saveToDb();
     });
     // _saveLocal(_SongStoreData(
     //     songs: songs, artists: artists, genres: genres, albums: albums));
@@ -175,15 +220,10 @@ class SongStore extends ChangeNotifier {
   }
 
   _getData() async {
-    final storaged = null;
+    final collected = await _getDataFromDb();
 
-    if (storaged != null) {
-      _songs = storaged.songs;
-      _albums = storaged.albums;
-      _artists = storaged.artists;
-      _genres = storaged.genres;
-    } else {
-      _getDataFromFiles();
+    if (collected == false) {
+      await _getDataFromFiles();
     }
   }
 }

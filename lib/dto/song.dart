@@ -2,9 +2,9 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:metadata_god/metadata_god.dart';
-import 'package:myapp/dto/artist.dart';
-import 'package:myapp/dto/album.dart';
-import 'package:myapp/dto/genre.dart';
+import 'package:onPlay/dto/artist.dart';
+import 'package:onPlay/dto/album.dart';
+import 'package:onPlay/dto/genre.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()

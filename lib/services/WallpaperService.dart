@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:myapp/dto/song.dart';
+import 'package:onPlay/dto/song.dart';
 import 'package:wallpaper_handler/wallpaper_handler.dart';
 
 class WallpaperService {

@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:myapp/dto/album.dart';
-import 'package:myapp/dto/artist.dart';
-import 'package:myapp/services/player_service.dart';
-import 'package:myapp/store/player_store.dart';
-import 'package:myapp/store/song_store.dart';
-import 'package:myapp/widgets/components/player.dart';
-import 'package:myapp/widgets/components/mini_player.dart';
-import 'package:myapp/widgets/pages/Artist.dart';
-import 'package:myapp/widgets/pages/Config.dart';
-import 'package:myapp/widgets/pages/album.dart';
-import 'package:myapp/widgets/pages/main_screens.dart';
-import 'package:myapp/widgets/pages/search.dart';
-import 'package:myapp/widgets/pages/UserForm.dart';
+import 'package:onPlay/dto/album.dart';
+import 'package:onPlay/dto/artist.dart';
+import 'package:onPlay/dto/genre.dart';
+import 'package:onPlay/services/player_service.dart';
+import 'package:onPlay/store/player_store.dart';
+import 'package:onPlay/store/song_store.dart';
+import 'package:onPlay/widgets/components/player.dart';
+import 'package:onPlay/widgets/components/mini_player.dart';
+import 'package:onPlay/widgets/pages/artist.dart';
+import 'package:onPlay/widgets/pages/genre.dart';
+import 'package:onPlay/widgets/pages/settings/Config.dart';
+import 'package:onPlay/widgets/pages/album.dart';
+import 'package:onPlay/widgets/pages/main-screens/main_screens.dart';
+import 'package:onPlay/widgets/pages/player_screen.dart';
+import 'package:onPlay/widgets/pages/search.dart';
+import 'package:onPlay/widgets/pages/user_form.dart';
+import 'package:onPlay/widgets/pages/settings/about.dart';
 import 'package:provider/provider.dart';
 
 final router = GoRouter(routes: [
@@ -22,6 +26,12 @@ final router = GoRouter(routes: [
   ),
   GoRoute(
     path: "/settings",
+    routes: [
+      GoRoute(
+        path: "about",
+        builder: (context, state) => _Layout(body: About()),
+      )
+    ],
     builder: (context, state) => _Layout(body: Config()),
   ),
   GoRoute(
@@ -35,6 +45,11 @@ final router = GoRouter(routes: [
     builder: (context, state) =>
         _Layout(body: AlbumScreen(album: state.extra as Album)),
   ),
+  GoRoute(
+      path: "/genre",
+      builder: (context, state) => _Layout(
+            body: GenreScreen(genre: state.extra as Genre),
+          )),
   GoRoute(
     path: "/artist",
     builder: (context, state) =>
@@ -52,11 +67,16 @@ class _Layout extends StatelessWidget {
   Widget build(BuildContext context) {
     final player = Provider.of<PlayerStore>(context);
 
-    return Stack(
+    return Scaffold(
+        body: Stack(
       children: [
         body,
-        player.playingSong != null ? MiniPlayer() : const Stack()
+        player.playingSong != null
+            ? PlayerScreen(
+                inMainScreen: false,
+              )
+            : const Stack()
       ],
-    );
+    ));
   }
 }

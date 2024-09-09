@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:myapp/constants/preferences_keys.dart';
-import 'package:myapp/dto/song.dart';
+import 'package:onPlay/constants/preferences_keys.dart';
+import 'package:onPlay/dto/song.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SongModel {

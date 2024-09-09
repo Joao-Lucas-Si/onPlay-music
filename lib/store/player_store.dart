@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/dto/song.dart';
+import 'package:onPlay/dto/song.dart';
 
 enum PlayModes { none, replayPlaylist, replayMusic }
 
@@ -32,6 +32,13 @@ class PlayerStore extends ChangeNotifier {
     notifyListeners();
   }
 
+  int? get currentSong => _currentSong;
+
+  set currentSong(int? song) {
+    _currentSong = song;
+    notifyListeners();
+  }
+
   Song? get playingSong =>
       _currentSong != null ? _playlist[_currentSong!] : null;
 
@@ -50,6 +57,7 @@ class PlayerStore extends ChangeNotifier {
     if (hasNext) {
       _currentSong = _currentSong! + 1;
     }
+    notifyListeners();
   }
 
   bool get hasPrevious => _currentSong != null && _currentSong! > 0;
@@ -58,6 +66,7 @@ class PlayerStore extends ChangeNotifier {
     if (hasPrevious) {
       _currentSong = _currentSong! - 1;
     }
+    notifyListeners();
   }
 
   onPause() {

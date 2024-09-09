@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/dto/album.dart';
-import 'package:myapp/store/song_store.dart';
-import 'package:myapp/widgets/components/album_card.dart';
+import 'package:onPlay/dto/album.dart';
+import 'package:onPlay/store/song_store.dart';
+import 'package:onPlay/widgets/components/album_card.dart';
 import 'package:provider/provider.dart';
 
 class Albums extends StatefulWidget {

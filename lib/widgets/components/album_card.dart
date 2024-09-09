@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:myapp/dto/album.dart';
+import 'package:onPlay/dto/album.dart';
 
 class AlbumCard extends StatelessWidget {
   final Album album;
@@ -17,7 +17,10 @@ class AlbumCard extends StatelessWidget {
           children: [
             Text(album.name),
             album.picture != null
-                ? Image.memory(album.picture!)
+                ? Image.memory(
+                    album.picture!,
+                    width: MediaQuery.of(context).size.width,
+                  )
                 : const Icon(Icons.disc_full),
             Text(album.songs.length.toString())
           ],

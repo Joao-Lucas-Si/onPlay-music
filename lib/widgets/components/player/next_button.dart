@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/store/color_store.dart';
-import 'package:myapp/store/player_store.dart';
+import 'package:onPlay/store/color_store.dart';
+import 'package:onPlay/store/player_store.dart';
 import 'package:provider/provider.dart';
 
 class NextButton extends StatelessWidget {
   final bool isSmall;
-
-  const NextButton({this.isSmall = false, super.key});
+  final bool isInMiniPlayer;
+  const NextButton(
+      {this.isSmall = false, this.isInMiniPlayer = false, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,9 @@ class NextButton extends StatelessWidget {
             icon: Icon(
               Icons.skip_next,
               size: isSmall ? 20 : 40,
-              color: colorStore.darkColor,
+              color: isInMiniPlayer
+                  ? colorStore.dominantColor
+                  : colorStore.lightColor,
             ))
         : const SizedBox(
             width: 40,

@@ -1,7 +1,8 @@
 import 'dart:io';
-
+import 'package:path/path.dart' as p;
 import 'package:metadata_god/metadata_god.dart';
-import 'package:myapp/dto/song.dart';
+import 'package:onPlay/dto/song.dart';
+import 'package:external_path/external_path.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class FilesService {
@@ -26,22 +27,44 @@ class FilesService {
     final permission = await requestPermission();
     if (permission) {
       if (setLoading != null) setLoading("acessando armazenamento");
-      Directory dir = Directory("storage/emulated/0/Music");
+      List<String> paths = [];
+      try {
+        paths = await ExternalPath.getExternalStorageDirectories();
+      } catch (e) {
+        paths = ["/storage/emulated/0"];
+      }
+      if (setLoading != null) setLoading(paths.toString());
+      print(paths);
+
+      // paths = paths
+      //     .expand((path) =>
+      //         ["Music", "Download"].map((folder) => p.join(path, folder)))
+      //     .toList();
+      paths = ["Music"].map((folder) => p.join(paths[0], folder)).toList();
+
+      print(paths);
+
       List<FileSystemEntity> musics = [];
-      if (setLoading != null) setLoading("coletando todos os arquivos");
-      final files = dir.listSync(
-        recursive: true,
-        followLinks: false,
-      );
-      if (setLoading != null) setLoading("filtrando arquivos mp3");
-      for (FileSystemEntity entity in files) {
-        String path = entity.path;
-        if (["mp3", "opus", "m4a"]
-            .any((extension) => path.endsWith('.${extension}'))) {
-          if (setLoading != null) {
-            setLoading("arquivo ${(await extractMetadata(path)).title ?? ""}");
+      for (final path in paths) {
+        if (setLoading != null) setLoading("acessando armazenamento");
+        if (setLoading != null) setLoading(path);
+        Directory dir = Directory(path);
+        if (setLoading != null) setLoading("coletando todos os arquivos");
+        final files = dir.listSync(
+          recursive: true,
+          followLinks: false,
+        );
+        if (setLoading != null) setLoading("filtrando arquivos mp3");
+        for (FileSystemEntity entity in files) {
+          String path = entity.path;
+          if (["mp3", "opus", "m4a"]
+              .any((extension) => path.endsWith('.$extension'))) {
+            if (setLoading != null) {
+              setLoading(
+                  "arquivo ${(await extractMetadata(path)).title ?? ""}");
+            }
+            musics.add(entity);
           }
-          musics.add(entity);
         }
       }
       return musics;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/store/color_store.dart';
-import 'package:myapp/store/player_store.dart';
+import 'package:onPlay/store/color_store.dart';
+import 'package:onPlay/store/player_store.dart';
 import 'package:provider/provider.dart';
 
 class PreviousButton extends StatelessWidget {
@@ -16,7 +16,7 @@ class PreviousButton extends StatelessWidget {
             icon: Icon(
               Icons.skip_previous,
               size: 40,
-              color: colorStore.darkColor,
+              color: colorStore.lightColor,
             ))
         : const SizedBox(
             width: 40,

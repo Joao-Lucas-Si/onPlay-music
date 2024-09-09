@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:myapp/dto/song.dart';
-import 'package:myapp/store/player_store.dart';
-import 'package:myapp/store/song_store.dart';
+import 'package:onPlay/dto/song.dart';
+import 'package:onPlay/store/player_store.dart';
+import 'package:onPlay/store/song_store.dart';
+import 'package:onPlay/widgets/components/mini_artist_card.dart';
+import 'package:onPlay/widgets/components/popup/music_popup.dart';
 import 'package:provider/provider.dart';
 
 class SongCard extends StatelessWidget {
   final Song song;
+  final bool showArtist;
 
   final List<Song>? playlist;
 
-  const SongCard({super.key, required this.song, this.playlist});
+  const SongCard(
+      {super.key, this.showArtist = true, required this.song, this.playlist});
   @override
   Widget build(BuildContext context) {
     final store = Provider.of<PlayerStore>(context);
@@ -24,14 +28,24 @@ class SongCard extends StatelessWidget {
       },
       child: Column(
         children: [
-          Text(
-            song.title ?? "",
-            textAlign: TextAlign.center,
-          ),
           song.picture != null
               ? Image.memory(song.picture!)
               : const Icon(Icons.music_off, size: 200),
-          Text(song.artist.target?.name ?? "desconhecido"),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            SizedBox(
+                width: MediaQuery.of(context).size.width * 0.85,
+                child: Text(
+                  song.title ?? "",
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                )),
+            MusicPopup()
+          ]),
+          song.artist.target != null && showArtist
+              ? MiniArtistCard(artist: song.artist.target!)
+              : Container(
+                  width: 0,
+                )
         ],
       ),
     );

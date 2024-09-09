@@ -1,5 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:myapp/dto/song.dart';
+import 'package:onPlay/dto/song.dart';
 
 class NotificationService {
   final plugin = FlutterLocalNotificationsPlugin();

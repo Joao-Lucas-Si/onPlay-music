@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:myapp/dto/artist.dart';
-import 'package:myapp/dto/song.dart';
+import 'package:onPlay/dto/artist.dart';
+import 'package:onPlay/dto/song.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()

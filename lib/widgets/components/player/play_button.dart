@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/services/ColorService.dart';
-import 'package:myapp/services/player_service.dart';
-import 'package:myapp/store/color_store.dart';
-import 'package:myapp/store/player_store.dart';
+import 'package:onPlay/services/color_service.dart';
+import 'package:onPlay/services/player_service.dart';
+import 'package:onPlay/store/color_store.dart';
+import 'package:onPlay/store/player_store.dart';
 import 'package:provider/provider.dart';
 
 class PlayButton extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/dto/artist.dart';
-import 'package:myapp/store/song_store.dart';
-import 'package:myapp/widgets/components/genre_card.dart';
+import 'package:onPlay/dto/artist.dart';
+import 'package:onPlay/store/song_store.dart';
+import 'package:onPlay/widgets/components/genre_card.dart';
 import 'package:provider/provider.dart';
 
 class Genres extends StatefulWidget {

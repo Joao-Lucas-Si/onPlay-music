@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/dto/album.dart';
-import 'package:myapp/widgets/components/song_card.dart';
+import 'package:onPlay/dto/album.dart';
+import 'package:onPlay/widgets/components/mini_artist_card.dart';
+import 'package:onPlay/widgets/components/song_card.dart';
 
 class AlbumScreen extends StatelessWidget {
   Album album;
@@ -11,7 +12,7 @@ class AlbumScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(),
-        body: Expanded(
+        body: SingleChildScrollView(
             child: Column(
           children: [
             album.picture != null
@@ -21,19 +22,17 @@ class AlbumScreen extends StatelessWidget {
               album.name,
               textAlign: TextAlign.center,
             ),
-            Expanded(
-              child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: album.songs.length,
-                  itemBuilder: (context, index) {
-                    final song = album.songs[index];
-
-                    return SongCard(
-                      song: song,
-                      playlist: album.songs,
-                    );
-                  }),
+            album.artist.target != null
+                ? MiniArtistCard(artist: album.artist.target!)
+                : Container(
+                    height: 0,
+                    width: 0,
+                  ),
+            ...album.songs.map(
+              (song) => SongCard(
+                song: song,
+                playlist: album.songs,
+              ),
             )
           ],
         )));

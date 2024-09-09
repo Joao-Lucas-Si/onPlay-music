@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/store/song_store.dart';
-import 'package:myapp/widgets/components/layouts/songs_popup.dart';
+import 'package:onPlay/store/song_store.dart';
+import 'package:onPlay/widgets/components/layouts/songs_popup.dart';
 import 'package:provider/provider.dart';
 
 class SongsPopup extends StatefulWidget {

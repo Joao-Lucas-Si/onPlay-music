@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:myapp/models/User.dart';
+import 'package:onPlay/models/User.dart';
 
 class UserHeader extends StatelessWidget {
   @override
