@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:onPlay/dto/artist.dart';
+import 'package:onPlay/models/artist.dart';
 
 class ArtistCard extends StatelessWidget {
-  Artist artist;
+  final Artist artist;
 
-  ArtistCard({super.key, required this.artist});
+  const ArtistCard({super.key, required this.artist});
 
   @override
   Widget build(BuildContext context) {

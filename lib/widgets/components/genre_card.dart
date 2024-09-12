@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:onPlay/dto/genre.dart';
+import 'package:onPlay/models/genre.dart';
 
 class GenreCard extends StatelessWidget {
-  Genre genre;
+  final Genre genre;
 
-  GenreCard({super.key, required this.genre});
+  const GenreCard({super.key, required this.genre});
 
   @override
   Widget build(BuildContext context) {

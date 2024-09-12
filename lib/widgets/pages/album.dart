@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:onPlay/dto/album.dart';
+import 'package:onPlay/models/album.dart';
 import 'package:onPlay/widgets/components/mini_artist_card.dart';
 import 'package:onPlay/widgets/components/song_card.dart';
 
 class AlbumScreen extends StatelessWidget {
-  Album album;
+  final Album album;
 
-  AlbumScreen({required this.album});
+  const AlbumScreen({super.key, required this.album});
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:onPlay/dto/song.dart';
+import 'package:onPlay/models/song.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
@@ -16,4 +16,12 @@ class Genre {
   final songs = ToMany<Song>();
 
   Genre({required this.name, this.picture});
+
+  @override
+  bool operator ==(Object other) {
+    if (other is Genre) {
+      return (other.id != 0 && id != 0 && other.id == id) || other.name == name;
+    }
+    return false;
+  }
 }

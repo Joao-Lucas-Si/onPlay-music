@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:onPlay/dto/song.dart';
+import 'package:onPlay/models/song.dart';
 import 'package:onPlay/store/player_store.dart';
-import 'package:onPlay/store/song_store.dart';
 import 'package:onPlay/widgets/components/mini_artist_card.dart';
 import 'package:onPlay/widgets/components/popup/music_popup.dart';
 import 'package:provider/provider.dart';
@@ -35,11 +33,11 @@ class SongCard extends StatelessWidget {
             SizedBox(
                 width: MediaQuery.of(context).size.width * 0.85,
                 child: Text(
-                  song.title ?? "",
+                  song.title,
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                 )),
-            MusicPopup()
+            MusicPopup(song: song)
           ]),
           song.artist.target != null && showArtist
               ? MiniArtistCard(artist: song.artist.target!)

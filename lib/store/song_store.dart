@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:onPlay/database/objectbox.dart';
-import 'package:onPlay/database/objectbox.g.dart';
-import 'package:onPlay/dto/artist.dart';
-import 'package:onPlay/dto/genre.dart';
-import 'package:onPlay/dto/song.dart';
-import 'package:onPlay/dto/album.dart';
-import 'package:onPlay/services/FilesService.dart';
+import 'package:onPlay/models/artist.dart';
+import 'package:onPlay/models/managers/box_manager.dart';
+import 'package:onPlay/models/genre.dart';
+import 'package:onPlay/models/managers/album_manager.dart';
+import 'package:onPlay/models/managers/artist_manager.dart';
+import 'package:onPlay/models/managers/genre_manager.dart';
+import 'package:onPlay/models/managers/song_manager.dart';
+import 'package:onPlay/models/song.dart';
+import 'package:onPlay/models/album.dart';
+import 'package:onPlay/services/files_service.dart';
 import 'package:collection/collection.dart';
-import 'package:path_provider/path_provider.dart';
 
 class SongStore extends ChangeNotifier {
+  late BoxManager _boxManager;
+  late SongManager _songManager;
+  late GenreManager _genreManager;
+  late AlbumManager _albumManager;
+  late ArtistManager _artistManager;
   List<Song> _songs = [];
-  late ObjectBox _objectBox;
   String _loading = "";
   List<Artist> _artists = [];
   String _sort = "modification_date";
@@ -59,147 +65,254 @@ class SongStore extends ChangeNotifier {
 
   List<Song> get songs => _songs;
 
-  SongStore() {
-    _getData();
+  init(BoxManager boxManager) {
+    if (boxManager.started) {
+      _boxManager = boxManager;
+      _artistManager = _boxManager.artistManager;
+      _songManager = _boxManager.songManager;
+      _albumManager = _boxManager.albumManager;
+      _genreManager = _boxManager.genreManager;
+      _getData();
+    }
+    return this;
   }
 
-  // _saveLocal(_SongStoreData data) async {
-  //   final prefs = SharedPreferencesAsync();
+  SongStore() {
+    activeListeners();
+  }
 
-  //   prefs.setString(_key, json.encode(data));
-  // }
+  activeListeners() async {
+    final dirs = await FilesService.getMusicFolders();
+    print(dirs);
+    for (final dir in dirs) {
+      print(dir);
+      FilesService.listenDirectory(
+        dir: dir,
+        onCreate: (event) async {
+          final song = await FilesService.getSongByPath(event.path);
+          debugPrint("nova musica $song");
+          _saveOneToDb(song);
+          _songs.add(song);
+          notifyListeners();
+        },
+        onMove: (event) {
+          debugPrint("musica movida");
+          final oldPath = event.path;
+          final newPath = event.destination;
 
-  // Future<_SongStoreData?> _getLocal() async {
-  //   final prefs = SharedPreferencesAsync();
+          if (newPath != null) {
+            final song = _songs.firstWhere((song) => song.path == oldPath);
 
-  //   final jsonStr = await prefs.getString(_key);
+            debugPrint("musica $song movida de $oldPath para $newPath");
 
-  //   return jsonStr != null
-  //       ? _SongStoreData.fromJson(json.decode(jsonStr))
-  //       : null;
-  // }
+            song.path = newPath;
+
+            _saveOneToDb(song);
+            notifyListeners();
+          }
+        },
+        onDelete: (event) {
+          debugPrint("musica deletada");
+          final song = _songs.firstWhere((song) => song.path == event.path);
+
+          debugPrint("$song foi deletado");
+          _songs.remove(song);
+
+          _remove(song);
+
+          notifyListeners();
+        },
+        onModify: (event) async {
+          updateSong(event.path);
+        },
+      );
+    }
+  }
+
+  updateSong(String path) async {
+    debugPrint("musica modificada");
+    final newData = await FilesService.getSongByPath(path);
+    final oldData = _songs.firstWhere((song) => song.path == path);
+
+    oldData.year = newData.year;
+    oldData.duration = newData.duration;
+    oldData.title = newData.title;
+    oldData.modified = newData.modified;
+    oldData.picture = newData.picture;
+
+    final album = _getAlbum(oldData);
+    final artist = _getArtist(oldData);
+    final genre = _getGenre(oldData);
+
+    if (album != oldData.album.target) {
+      album.songs.add(oldData);
+      oldData.album.target = album;
+    }
+
+    _addAlbum(album);
+    _addArtist(artist);
+    _addGenre(genre);
+
+    oldData.artist.target = newData.artist.target;
+    oldData.genre.target = newData.genre.target;
+
+    debugPrint("$oldData foi modificado para $newData");
+
+    _saveOneToDb(oldData);
+
+    notifyListeners();
+  }
 
   _setLoading(String loading) {
     _loading = loading;
     notifyListeners();
   }
 
+  Artist _getArtist(Song song) {
+    var artist = _artists.firstWhereOrNull((value) =>
+        value.name.toLowerCase() ==
+        (song.metadata?.artist?.toLowerCase() ?? "desconhecido"));
+    if (artist != null) {
+      if (artist.picture == null && song.picture != null) {
+        artist.picture = song.picture;
+      }
+    } else {
+      artist = Artist(
+          name: song.metadata?.artist ?? "desconhecido", picture: song.picture);
+    }
+    song.artist.target = artist;
+    artist.songs.add(song);
+    return artist;
+  }
+
   _getArtists() {
     _setLoading("procurando artistas");
-    List<Artist> artists = [];
+    _artists = [];
     for (final song in songs) {
-      var artist = artists.firstWhereOrNull((value) =>
-          value.name.toLowerCase() ==
-          (song.metadata?.artist?.toLowerCase() ?? "desconhecido"));
-      if (artist != null) {
-        if (artist.picture == null && song.picture != null) {
-          artist.picture = song.picture;
-        }
-        artist.songs.add(song);
-      } else {
-        artist = Artist(
-            name: song.metadata?.artist ?? "desconhecido",
-            picture: song.picture);
-        artist.songs.add(song);
-        artists.add(artist);
-      }
-      song.artist.target = artist;
+      final artist = _getArtist(song);
+      _addArtist(artist);
     }
     _setLoading("");
-    _artists = artists;
     notifyListeners();
+  }
+
+  _addArtist(Artist artist) {
+    if (!_artists.contains(artist)) _artists.add(artist);
+  }
+
+  Genre _getGenre(Song song) {
+    var genre = _genres.firstWhereOrNull((value) =>
+        value.name.toLowerCase() ==
+        (song.metadata?.genre?.toLowerCase() ?? "desconhecido"));
+    if (genre != null) {
+      if (genre.picture == null && song.picture != null) {
+        genre.picture = song.picture;
+      }
+    } else {
+      genre = Genre(
+          name: song.metadata != null &&
+                  song.metadata!.genre != null &&
+                  song.metadata!.genre!.trim() != ""
+              ? song.metadata!.genre!
+              : "desconhecido",
+          picture: song.picture);
+    }
+    genre.songs.add(song);
+    song.genre.target = genre;
+    return genre;
   }
 
   _getGenres() {
     _setLoading("procurando gêneros");
-    List<Genre> genres = [];
+    _genres = [];
     for (final song in songs) {
-      var genre = genres.firstWhereOrNull(
-          (value) => value.name == (song.metadata?.genre ?? "desconhecido"));
-      if (genre != null) {
-        if (genre.picture == null && song.picture != null) {
-          genre.picture = song.picture;
-        }
-        genre.songs.add(song);
-      } else {
-        genre = Genre(
-            name: song.metadata?.genre ?? "desconhecido",
-            picture: song.picture);
-        genre.songs.add(song);
-        genres.add(genre);
-      }
+      final genre = _getGenre(song);
+      _addGenre(genre);
     }
     _setLoading("");
-    _genres = genres;
     notifyListeners();
+  }
+
+  _addGenre(Genre genre) {
+    if (!_genres.contains(genre)) _genres.add(genre);
+  }
+
+  Album _getAlbum(Song song) {
+    var album = _albums.firstWhereOrNull((value) =>
+        value.name.toLowerCase() == song.metadata?.album?.toLowerCase() &&
+        song.metadata?.artist?.toLowerCase() ==
+            value.artist.target?.name.toLowerCase());
+    if (album != null) {
+      if (album.picture == null && song.picture != null) {
+        album.picture = song.picture;
+      }
+      album.songs.add(song);
+    } else {
+      final artist = _artists.firstWhereOrNull((artist) =>
+          artist.name.toLowerCase() == song.artist.target?.name.toLowerCase());
+
+      album = Album(
+          name: song.metadata?.album ?? "desconhecido", picture: song.picture);
+      album.artist.target = artist;
+
+      if (artist != null) artist.albums.add(album);
+    }
+    return album;
   }
 
   _getAlbums() {
     _setLoading("procurando albuns");
-    List<Album> albums = [];
+    _albums = [];
     for (final song in songs) {
-      var album = albums.firstWhereOrNull((value) =>
-          value.name == (song.metadata?.album ?? "desconhecido") &&
-          value.artist.target?.name.toLowerCase() ==
-              song.artist.target?.name.toLowerCase());
-      if (album != null) {
-        if (album.picture == null && song.picture != null) {
-          album.picture = song.picture;
-        }
-        album.songs.add(song);
-      } else {
-        final artist = artists.firstWhereOrNull((artist) =>
-            artist.name.toLowerCase() ==
-            song.artist.target?.name.toLowerCase());
-
-        album = Album(
-            name: song.metadata?.album ?? "desconhecido",
-            picture: song.picture);
-        album.artist.target = artist;
-        album.songs.add(song);
-        if (artist != null) artist.albums.add(album);
-        albums.add(album);
-      }
+      final album = _getAlbum(song);
+      album.songs.add(song);
+      _addAlbum(album);
     }
     _setLoading("");
-    _albums = albums;
     notifyListeners();
   }
 
+  _addAlbum(Album album) {
+    if (!_albums.contains(album)) _albums.add(album);
+  }
+
   Future<bool> _getDataFromDb() async {
-    _objectBox = await ObjectBox.create();
-
-    final songBox = _objectBox.boxSong;
-    final albumBox = _objectBox.albumBox;
-    final artistBox = _objectBox.artistBox;
-    final genreBox = _objectBox.genreBox;
-
-    print(songBox.count());
-    if (songBox.count() == 0) {
+    if (_songManager.count() == 0) {
       return false;
     } else {
-      _songs = songBox.getAll();
-      _albums = albumBox.getAll();
-      _artists = artistBox.getAll();
-      _genres = genreBox.getAll();
+      _songs = _songManager.getAll();
+      _albums = _albumManager.getAll();
+      _artists = _artistManager.getAll();
+      _genres = _genreManager.getAll();
       return true;
     }
   }
 
-  _saveToDb() {
-    final songBox = _objectBox.boxSong;
-    final albumBox = _objectBox.albumBox;
-    final artistBox = _objectBox.artistBox;
-    final genreBox = _objectBox.genreBox;
+  _remove(Song song) {
+    _songManager.remove(song);
+  }
 
-    songBox.removeAll();
-    albumBox.removeAll();
-    artistBox.removeAll();
-    genreBox.removeAll();
-    songBox.putMany(_songs);
-    albumBox.putMany(_albums);
-    artistBox.putMany(_artists);
-    genreBox.putMany(_genres);
+  _saveToDb() {
+    _songManager.removeAll();
+    _albumManager.removeAll();
+    _artistManager.removeAll();
+    _genreManager.removeAll();
+    _songManager.saveAll(_songs);
+    _albumManager.saveAll(_albums);
+    _artistManager.saveAll(_artists);
+    _genreManager.saveAll(_genres);
+  }
+
+  _saveOneToDb(Song song) {
+    final album = _getAlbum(song);
+    final artist = _getArtist(song);
+    final genre = _getGenre(song);
+
+    _addAlbum(album);
+    _addArtist(artist);
+    _addGenre(genre);
+
+    _songManager.save(song);
   }
 
   _getDataFromFiles() {

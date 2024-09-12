@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:onPlay/dto/album.dart';
+import 'package:onPlay/models/album.dart';
 
 class AlbumCard extends StatelessWidget {
   final Album album;

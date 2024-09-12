@@ -1,8 +1,8 @@
 import 'package:onPlay/database/objectbox.g.dart';
-import 'package:onPlay/dto/album.dart';
-import 'package:onPlay/dto/artist.dart';
-import 'package:onPlay/dto/genre.dart';
-import 'package:onPlay/dto/song.dart';
+import 'package:onPlay/models/album.dart';
+import 'package:onPlay/models/artist.dart';
+import 'package:onPlay/models/genre.dart';
+import 'package:onPlay/models/song.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
@@ -27,7 +27,7 @@ class ObjectBox {
     final docsDir = await getApplicationDocumentsDirectory();
     // Future<Store> openStore() {...} is defined in the generated objectbox.g.dart
     final store =
-        await openStore(directory: p.join(docsDir.path, "obx-example"));
+        await openStore(directory: p.join(docsDir.path, "obx"));
     return ObjectBox._create(store);
   }
 }

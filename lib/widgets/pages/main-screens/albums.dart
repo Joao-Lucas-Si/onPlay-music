@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:onPlay/dto/album.dart';
+import 'package:onPlay/models/album.dart';
 import 'package:onPlay/store/song_store.dart';
 import 'package:onPlay/widgets/components/album_card.dart';
 import 'package:provider/provider.dart';

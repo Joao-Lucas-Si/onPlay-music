@@ -40,10 +40,10 @@ class _LayoutSettings {
   }
 
   static toObject(Map<String, dynamic> map) {
-    final obj = InterfaceSettings();
-    obj.primaryColor = map["primaryColor"];
-    obj.useMusicColors = map["useMusicColors"];
-    return obj;
+    // final obj = InterfaceSettings();
+    // obj.primaryColor = map["primaryColor"];
+    // obj.colorSchemeType = map["colorSchemeType"];
+    // return obj;
   }
 }
 
@@ -68,9 +68,26 @@ enum MusicCardStyle {
   const MusicCardStyle(this._name);
 }
 
+enum ColorSchemeType {
+  selectedColor("selected"),
+  totalMusicColor("totalMusic"),
+  partialMusicColor("partialMusic"),
+  appColor("app");
+
+  static fromString(String name) {
+    return ColorSchemeType.values.firstWhere((value) => value.name == name);
+  }
+
+  final String name;
+
+  const ColorSchemeType(this.name);
+}
+
 class InterfaceSettings {
   int primaryColor = 0xFF673AB7;
-  bool useMusicColors = true;
+  ColorSchemeType colorSchemeType = ColorSchemeType.totalMusicColor;
+  bool darkTheme = true;
+
   MusicCardStyle style = MusicCardStyle.normal;
 
   toJson() {
@@ -79,7 +96,7 @@ class InterfaceSettings {
       toEncodable: (object) {
         final jsonMap = Map<String, dynamic>();
         jsonMap["primaryColor"] = primaryColor;
-        jsonMap["useMusicColors"] = useMusicColors;
+        jsonMap["colorSchemeType"] = colorSchemeType.name;
       },
     );
   }
@@ -87,7 +104,7 @@ class InterfaceSettings {
   static toObject(Map<String, dynamic> map) {
     final obj = InterfaceSettings();
     obj.primaryColor = map["primaryColor"];
-    obj.useMusicColors = map["useMusicColors"];
+    obj.colorSchemeType = ColorSchemeType.fromString(map["colorSchemeType"]);
     return obj;
   }
 }

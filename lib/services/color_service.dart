@@ -1,7 +1,5 @@
 import 'dart:typed_data';
-
 import 'package:flutter/widgets.dart';
-import 'package:metadata_god/metadata_god.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 class ColorService {
@@ -14,11 +12,13 @@ class ColorService {
     return hslDark.toColor();
   }
 
-  static const lightenNivel = 0.7;
+  static const lightenNivel = 0.6;
 
-  static const mediumNivel = 0.5;
+  static const mediumNivel = 0.35;
 
-  static const darkenNivel = 0.3;
+  static const minMediumNivel = 0.2;
+
+  static const darkenNivel = 0.15;
 
   Color toLighten(Color color, [double amount = .1]) {
     // assert(amount >= 0 && amount <= 1);
@@ -31,21 +31,21 @@ class ColorService {
   }
 
   bool isMedium(Color color) {
-    final hsl = HSLColor.fromColor(color);
+    final lightness = getLigthness(color);
 
-    return hsl.lightness == mediumNivel;
+    return lightness <= mediumNivel && lightness >= minMediumNivel;
   }
 
   bool isDarken(Color color) {
     final hsl = HSLColor.fromColor(color);
 
-    return hsl.lightness < darkenNivel;
+    return hsl.lightness <= darkenNivel;
   }
 
   bool isLighten(Color color) {
     final hsl = HSLColor.fromColor(color);
 
-    return hsl.lightness > lightenNivel;
+    return hsl.lightness >= lightenNivel;
   }
 
   getLigthness(Color color) {

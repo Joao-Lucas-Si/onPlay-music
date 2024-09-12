@@ -10,6 +10,7 @@ class SongsPopup extends StatefulWidget {
 class _SongsPopup extends State<SongsPopup> {
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final sorts = [
       PopupOption(value: "name", text: "nome"),
       PopupOption(value: "year", text: "ano"),
@@ -24,6 +25,8 @@ class _SongsPopup extends State<SongsPopup> {
     final store = Provider.of<SongStore>(context);
 
     return PopupMenuButton<String>(
+        color: colorScheme.primary,
+        iconColor: colorScheme.secondary,
         onSelected: (value) {
           if (["desc", "asc"].contains(value)) {
             store.order = value;
@@ -67,10 +70,21 @@ class PopupItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selected = currentValue == value;
+    final colorScheme = Theme.of(context).colorScheme;
     return PopupMenuItem(
         value: value,
         child: Row(
-          children: [Checkbox(value: selected, onChanged: (e) {}), Text(text)],
+          children: [
+            Checkbox(
+              value: selected,
+              onChanged: (e) {},
+              activeColor: colorScheme.secondary,
+            ),
+            Text(
+              text,
+              style: TextStyle(color: colorScheme.secondary),
+            ),
+          ],
         ));
   }
 }

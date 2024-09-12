@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:onPlay/dto/artist.dart';
+import 'package:onPlay/models/artist.dart';
 import 'package:onPlay/store/song_store.dart';
 import 'package:onPlay/widgets/components/artist_card.dart';
 import 'package:provider/provider.dart';

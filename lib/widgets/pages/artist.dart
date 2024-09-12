@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:onPlay/dto/artist.dart';
-import 'package:onPlay/store/song_store.dart';
+import 'package:onPlay/models/artist.dart';
 import 'package:onPlay/widgets/components/album_card.dart';
 import 'package:onPlay/widgets/components/song_card.dart';
-import 'package:provider/provider.dart';
 
 class ArtistScreen extends StatelessWidget {
   final Artist artist;
@@ -12,8 +10,8 @@ class ArtistScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final store = Provider.of<SongStore>(context);
-    print(artist.albums);
+    //final store = Provider.of<SongStore>(context);
+
     return Scaffold(
         appBar: AppBar(),
         body: SingleChildScrollView(

@@ -1,9 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
-import 'package:onPlay/dto/song.dart';
+import 'package:onPlay/models/song.dart';
 import 'package:onPlay/services/color_service.dart';
-import 'package:onPlay/services/player_service.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 class ColorStorage extends ChangeNotifier {
@@ -33,15 +32,26 @@ class ColorStorage extends ChangeNotifier {
           colorInfo?.darkMutedColor?.color ?? colorInfo?.darkMutedColor?.color;
       lightColor =
           colorInfo?.vibrantColor?.color ?? colorInfo?.mutedColor?.color;
+
+      if ((lightColor?.computeLuminance() ?? 0) <
+          (dominantColor?.computeLuminance() ?? 0)) {
+        final tempDominantColor = dominantColor;
+        final tempLightColor = lightColor;
+        dominantColor = tempLightColor;
+        lightColor = tempDominantColor;
+      }
+
+      darkColor ??= dominantColor;
+
       if (dominantColor != null) {
-        if (colorService.isMedium(dominantColor!)) {
+        if (!colorService.isMedium(dominantColor!)) {
           final lightness = colorService.getLigthness(dominantColor!);
-          if (lightness < ColorService.mediumNivel) {
+          if (lightness < ColorService.minMediumNivel) {
             dominantColor = colorService.toLighten(
-                dominantColor!, lightness - ColorService.mediumNivel);
+                dominantColor!, ColorService.minMediumNivel - lightness);
           } else {
             dominantColor = colorService.toDarken(
-                dominantColor!, ColorService.mediumNivel - lightness);
+                dominantColor!, lightness - ColorService.mediumNivel);
           }
         }
       }

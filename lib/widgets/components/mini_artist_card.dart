@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:onPlay/dto/artist.dart';
+import 'package:onPlay/models/artist.dart';
 
 class MiniArtistCard extends StatelessWidget {
   final Artist artist;

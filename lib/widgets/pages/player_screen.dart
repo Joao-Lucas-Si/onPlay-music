@@ -5,7 +5,7 @@ import 'package:onPlay/widgets/components/player.dart';
 class PlayerScreen extends StatefulWidget {
   final bool inMainScreen;
 
-  PlayerScreen({required this.inMainScreen, super.key});
+  const PlayerScreen({required this.inMainScreen, super.key});
 
   @override
   State<StatefulWidget> createState() => _PlayerScreen();
@@ -39,6 +39,7 @@ class _PlayerScreen extends State<PlayerScreen> {
         changePlayer();
       },
     );
+    final colorScheme = Theme.of(context).colorScheme;
     return DraggableScrollableSheet(
         initialChildSize: minSize,
         controller: draggableController,
@@ -50,7 +51,7 @@ class _PlayerScreen extends State<PlayerScreen> {
               controller: scrollController,
               child: Container(
                   alignment: AlignmentDirectional.topCenter,
-                  color: const Color(0XFF000000),
+                  color: colorScheme.primary,
                   height: MediaQuery.of(context).size.height -
                       (widget.inMainScreen ? 55 : 0),
                   child: playerType));

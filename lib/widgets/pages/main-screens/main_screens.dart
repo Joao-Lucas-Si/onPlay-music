@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:onPlay/store/player_store.dart';
 import 'package:onPlay/store/song_store.dart';
 import 'package:onPlay/widgets/components/layouts/songs_popup.dart';
-import 'package:onPlay/widgets/components/mini_player.dart';
 import 'package:onPlay/widgets/pages/main-screens/artists.dart';
 import 'package:onPlay/widgets/pages/main-screens/genres.dart';
 import 'package:onPlay/widgets/pages/home/home.dart';
@@ -35,14 +34,16 @@ class _MainScreensState extends State<MainScreens> {
   Widget build(BuildContext context) {
     final store = Provider.of<SongStore>(context);
     final player = Provider.of<PlayerStore>(context);
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: currentPage,
         showUnselectedLabels: false,
+        backgroundColor: colorScheme.primary,
         mouseCursor: MouseCursor.defer,
-        unselectedItemColor: Theme.of(context).colorScheme.tertiary,
-        selectedItemColor: Theme.of(context).colorScheme.secondary,
+        unselectedItemColor: colorScheme.tertiary,
+        selectedItemColor: colorScheme.secondary,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(
@@ -62,26 +63,33 @@ class _MainScreensState extends State<MainScreens> {
         children: [
           Scaffold(
               appBar: AppBar(
-                title: const Text("onPlay"),
+                title: Text(
+                  "onPlay",
+                  style: TextStyle(color: colorScheme.secondary),
+                ),
                 centerTitle: true,
                 leading: IconButton(
                     onPressed: () {
                       GoRouter.of(context).push("/search");
                     },
-                    icon: const Icon(Icons.search)),
+                    icon: Icon(
+                      Icons.search,
+                      color: colorScheme.secondary,
+                    )),
                 actions: [
                   IconButton(
                       onPressed: () {
                         store.refresh();
                       },
-                      icon: const Icon(Icons.refresh)),
+                      icon: Icon(Icons.refresh, color: colorScheme.secondary)),
                   currentPage == 1
                       ? SongsPopup()
                       : IconButton(
                           onPressed: () {
                             GoRouter.of(context).push("/settings");
                           },
-                          icon: const Icon(Icons.settings)),
+                          icon: Icon(Icons.settings,
+                              color: colorScheme.secondary)),
                 ],
               ),
               body: PageView(
@@ -94,7 +102,7 @@ class _MainScreensState extends State<MainScreens> {
                 children: [
                   Home(),
                   Songs(),
-                  Artists(),
+                  const Artists(),
                   Genres(),
                   Albums(),
                   Playlist(),

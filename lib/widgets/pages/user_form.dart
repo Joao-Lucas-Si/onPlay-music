@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:onPlay/models/User.dart';
+import 'package:onPlay/localModels/User.dart';
+import 'package:onPlay/store/song_store.dart';
+import 'package:provider/provider.dart';
 
 class UserForm extends StatefulWidget {
   @override
@@ -25,6 +27,7 @@ class _UserfFormState extends State {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         appBar: AppBar(),
         body: user != null
