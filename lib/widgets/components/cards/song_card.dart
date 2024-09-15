@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/models/song.dart';
 import 'package:onPlay/store/player_store.dart';
-import 'package:onPlay/widgets/components/mini_artist_card.dart';
+import 'package:onPlay/widgets/components/cards/mini_artist_card.dart';
 import 'package:onPlay/widgets/components/popup/music_popup.dart';
 import 'package:provider/provider.dart';
 

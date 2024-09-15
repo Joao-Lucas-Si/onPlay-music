@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:onPlay/widgets/components/mini_player.dart';
-import 'package:onPlay/widgets/components/player.dart';
+import 'package:onPlay/widgets/components/player/mini_player.dart';
+import 'package:onPlay/widgets/components/player/player.dart';
 
 class PlayerScreen extends StatefulWidget {
   final bool inMainScreen;

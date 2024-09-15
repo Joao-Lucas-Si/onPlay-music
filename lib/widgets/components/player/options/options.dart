@@ -1,0 +1,42 @@
+import 'package:flutter/material.dart';
+import 'package:onPlay/enums/volume_type.dart';
+import 'package:onPlay/localModels/settings/settings.dart';
+import 'package:onPlay/models/song.dart';
+import 'package:onPlay/services/colors/color_adapter.dart';
+import 'package:onPlay/widgets/components/player/options/change_palette.dart';
+import 'package:onPlay/widgets/components/player/options/change_theme.dart';
+import 'package:onPlay/widgets/components/player/options/music_flow.dart';
+import 'package:onPlay/widgets/components/player/options/velocity.dart';
+import 'package:onPlay/widgets/components/player/volume/volume_option.dart';
+import 'package:provider/provider.dart';
+
+class Options extends StatelessWidget {
+  final Song song;
+  final MusicColor musicColor;
+  const Options({super.key, required this.song, required this.musicColor});
+  @override
+  Widget build(BuildContext context) {
+    final settings = Provider.of<Settings>(context);
+    final layout = settings.layout;
+    final interface = settings.interface;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        interface.showChangeTheme ? ChangeTheme(musicColor: musicColor) : null,
+        VelocityController(musicColor: musicColor),
+        // MusicPopup(
+        //   song: playerStore.playingSong!,
+        // ),
+        MusicFlow(musicColor: musicColor),
+        layout.volumeType == VolumeType.option
+            ? VolumeOption(
+                musicColor: musicColor,
+              )
+            : null,
+        interface.showChangePalette
+            ? ChangePalette(musicColor: musicColor)
+            : null
+      ].nonNulls.toList(),
+    );
+  }
+}

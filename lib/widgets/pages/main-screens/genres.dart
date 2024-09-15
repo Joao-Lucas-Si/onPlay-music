@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/store/song_store.dart';
-import 'package:onPlay/widgets/components/genre_card.dart';
+import 'package:onPlay/widgets/components/cards/genre_card.dart';
 import 'package:provider/provider.dart';
 
 class Genres extends StatefulWidget {

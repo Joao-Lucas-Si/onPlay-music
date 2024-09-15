@@ -1,7 +1,4 @@
 import 'dart:io';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:onPlay/models/song.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -23,7 +20,6 @@ class WallpaperService {
         file.path,
         WallpaperLocation.homeScreen,
       );
-      print(result);
     }
   }
 }

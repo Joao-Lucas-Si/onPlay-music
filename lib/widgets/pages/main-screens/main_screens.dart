@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:onPlay/enums/main_screens.dart';
+import 'package:onPlay/localModels/settings/settings.dart';
 import 'package:onPlay/store/player_store.dart';
 import 'package:onPlay/store/song_store.dart';
 import 'package:onPlay/widgets/components/layouts/songs_popup.dart';
@@ -12,12 +14,13 @@ import 'package:onPlay/widgets/pages/player_screen.dart';
 import 'package:onPlay/widgets/pages/main-screens/songs.dart';
 import 'package:provider/provider.dart';
 
-class MainScreens extends StatefulWidget {
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
   @override
   State<StatefulWidget> createState() => _MainScreensState();
 }
 
-class _MainScreensState extends State<MainScreens> {
+class _MainScreensState extends State<MainScreen> {
   var initialPage = 0;
 
   var currentPage = 0;
@@ -29,9 +32,55 @@ class _MainScreensState extends State<MainScreens> {
     pageController = PageController(initialPage: initialPage);
   }
 
+  List<BottomNavigationBarItem> getBottomNavigationItems(
+      List<MainScreens> mainScreens) {
+    return mainScreens.map((screen) {
+      switch (screen) {
+        case MainScreens.home:
+          return const BottomNavigationBarItem(
+              icon: Icon(Icons.home), label: "Home");
+        case MainScreens.musics:
+          return const BottomNavigationBarItem(
+              icon: Icon(Icons.music_note), label: "musicas");
+        case MainScreens.albums:
+          return const BottomNavigationBarItem(
+              icon: Icon(Icons.disc_full), label: "Albuns");
+        case MainScreens.artists:
+          return const BottomNavigationBarItem(
+              icon: Icon(Icons.person), label: "Artistas");
+        case MainScreens.genres:
+          return const BottomNavigationBarItem(
+              icon: Icon(Icons.category), label: "Gêneros");
+        case MainScreens.playlists:
+          return const BottomNavigationBarItem(
+              icon: Icon(Icons.playlist_play), label: "Playlist");
+      }
+    }).toList();
+  }
+
+  List<Widget> getMainScreens(List<MainScreens> mainScreens) {
+    return mainScreens.map((screen) {
+      switch (screen) {
+        case MainScreens.home:
+          return const Home();
+        case MainScreens.musics:
+          return const Songs();
+        case MainScreens.playlists:
+          return Playlist();
+        case MainScreens.albums:
+          return Albums();
+        case MainScreens.genres:
+          return const Genres();
+        case MainScreens.artists:
+          return const Artists();
+      }
+    }).toList();
+  }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final settings = Provider.of<Settings>(context);
     final store = Provider.of<SongStore>(context);
     final player = Provider.of<PlayerStore>(context);
     final colorScheme = Theme.of(context).colorScheme;
@@ -44,16 +93,7 @@ class _MainScreensState extends State<MainScreens> {
         mouseCursor: MouseCursor.defer,
         unselectedItemColor: colorScheme.tertiary,
         selectedItemColor: colorScheme.secondary,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.music_note), label: "musicas"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Artistas"),
-          BottomNavigationBarItem(icon: Icon(Icons.category), label: "Gêneros"),
-          BottomNavigationBarItem(icon: Icon(Icons.disc_full), label: "Albuns"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.playlist_play), label: "Playlist"),
-        ],
+        items: getBottomNavigationItems(settings.layout.mainScreens),
         onTap: (value) => {
           pageController.animateToPage(value,
               duration: const Duration(microseconds: 400), curve: Curves.ease)
@@ -99,17 +139,18 @@ class _MainScreensState extends State<MainScreens> {
                     currentPage = value;
                   })
                 },
-                children: [
-                  Home(),
-                  Songs(),
-                  const Artists(),
-                  Genres(),
-                  Albums(),
-                  Playlist(),
-                ],
+                children: getMainScreens(settings.layout.mainScreens),
+                // children: [
+                //   Home(),
+                //   Songs(),
+                //   const Artists(),
+                //   Genres(),
+                //   Albums(),
+                //   Playlist(),
+                // ],
               )),
           player.playingSong != null
-              ? PlayerScreen(
+              ? const PlayerScreen(
                   inMainScreen: true,
                 )
               : const Stack()

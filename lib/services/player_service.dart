@@ -1,6 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:onPlay/services/WallpaperService.dart';
+import 'package:onPlay/services/wallpaper_service.dart';
 import 'package:onPlay/store/player_store.dart';
 
 class PlayerService extends ChangeNotifier {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/models/artist.dart';
-import 'package:onPlay/widgets/components/album_card.dart';
-import 'package:onPlay/widgets/components/song_card.dart';
+import 'package:onPlay/widgets/components/cards/album_card.dart';
+import 'package:onPlay/widgets/components/cards/song_card.dart';
 
 class ArtistScreen extends StatelessWidget {
   final Artist artist;

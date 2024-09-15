@@ -25,9 +25,13 @@ class FilesService {
     required Function(FileSystemDeleteEvent event) onDelete,
     required Function(FileSystemModifyEvent event) onModify,
   }) {
-    dir.watch(recursive: true,).listen(
+    dir
+        .watch(
+      recursive: true,
+    )
+        .listen(
       (event) {
-        debugPrint("evento, ${event.path}");
+        debugPrint("evento, ${event.isDirectory}");
         if (!event.isDirectory &&
             musicExtensions
                 .any((extension) => event.path.endsWith(extension))) {

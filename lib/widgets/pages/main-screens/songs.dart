@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/models/song.dart';
 import 'package:onPlay/store/song_store.dart';
-import 'package:onPlay/widgets/components/song_card.dart';
+import 'package:onPlay/widgets/components/cards/song_card.dart';
 import 'package:provider/provider.dart';
 
 class Songs extends StatefulWidget {

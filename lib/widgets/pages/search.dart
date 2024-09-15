@@ -5,10 +5,10 @@ import 'package:onPlay/models/genre.dart';
 import 'package:onPlay/models/song.dart';
 import 'package:onPlay/models/album.dart';
 import 'package:onPlay/store/song_store.dart';
-import 'package:onPlay/widgets/components/album_card.dart';
-import 'package:onPlay/widgets/components/artist_card.dart';
-import 'package:onPlay/widgets/components/genre_card.dart';
-import 'package:onPlay/widgets/components/song_card.dart';
+import 'package:onPlay/widgets/components/cards/album_card.dart';
+import 'package:onPlay/widgets/components/cards/artist_card.dart';
+import 'package:onPlay/widgets/components/cards/genre_card.dart';
+import 'package:onPlay/widgets/components/cards/song_card.dart';
 import 'package:provider/provider.dart';
 
 class Search extends StatefulWidget {

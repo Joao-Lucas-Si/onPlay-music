@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/models/genre.dart';
-import 'package:onPlay/widgets/components/song_card.dart';
+import 'package:onPlay/widgets/components/cards/song_card.dart';
 
 class GenreScreen extends StatelessWidget {
   final Genre genre;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/models/album.dart';
-import 'package:onPlay/widgets/components/mini_artist_card.dart';
-import 'package:onPlay/widgets/components/song_card.dart';
+import 'package:onPlay/widgets/components/cards/mini_artist_card.dart';
+import 'package:onPlay/widgets/components/cards/song_card.dart';
 
 class AlbumScreen extends StatelessWidget {
   final Album album;

@@ -1,0 +1,106 @@
+import 'dart:convert';
+import 'package:onPlay/enums/main_screens.dart';
+import 'package:onPlay/enums/player_element.dart';
+import 'package:onPlay/enums/volume_type.dart';
+
+class LayoutSettings {
+  var showArtists = true;
+  var showGenres = true;
+  var showPlaylists = true;
+  var _mainScreens = [
+    MainScreens.home,
+    MainScreens.musics,
+    MainScreens.artists,
+    MainScreens.genres,
+    MainScreens.playlists,
+  ];
+
+  var _hiddenScreens = [MainScreens.albums];
+
+  List<MainScreens> get hiddenScreens => _hiddenScreens;
+
+  List<MainScreens> get mainScreens => _mainScreens;
+
+  replaceMainScreens(int oldIndex, int newIndex) {
+    if (newIndex > oldIndex) {
+      newIndex -= 1;
+    }
+    final screen = _mainScreens[oldIndex];
+    _mainScreens.removeAt(oldIndex);
+    _mainScreens.insert(newIndex, screen);
+    _notify();
+  }
+
+  hiddenScreen(MainScreens screen) {
+    hiddenScreens.add(screen);
+    mainScreens.remove(screen);
+    _notify();
+  }
+
+  showScreen(MainScreens screen) {
+    hiddenScreens.remove(screen);
+    mainScreens.add(screen);
+    _notify();
+  }
+
+  VolumeType _volumeType = VolumeType.levels;
+
+  VolumeType get volumeType => _volumeType;
+
+  set volumeType(VolumeType value) {
+    _volumeType = value;
+    _notify();
+  }
+
+  late final Function() _notify;
+  List<PlayerElement> _playerElements = [
+    PlayerElement.picture,
+    PlayerElement.options,
+    PlayerElement.title,
+    PlayerElement.position,
+    PlayerElement.controls,
+    PlayerElement.volume,
+  ];
+
+  List<PlayerElement> get playerElements => _playerElements;
+
+  set playerElements(List<PlayerElement> value) {
+    _playerElements = value;
+    _notify();
+  }
+
+  LayoutSettings(Function() notify) {
+    _notify = notify;
+  }
+
+  toJson() {
+    return json.encode(
+      this,
+      toEncodable: (object) {
+        final jsonMap = {};
+        jsonMap["showArtists"] = showArtists;
+        jsonMap["showGenres"] = showGenres;
+        jsonMap["showPlaylists "] = showPlaylists;
+        return jsonMap;
+      },
+    );
+  }
+
+  static toObject(Map<String, dynamic> map) {
+    // final obj = InterfaceSettings();
+    // obj.primaryColor = map["primaryColor"];
+    // obj.colorSchemeType = map["colorSchemeType"];
+    // return obj;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (other is LayoutSettings) {
+      return showArtists == other.showArtists &&
+          showGenres == other.showArtists &&
+          other.showPlaylists == showPlaylists &&
+          other.volumeType == volumeType;
+    }
+    return false;
+  }
+}

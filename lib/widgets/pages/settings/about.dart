@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:onPlay/widgets/pages/settings/Config.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class About extends StatelessWidget {
+  static const path = "${Config.path}/$route";
+  static const route = "about";
+
+  const About({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

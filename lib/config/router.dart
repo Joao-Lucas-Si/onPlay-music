@@ -4,11 +4,8 @@ import 'package:onPlay/models/album.dart';
 import 'package:onPlay/models/artist.dart';
 import 'package:onPlay/models/genre.dart';
 import 'package:onPlay/models/song.dart';
-import 'package:onPlay/services/player_service.dart';
 import 'package:onPlay/store/player_store.dart';
-import 'package:onPlay/store/song_store.dart';
-import 'package:onPlay/widgets/components/player.dart';
-import 'package:onPlay/widgets/components/mini_player.dart';
+import 'package:onPlay/widgets/components/player/player.dart';
 import 'package:onPlay/widgets/pages/artist.dart';
 import 'package:onPlay/widgets/pages/genre.dart';
 import 'package:onPlay/widgets/pages/settings/Config.dart';
@@ -16,6 +13,9 @@ import 'package:onPlay/widgets/pages/album.dart';
 import 'package:onPlay/widgets/pages/main-screens/main_screens.dart';
 import 'package:onPlay/widgets/pages/player_screen.dart';
 import 'package:onPlay/widgets/pages/search.dart';
+import 'package:onPlay/widgets/pages/settings/interface.dart';
+import 'package:onPlay/widgets/pages/settings/layout.dart';
+import 'package:onPlay/widgets/pages/settings/player.dart';
 import 'package:onPlay/widgets/pages/song_form.dart';
 import 'package:onPlay/widgets/pages/user_form.dart';
 import 'package:onPlay/widgets/pages/settings/about.dart';
@@ -24,24 +24,40 @@ import 'package:provider/provider.dart';
 final router = GoRouter(routes: [
   GoRoute(
     path: "/",
-    builder: (context, state) => MainScreens(),
+    builder: (context, state) => const MainScreen(),
   ),
   GoRoute(
-    path: "/settings",
+    path: Config.path,
     routes: [
       GoRoute(
-        path: "about",
-        builder: (context, state) => _Layout(body: About()),
-      )
+        path: About.route,
+        builder: (context, state) => const _Layout(body: About()),
+      ),
+      GoRoute(
+        path: InterfaceSettingsScreen.route,
+        builder: (context, state) =>
+            const _Layout(body: InterfaceSettingsScreen()),
+      ),
+      GoRoute(
+        path: LayoutSettingsScreen.route,
+        builder: (context, state) =>
+            const _Layout(body: LayoutSettingsScreen()),
+      ),
+      GoRoute(
+        path: PlayerSettingsScreens.route,
+        builder: (context, state) =>
+            const _Layout(body: PlayerSettingsScreens()),
+      ),
     ],
-    builder: (context, state) => _Layout(body: Config()),
+    builder: (context, state) => const _Layout(body: Config()),
   ),
   GoRoute(
     path: "/search",
     builder: (context, state) => _Layout(body: Search()),
   ),
   GoRoute(
-      path: "/user", builder: (context, state) => _Layout(body: UserForm())),
+      path: "/user",
+      builder: (context, state) => const _Layout(body: UserForm())),
   GoRoute(
     path: "/album",
     builder: (context, state) =>
@@ -57,7 +73,7 @@ final router = GoRouter(routes: [
     builder: (context, state) =>
         _Layout(body: ArtistScreen(artist: state.extra as Artist)),
   ),
-  GoRoute(path: "/player", builder: (context, state) => Player()),
+  GoRoute(path: "/player", builder: (context, state) => const Player()),
   GoRoute(
       path: SongForm.url,
       builder: (context, state) => SongForm(song: state.extra as Song))
@@ -77,7 +93,7 @@ class _Layout extends StatelessWidget {
       children: [
         body,
         player.playingSong != null
-            ? PlayerScreen(
+            ? const PlayerScreen(
                 inMainScreen: false,
               )
             : const Stack()

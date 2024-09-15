@@ -1,77 +1,85 @@
-import 'dart:ui';
-
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:onPlay/localModels/settings/settings.dart';
 import 'package:onPlay/models/song.dart';
-import 'package:onPlay/services/color_service.dart';
+import 'package:onPlay/services/colors/color_service.dart';
+import 'package:onPlay/services/colors/color_adapter.dart';
 import 'package:palette_generator/palette_generator.dart';
+import 'package:provider/provider.dart';
 
 class ColorStorage extends ChangeNotifier {
-  Color? dominantColor;
-  Color? darkColor;
-  Color? lightColor;
-  final colorService = ColorService();
+  Color? background;
+  Color? other;
+  Color? text;
+  late ColorService colorService;
   PaletteGenerator? info;
   Song? song;
+  List<MusicColor> colors = [];
+  List<Song> playlist = [];
+  BuildContext context;
 
-  setColors(Song song) {
+  ColorStorage({required this.context}) {
+    colorService = ColorService();
+  }
+
+  setColors(Song? song) {
     _setStates(song);
     notifyListeners();
   }
 
-  update(Song? song) {
-    this.song = song;
-    if (song != null) setColors(song);
+  update(Song? song, List<Song> playlist, BuildContext context) {
+    this.context = context;
+    final settings = Provider.of<Settings>(context, listen: false);
+
+    if (settings.change) {
+      settings.desableChange();
+      _setAllColors();
+    } else if (song != this.song) {
+      this.song = song;
+      setColors(song);
+    } else if (!listEquals(playlist, this.playlist)) {
+      this.playlist = playlist;
+      _setAllColors();
+    }
+
     return this;
   }
 
-  _setStates(Song song) async {
-    if (song.picture != null) {
-      final colorInfo = await colorService.getDominantColor(song.picture!);
-      dominantColor = colorInfo?.dominantColor?.color;
-      darkColor =
-          colorInfo?.darkMutedColor?.color ?? colorInfo?.darkMutedColor?.color;
-      lightColor =
-          colorInfo?.vibrantColor?.color ?? colorInfo?.mutedColor?.color;
-
-      if ((lightColor?.computeLuminance() ?? 0) <
-          (dominantColor?.computeLuminance() ?? 0)) {
-        final tempDominantColor = dominantColor;
-        final tempLightColor = lightColor;
-        dominantColor = tempLightColor;
-        lightColor = tempDominantColor;
+  _setStates(Song? song) async {
+    final index = playlist
+        .indexOf(song ?? Song(path: "", title: "", duration: 0, year: 0));
+    if (song != null && index != -1) {
+      MusicColor colorInfo;
+      try {
+        colorInfo = colors[index];
+      } catch (e) {
+        colorInfo = await _getColors(song);
       }
-
-      darkColor ??= dominantColor;
-
-      if (dominantColor != null) {
-        if (!colorService.isMedium(dominantColor!)) {
-          final lightness = colorService.getLigthness(dominantColor!);
-          if (lightness < ColorService.minMediumNivel) {
-            dominantColor = colorService.toLighten(
-                dominantColor!, ColorService.minMediumNivel - lightness);
-          } else {
-            dominantColor = colorService.toDarken(
-                dominantColor!, lightness - ColorService.mediumNivel);
-          }
-        }
-      }
-      if (lightColor != null) {
-        final isLighten = colorService.isLighten(lightColor!);
-        if (!isLighten) {
-          lightColor = colorService.toLighten(
-              lightColor!,
-              ColorService.lightenNivel -
-                  colorService.getLigthness(lightColor!));
-        }
-      }
-      if (darkColor != null) {
-        final isDarken = colorService.isDarken(darkColor!);
-        if (!isDarken) {
-          darkColor = colorService.toDarken(darkColor!,
-              colorService.getLigthness(darkColor!) - ColorService.darkenNivel);
-        }
-      }
-      info = colorInfo;
+      background = colorInfo.background;
+      other = colorInfo.other;
+      text = colorInfo.text;
+    } else {
+      final colorInfo = await _getColors(song);
+      background = colorInfo.background;
+      other = colorInfo.other;
+      text = colorInfo.text;
+      notifyListeners();
     }
+  }
+
+  Future<MusicColor> _getColors(Song? song) async {
+    final colorInfo =
+        await colorService.getMusicColors(song?.picture, context: context);
+    return colorInfo;
+  }
+
+  _setAllColors() async {
+    colors = [];
+    for (final song in playlist) {
+      colors.add(await _getColors(song));
+      notifyListeners();
+    }
+    _setStates(song);
+    notifyListeners();
   }
 }
