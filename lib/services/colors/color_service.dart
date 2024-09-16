@@ -2,8 +2,8 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:onPlay/constants/themes/purple.dart';
-import 'package:onPlay/enums/color_palette.dart';
-import 'package:onPlay/enums/color_theme.dart';
+import 'package:onPlay/enums/colors/color_palette.dart';
+import 'package:onPlay/enums/colors/color_theme.dart';
 import 'package:onPlay/localModels/settings/settings.dart';
 import 'package:onPlay/services/colors/color_adapter.dart';
 import 'package:onPlay/services/colors/color_type.dart';
@@ -111,10 +111,47 @@ class ColorService {
 
     types = types.reversed.toList();
 
+    final similars = {
+      ColorGroup.red: [ColorGroup.yellow, ColorGroup.orange, ColorGroup.pink],
+      ColorGroup.yellow: [ColorGroup.red, ColorGroup.orange],
+      ColorGroup.orange: [ColorGroup.red, ColorGroup.yellow],
+      ColorGroup.pink: [ColorGroup.red, ColorGroup.purple],
+      ColorGroup.purple: [ColorGroup.blue, ColorGroup.pink],
+      ColorGroup.blue: [ColorGroup.purple]
+    };
+
     while (background == null || text == null || other == null) {
-      final possibilities =
+      debugPrint(
+          "grupos: ${types.map((possibility) => possibility.type.group).toSet()}");
+      var possibilities = types.where((type) =>
+          (![ColorGroup.white, ColorGroup.black].contains(type.type.group)) &&
+          (!used.contains(type.type.group) &&
+              (!used.any((used) {
+                try {
+                  return similars[used]?.contains(type.type.group) ?? false;
+                } catch (e) {
+                  return false;
+                }
+              }))));
+      final possibilitiesWithWhiteAndBlack =
           types.where((type) => !used.contains(type.type.group));
-      if (possibilities.isNotEmpty) {
+      final possibilitiesWithSimilars = types.where((type) =>
+          (!used.contains(type.type.group)) &&
+          (![ColorGroup.white, ColorGroup.black].contains(type.type.group)));
+
+      debugPrint(
+          "cores ${possibilities.map((possibility) => possibility.type.group).toSet()}");
+      debugPrint(
+          "similar ${possibilitiesWithSimilars.map((possibility) => possibility.type.group).toSet()}");
+
+      if (possibilities.isNotEmpty ||
+          possibilitiesWithWhiteAndBlack.isNotEmpty ||
+          possibilitiesWithSimilars.isNotEmpty) {
+        possibilities = possibilities.isEmpty
+            ? (possibilitiesWithSimilars.isEmpty
+                ? possibilitiesWithWhiteAndBlack
+                : possibilitiesWithSimilars)
+            : possibilities;
         if (background == null) {
           background = possibilities.first.type.color;
         } else if (text == null) {

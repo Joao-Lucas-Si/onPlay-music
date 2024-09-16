@@ -122,15 +122,13 @@ class _MainScreensState extends State<MainScreen> {
                         store.refresh();
                       },
                       icon: Icon(Icons.refresh, color: colorScheme.secondary)),
-                  currentPage == 1
-                      ? SongsPopup()
-                      : IconButton(
-                          onPressed: () {
-                            GoRouter.of(context).push("/settings");
-                          },
-                          icon: Icon(Icons.settings,
-                              color: colorScheme.secondary)),
-                ],
+                  IconButton(
+                      onPressed: () {
+                        GoRouter.of(context).push("/settings");
+                      },
+                      icon: Icon(Icons.settings, color: colorScheme.secondary)),
+                  currentPage == 1 ? SongsPopup() : null,
+                ].nonNulls.toList(),
               ),
               body: PageView(
                 controller: pageController,

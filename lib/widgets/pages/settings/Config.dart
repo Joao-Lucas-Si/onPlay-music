@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onPlay/widgets/pages/settings/about.dart';
+import 'package:onPlay/widgets/pages/settings/files.dart';
 import 'package:onPlay/widgets/pages/settings/interface.dart';
 import 'package:onPlay/widgets/pages/settings/layout.dart';
 import 'package:onPlay/widgets/pages/settings/player.dart';
@@ -37,6 +38,10 @@ class _ConfigState extends State<Config> {
             icon: Icons.gamepad,
             title: "player",
             path: PlayerSettingsScreens.path),
+        _ConfigCategory(
+            icon: Icons.file_copy,
+            title: "arquivos",
+            path: FilesSettingsScreen.path),
         _ConfigCategory(icon: Icons.info, title: "sobre", path: About.path),
       ]),
     );

@@ -46,8 +46,13 @@ class ColorStorage extends ChangeNotifier {
   }
 
   _setStates(Song? song) async {
-    final index = playlist
-        .indexOf(song ?? Song(path: "", title: "", duration: 0, year: 0));
+    final index = playlist.indexOf(song ??
+        Song(
+            path: "",
+            title: "",
+            duration: 0,
+            year: 0,
+            modified: DateTime.now()));
     if (song != null && index != -1) {
       MusicColor colorInfo;
       try {
@@ -76,6 +81,7 @@ class ColorStorage extends ChangeNotifier {
   _setAllColors() async {
     colors = [];
     for (final song in playlist) {
+      debugPrint(song.title);
       colors.add(await _getColors(song));
       notifyListeners();
     }

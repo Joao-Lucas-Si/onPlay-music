@@ -1,21 +1,30 @@
 import 'dart:convert';
+import 'package:onPlay/enums/player/container_style.dart';
 import 'package:onPlay/enums/main_screens.dart';
 import 'package:onPlay/enums/player_element.dart';
-import 'package:onPlay/enums/volume_type.dart';
+import 'package:onPlay/enums/player/volume_type.dart';
 
 class LayoutSettings {
   var showArtists = true;
   var showGenres = true;
   var showPlaylists = true;
+  var _containerStyle = ContainerStyle.lateral;
   var _mainScreens = [
     MainScreens.home,
     MainScreens.musics,
     MainScreens.artists,
-    MainScreens.genres,
+    MainScreens.albums,
     MainScreens.playlists,
+    MainScreens.genres,
   ];
+  List<MainScreens> _hiddenScreens = [];
 
-  var _hiddenScreens = [MainScreens.albums];
+  ContainerStyle get containerStyle => _containerStyle;
+
+  set containerStyle(ContainerStyle value) {
+    _containerStyle = value;
+    _notify();
+  }
 
   List<MainScreens> get hiddenScreens => _hiddenScreens;
 

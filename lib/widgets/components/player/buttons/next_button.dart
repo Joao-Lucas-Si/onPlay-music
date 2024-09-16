@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:onPlay/enums/controls_type.dart';
+import 'package:onPlay/enums/player/controls_type.dart';
 import 'package:onPlay/localModels/settings/settings.dart';
 import 'package:onPlay/services/colors/color_adapter.dart';
 import 'package:onPlay/store/player_store.dart';
@@ -34,7 +34,7 @@ class NextButton extends StatelessWidget {
                   interfaceSettings.controlsType == ControlsType.outline
                       ? Icons.skip_next_outlined
                       : Icons.skip_next,
-                  size: isSmall ? 20 : 40,
+                  size: isSmall ? 30 : 40,
                   color: interfaceSettings.controlsType ==
                           ControlsType.circleButton
                       ? musicColor.background

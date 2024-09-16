@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/enums/main_screens.dart';
+import 'package:onPlay/enums/player/container_style.dart';
+import 'package:onPlay/enums/player/picture_type.dart';
 import 'package:onPlay/enums/player_element.dart';
-import 'package:onPlay/enums/volume_type.dart';
+import 'package:onPlay/enums/player/volume_type.dart';
 import 'package:onPlay/localModels/settings/settings.dart';
 import 'package:onPlay/widgets/pages/settings/Config.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +17,7 @@ class LayoutSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final settings = Provider.of<Settings>(context);
     final layout = settings.layout;
+    final interface = settings.interface;
     return Scaffold(
         appBar: AppBar(
           title: const Text("configurações de layout"),
@@ -94,7 +97,7 @@ class LayoutSettingsScreen extends StatelessWidget {
                       .toList(),
                 ),
               ),
-              Text("elementos do player"),
+              const Text("elementos do player"),
               SizedBox(
                 height: layout.playerElements.length * 65,
                 child: ReorderableListView(
@@ -141,6 +144,24 @@ class LayoutSettingsScreen extends StatelessWidget {
                       layout.playerElements = layout.playerElements;
                     }
                     layout.volumeType = value;
+                  }
+                },
+              ),
+              const Text("estilos de player com imagem de fundo"),
+              DropdownButton(
+                value: layout.containerStyle,
+                items: ContainerStyle.values
+                    .map((value) => DropdownMenuItem(
+                        enabled: value == ContainerStyle.normal ||
+                            (value != ContainerStyle.normal &&
+                                interface.pictureType ==
+                                    PictureType.background),
+                        value: value,
+                        child: Text(value.toString())))
+                    .toList(),
+                onChanged: (value) {
+                  if (value != null) {
+                    layout.containerStyle = value;
                   }
                 },
               ),

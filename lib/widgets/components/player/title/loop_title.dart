@@ -7,7 +7,11 @@ class LoopTitle extends StatelessWidget {
   final bool isSmall;
   final Song song;
   final MusicColor musicColor;
-  const LoopTitle({super.key, this.isSmall = false, required this.musicColor, required this.song});
+  const LoopTitle(
+      {super.key,
+      this.isSmall = false,
+      required this.musicColor,
+      required this.song});
   final loopDuration = const Duration(seconds: 10);
   final horizontalPadding = 15.0;
   @override

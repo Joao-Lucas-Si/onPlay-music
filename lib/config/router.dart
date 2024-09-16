@@ -8,11 +8,14 @@ import 'package:onPlay/store/player_store.dart';
 import 'package:onPlay/widgets/components/player/player.dart';
 import 'package:onPlay/widgets/pages/artist.dart';
 import 'package:onPlay/widgets/pages/genre.dart';
+import 'package:onPlay/widgets/pages/home/home.dart';
+import 'package:onPlay/widgets/pages/home/recent.dart';
 import 'package:onPlay/widgets/pages/settings/Config.dart';
 import 'package:onPlay/widgets/pages/album.dart';
 import 'package:onPlay/widgets/pages/main-screens/main_screens.dart';
 import 'package:onPlay/widgets/pages/player_screen.dart';
 import 'package:onPlay/widgets/pages/search.dart';
+import 'package:onPlay/widgets/pages/settings/files.dart';
 import 'package:onPlay/widgets/pages/settings/interface.dart';
 import 'package:onPlay/widgets/pages/settings/layout.dart';
 import 'package:onPlay/widgets/pages/settings/player.dart';
@@ -26,6 +29,12 @@ final router = GoRouter(routes: [
     path: "/",
     builder: (context, state) => const MainScreen(),
   ),
+  GoRoute(path: Home.path, redirect: (context, state) => Recents.path, routes: [
+    GoRoute(
+      path: Recents.route,
+      builder: (context, state) => _Layout(body: Recents()),
+    )
+  ]),
   GoRoute(
     path: Config.path,
     routes: [
@@ -47,6 +56,10 @@ final router = GoRouter(routes: [
         path: PlayerSettingsScreens.route,
         builder: (context, state) =>
             const _Layout(body: PlayerSettingsScreens()),
+      ),
+      GoRoute(
+        path: FilesSettingsScreen.route,
+        builder: (context, state) => const _Layout(body: FilesSettingsScreen()),
       ),
     ],
     builder: (context, state) => const _Layout(body: Config()),

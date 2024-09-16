@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:onPlay/enums/picture_type.dart';
+import 'package:onPlay/enums/player/picture_type.dart';
 import 'package:onPlay/localModels/settings/settings.dart';
 import 'package:onPlay/models/song.dart';
 import 'package:onPlay/services/colors/color_adapter.dart';
 import 'package:onPlay/widgets/components/player/images/circular_picture.dart';
+import 'package:onPlay/widgets/components/player/images/disk.dart';
 import 'package:onPlay/widgets/components/player/images/gradient_picture.dart';
 import 'package:onPlay/widgets/components/player/images/square_picture.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +20,9 @@ class Picture extends StatelessWidget {
     final sizes = MediaQuery.sizeOf(context);
     switch (interfaceSettings.pictureType) {
       case PictureType.circular:
-        return CircularPicture(song: song,);
+        return CircularPicture(
+          song: song,
+        );
       case PictureType.gradient:
         return GradientPicture(
           song: song,
@@ -31,8 +34,10 @@ class Picture extends StatelessWidget {
         );
       case PictureType.background:
         return SizedBox(
-          height: sizes.height * 0.55,
+          height: sizes.height * 0.50,
         );
+      case PictureType.disk:
+        return Disk(musicColor: musicColor, song: song);
     }
   }
 }

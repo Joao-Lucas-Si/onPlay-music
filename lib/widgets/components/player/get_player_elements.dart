@@ -5,9 +5,9 @@ import 'package:onPlay/models/song.dart';
 import 'package:onPlay/services/colors/color_adapter.dart';
 import 'package:onPlay/widgets/components/player/controls.dart';
 import 'package:onPlay/widgets/components/player/images/picture.dart';
-import 'package:onPlay/widgets/components/player/loop_title.dart';
 import 'package:onPlay/widgets/components/player/options/options.dart';
-import 'package:onPlay/widgets/components/player/time-progress/linear_time.dart';
+import 'package:onPlay/widgets/components/player/time-progress/time_progress.dart';
+import 'package:onPlay/widgets/components/player/title/song_title.dart';
 import 'package:onPlay/widgets/components/player/volume/volume.dart';
 import 'package:provider/provider.dart';
 
@@ -24,13 +24,13 @@ List<Widget> getPlayerElements(BuildContext context, MusicColor musicColor, Song
         widget = Controls(musicColor: musicColor,);
         break;
       case PlayerElement.title:
-        widget = LoopTitle(song: song, musicColor: musicColor,);
+        widget = SongTitle(song: song, musicColor: musicColor,);
         break;
       case PlayerElement.options:
         widget = Options(musicColor: musicColor, song: song);
         break;
       case PlayerElement.position:
-        widget = LinearTime(musicColor: musicColor,);
+        widget = TimeProgress(musicColor: musicColor,);
         break;
       case PlayerElement.volume:
         widget = Volume(musicColor: musicColor,);

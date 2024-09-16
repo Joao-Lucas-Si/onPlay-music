@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:onPlay/enums/controls_type.dart';
+import 'package:onPlay/enums/player/controls_type.dart';
 import 'package:onPlay/localModels/settings/settings.dart';
 import 'package:onPlay/services/colors/color_adapter.dart';
 import 'package:onPlay/store/player_store.dart';
@@ -10,7 +10,10 @@ class PreviousButton extends StatelessWidget {
   final bool isInMiniPlayer;
   final MusicColor musicColor;
   const PreviousButton(
-      {super.key, this.isInMiniPlayer = false, this.isSmall = false, required this.musicColor});
+      {super.key,
+      this.isInMiniPlayer = false,
+      this.isSmall = false,
+      required this.musicColor});
   @override
   Widget build(BuildContext context) {
     final playerStore = Provider.of<PlayerStore>(context);
@@ -32,7 +35,7 @@ class PreviousButton extends StatelessWidget {
                   interfaceSettings.controlsType == ControlsType.outline
                       ? Icons.skip_previous_outlined
                       : Icons.skip_previous,
-                  size: isSmall ? 20 : 40,
+                  size: isSmall ? 30 : 40,
                   color: interfaceSettings.controlsType ==
                           ControlsType.circleButton
                       ? musicColor.background

@@ -6,6 +6,7 @@ import 'package:onPlay/models/artist.dart';
 import 'package:onPlay/models/album.dart';
 import 'package:onPlay/models/genre.dart';
 import 'package:objectbox/objectbox.dart';
+import 'package:onPlay/models/music_color.dart';
 
 @Entity()
 class Song {
@@ -32,11 +33,16 @@ class Song {
   final album = ToOne<Album>();
   final genre = ToOne<Genre>();
 
+  // final lightColors = ToOne<MusicColor>();
+  // final darkColors = ToOne<MusicColor>();
+  // final totalDarkColors = ToOne<MusicColor>();
+
   Song(
       {required this.path,
       this.picture,
       required this.title,
       required this.duration,
+      required this.modified,
       required this.year});
 
   Song.withFileData(
@@ -45,6 +51,7 @@ class Song {
       required this.title,
       this.file,
       this.metadata,
+      required this.modified,
       required this.duration,
       required this.year});
 

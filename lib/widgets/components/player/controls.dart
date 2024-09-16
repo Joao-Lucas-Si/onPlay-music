@@ -10,14 +10,21 @@ class Controls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const spacing = 10.0;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Wrap(
+      spacing: 10,
+      alignment: WrapAlignment.center,
       children: [
-        PreviousButton(musicColor: musicColor,),
+        PreviousButton(
+          musicColor: musicColor,
+        ),
         const SizedBox(width: spacing),
-        PlayButton(musicColor: musicColor,),
+        PlayButton(
+          musicColor: musicColor,
+        ),
         const SizedBox(width: spacing),
-        NextButton(musicColor: musicColor,)
+        NextButton(
+          musicColor: musicColor,
+        )
       ],
     );
   }

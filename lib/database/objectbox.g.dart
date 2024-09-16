@@ -401,6 +401,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
               .vTableGet(buffer, rootOffset, 6, '');
           final durationParam =
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 10);
+          final modifiedParam = modifiedValue == null
+              ? null
+              : DateTime.fromMillisecondsSinceEpoch(modifiedValue);
           final yearParam =
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 12);
           final object = Song(
@@ -408,11 +411,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
               picture: pictureParam,
               title: titleParam,
               duration: durationParam,
+              modified: modifiedParam,
               year: yearParam)
-            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
-            ..modified = modifiedValue == null
-                ? null
-                : DateTime.fromMillisecondsSinceEpoch(modifiedValue);
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
           object.artist.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0);
           object.artist.attach(store);

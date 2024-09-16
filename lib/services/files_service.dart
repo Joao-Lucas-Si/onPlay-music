@@ -69,9 +69,7 @@ class FilesService {
     //     .expand((path) =>
     //         ["Music", "Download"].map((folder) => p.join(path, folder)))
     //     .toList();
-    paths = ["Music", "Download"]
-        .map((folder) => p.join(paths[0], folder))
-        .toList();
+    paths = ["Music"].map((folder) => p.join(paths[0], folder)).toList();
 
     final dirs = paths.map((path) => Directory(path)).toList();
 
@@ -131,6 +129,7 @@ class FilesService {
     final metadata = await extractMetadataFromFile(file);
     final song = Song.withFileData(
         path: file.path,
+        modified: file.statSync().modified,
         metadata: metadata,
         file: file,
         duration: metadata.duration?.inSeconds,

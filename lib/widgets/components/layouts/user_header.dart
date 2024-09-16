@@ -25,11 +25,12 @@ class _UserHeaderState extends State<UserHeader> {
 
   @override
   Widget build(BuildContext context) {
+    final colorSchema = Theme.of(context).colorScheme;
     if (user == null) {
       return const Text("carregando");
     } else {
       final user = this.user!;
-      return Column(children: [
+      return Stack(children: [
         user.banner != null
             ? Image.memory(
                 user.banner!,
@@ -43,23 +44,36 @@ class _UserHeaderState extends State<UserHeader> {
                 fit: BoxFit.cover,
                 height: 150,
               ),
-        GestureDetector(
-          onTap: () {
-            GoRouter.of(context).push("/user");
-          },
-          child: Row(
-            children: [
-              user.image != null
-                  ? Image.memory(
-                      user.image!,
-                      width: 100,
-                      height: 100,
-                    )
-                  : const Icon(Icons.person, size: 100),
-              Text(user.name ?? "user")
-            ],
-          ),
-        )
+        Positioned(
+            left: 5,
+            bottom: 5,
+            child: GestureDetector(
+              onTap: () {
+                GoRouter.of(context).push("/user");
+              },
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 10,
+                children: [
+                  CircleAvatar(
+                    backgroundImage:
+                        user.image != null ? MemoryImage(user.image!) : null,
+                    radius: 40,
+                    child: user.image != null
+                        ? null
+                        : const Icon(Icons.person, size: 80),
+                  ),
+                  Text(
+                    user.name?.trim() == "" ? "user" : user.name ?? "user",
+                    style: TextStyle(
+                      backgroundColor: colorSchema.primary,
+                      fontSize: 20,
+                    ),
+                  )
+                ],
+              ),
+            )),
       ]);
     }
   }

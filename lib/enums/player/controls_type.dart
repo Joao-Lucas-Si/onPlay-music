@@ -1,5 +1,6 @@
 enum ControlsType {
   outline("outline"),
+  disk("disk"),
   circleButton("circleButton"),
   fill("fill");
 

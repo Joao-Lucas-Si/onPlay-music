@@ -1,13 +1,12 @@
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
-import 'package:onPlay/enums/color_palette.dart';
-import 'package:onPlay/enums/color_schema_type.dart';
-import 'package:onPlay/enums/color_theme.dart';
-import 'package:onPlay/enums/controls_type.dart';
+import 'package:onPlay/enums/colors/color_palette.dart';
+import 'package:onPlay/enums/colors/color_schema_type.dart';
+import 'package:onPlay/enums/colors/color_theme.dart';
+import 'package:onPlay/enums/player/controls_type.dart';
 import 'package:onPlay/enums/music_card_type.dart';
-import 'package:onPlay/enums/picture_type.dart';
-import 'package:onPlay/localModels/settings/settings.dart';
+import 'package:onPlay/enums/player/picture_type.dart';
+import 'package:onPlay/enums/player/progress_type.dart';
+import 'package:onPlay/enums/player/title_type.dart';
 
 class InterfaceSettings {
   late Function() _notify;
@@ -20,10 +19,36 @@ class InterfaceSettings {
   ControlsType _controlsType = ControlsType.outline;
   MusicCardStyle style = MusicCardStyle.normal;
   ColorTheme _colorTheme = ColorTheme.totalDark;
+  ProgressType _progressType = ProgressType.linear;
+  TitleType _titleType = TitleType.loop;
+
+  TitleType get titleType => _titleType;
+
+  set titleType(TitleType value) {
+    _titleType = value;
+    _notify();
+  }
+
+  ProgressType get progressType => _progressType;
+
+  set progressType(ProgressType value) {
+    _progressType = value;
+    _notify();
+  }
 
   bool get showChangeTheme => _showChangeTheme;
 
+  set showChangeTheme(bool value) {
+    _showChangeTheme = value;
+    _notify();
+  }
+
   bool get showChangePalette => _showChangePalette;
+
+  set showChangePallete(bool value) {
+    _showChangePalette = value;
+    _notify();
+  }
 
   ColorPalette get colorPalette => _colorPalette;
 

@@ -15,6 +15,7 @@ class ColorType {
 enum ColorGroup {
   red,
   blue,
+  pink,
   purple,
   green,
   orange,
@@ -29,7 +30,7 @@ ColorGroup getColorGroup(Color color) {
   final hslColor = HSLColor.fromColor(color);
   final hue = hslColor.hue;
   // Define os intervalos de matiz para cada grupo de cores
-  if (hue >= 285 || hue < 15) {
+  if (hue >= 330 || hue < 15) {
     return ColorGroup.red;
   } else if (hue >= 15 && hue < 45) {
     return ColorGroup.orange;
@@ -41,6 +42,8 @@ ColorGroup getColorGroup(Color color) {
     return ColorGroup.blue;
   } else if (hue >= 255 && hue < 285) {
     return ColorGroup.purple;
+  } else if (hue >= 285 && hue < 330) {
+    return ColorGroup.pink;
   }
   // Verifica tons de cinza e cores próximas ao preto e branco
   final luminance = hslColor.lightness;

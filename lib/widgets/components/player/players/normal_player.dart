@@ -4,7 +4,7 @@ import 'package:onPlay/localModels/settings/settings.dart';
 import 'package:onPlay/models/song.dart';
 import 'package:onPlay/services/colors/color_adapter.dart';
 import 'package:onPlay/widgets/components/player/current_playlist.dart';
-import 'package:onPlay/widgets/components/player/getPlayerElements.dart';
+import 'package:onPlay/widgets/components/player/get_player_elements.dart';
 import 'package:provider/provider.dart';
 
 class NormalPlayer extends StatelessWidget {
