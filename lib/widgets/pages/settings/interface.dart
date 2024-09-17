@@ -3,8 +3,10 @@ import 'package:onPlay/enums/colors/color_palette.dart';
 import 'package:onPlay/enums/colors/color_theme.dart';
 import 'package:onPlay/enums/player/controls_type.dart';
 import 'package:onPlay/enums/player/picture_type.dart';
+import 'package:onPlay/enums/player/progress_type.dart';
 import 'package:onPlay/enums/player/title_type.dart';
 import 'package:onPlay/enums/player_element.dart';
+import 'package:onPlay/localModels/settings/layout.dart';
 import 'package:onPlay/localModels/settings/settings.dart';
 import 'package:onPlay/widgets/pages/settings/Config.dart';
 import 'package:provider/provider.dart';
@@ -15,17 +17,33 @@ class InterfaceSettingsScreen extends StatelessWidget {
   static const route = "interface";
 
   onTitleChange(Settings settings, TitleType value) {
+    final layout = settings.layout;
     if (value == TitleType.option &&
         settings.layout.playerElements.contains(PlayerElement.title)) {
       final elements = settings.layout.playerElements;
       elements.remove(PlayerElement.title);
-      settings.layout.playerElements = elements;
+      layout.lateralElements
+          .removeWhere((element) => element.element == PlayerElement.title);
+      layout.lateralElements = layout.lateralElements;
+      layout.playerElements = elements;
     } else if (!settings.layout.playerElements.contains(PlayerElement.title)) {
       final elements = settings.layout.playerElements;
       elements.add(PlayerElement.title);
-      settings.layout.playerElements = elements;
+      layout.lateralElements.add(LateralPlayerElement(
+          element: PlayerElement.title,
+          position: LateralPosition.values.firstWhere((position) => !layout
+              .lateralElements
+              .map((element) => element.position)
+              .contains(position))));
+      layout.lateralElements = layout.lateralElements;
+      layout.playerElements = elements;
     }
     settings.interface.titleType = value;
+  }
+
+  onProgressChange(Settings settings, ProgressType value) {
+    final interface = settings.interface;
+    interface.progressType = value;
   }
 
   @override
@@ -138,6 +156,19 @@ class InterfaceSettingsScreen extends StatelessWidget {
                     currentValue: interface.titleType,
                     text: "como opção",
                     onChanged: (value) => onTitleChange(settings, value),
+                  ),
+                  const Text("Tipo de barra de progresso"),
+                  Check(
+                    value: ProgressType.linear,
+                    currentValue: interface.progressType,
+                    text: "linha",
+                    onChanged: (value) => onProgressChange(settings, value),
+                  ),
+                  Check(
+                    value: ProgressType.skip,
+                    currentValue: interface.progressType,
+                    text: "skip",
+                    onChanged: (value) => onProgressChange(settings, value),
                   ),
                   const SizedBox.square(
                     dimension: 100,

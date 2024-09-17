@@ -14,9 +14,9 @@ class InterfaceSettings {
   bool _showChangeTheme = true;
   bool _showChangePalette = true;
   bool themeBasedOnTime = false;
-  ColorPalette _colorPalette = ColorPalette.monocromatic;
+  ColorPalette _colorPalette = ColorPalette.polychromatic;
   PictureType _pictureType = PictureType.gradient;
-  ControlsType _controlsType = ControlsType.outline;
+  ControlsType _controlsType = ControlsType.fill;
   MusicCardStyle style = MusicCardStyle.normal;
   ColorTheme _colorTheme = ColorTheme.totalDark;
   ProgressType _progressType = ProgressType.linear;

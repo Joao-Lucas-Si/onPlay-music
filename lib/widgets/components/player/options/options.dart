@@ -15,14 +15,21 @@ import 'package:provider/provider.dart';
 class Options extends StatelessWidget {
   final Song song;
   final MusicColor musicColor;
-  const Options({super.key, required this.song, required this.musicColor});
+  final bool isVertical;
+  const Options(
+      {super.key,
+      required this.song,
+      required this.musicColor,
+      this.isVertical = false});
   @override
   Widget build(BuildContext context) {
     final settings = Provider.of<Settings>(context);
     final layout = settings.layout;
     final interface = settings.interface;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Wrap(
+      spacing: 10,
+      alignment: isVertical ? WrapAlignment.center : WrapAlignment.spaceBetween,
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         interface.showChangeTheme ? ChangeTheme(musicColor: musicColor) : null,
         VelocityController(musicColor: musicColor),

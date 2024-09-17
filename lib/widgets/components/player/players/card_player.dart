@@ -22,7 +22,7 @@ class CardPlayer extends StatelessWidget {
     final playerStore = Provider.of<PlayerStore>(context);
 
     final elements = getPlayerElements(context, musicColor, song);
-
+    final size = MediaQuery.sizeOf(context);
     return DecoratedBox(
       decoration: BoxDecoration(
           color: musicColor.background,
@@ -37,7 +37,11 @@ class CardPlayer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Picture(musicColor: musicColor, song: song,),
-          Padding(
+          Positioned(
+            bottom: size.height * CurrentPlaylist.minSize,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child:Padding(
               padding: const EdgeInsets.only(left: 5, right: 5),
               child: DecoratedBox(
                   decoration: BoxDecoration(
@@ -48,13 +52,7 @@ class CardPlayer extends StatelessWidget {
                       padding: const EdgeInsets.only(bottom: 5, top: 5),
                       child: Column(
                         children: [...elements],
-                      )))),
-          SizedBox.fromSize(
-            size: Size.fromHeight(MediaQuery.sizeOf(context).height *
-                (layoutSettings.playerElements.last == PlayerElement.picture
-                    ? 0.025
-                    : CurrentPlaylist.minSize)),
-          )
+                      )))))),
         ],
       ),
     );

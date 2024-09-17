@@ -1,9 +1,11 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:onPlay/enums/main_screens.dart';
 import 'package:onPlay/enums/player/container_style.dart';
 import 'package:onPlay/enums/player/picture_type.dart';
 import 'package:onPlay/enums/player_element.dart';
 import 'package:onPlay/enums/player/volume_type.dart';
+import 'package:onPlay/localModels/settings/layout.dart';
 import 'package:onPlay/localModels/settings/settings.dart';
 import 'package:onPlay/widgets/pages/settings/Config.dart';
 import 'package:provider/provider.dart';
@@ -99,26 +101,74 @@ class LayoutSettingsScreen extends StatelessWidget {
               ),
               const Text("elementos do player"),
               SizedBox(
-                height: layout.playerElements.length * 65,
-                child: ReorderableListView(
-                    onReorder: (oldIndex, newIndex) {
-                      if (newIndex > oldIndex) {
-                        newIndex -= 1;
-                      }
-                      final element = layout.playerElements[oldIndex];
-                      layout.playerElements.removeAt(oldIndex);
-                      layout.playerElements.insert(newIndex, element);
-                      layout.playerElements = layout.playerElements;
-                    },
-                    children: layout.playerElements
-                        .map((element) => Card(
-                            elevation: 2,
-                            key: ValueKey(element.name),
-                            child: ListTile(
-                                title: Text(
-                              element.name,
-                            ))))
-                        .toList()),
+                height: layout.lateralElements.length * 75,
+                child: (interface.pictureType == PictureType.background &&
+                        layout.containerStyle == ContainerStyle.lateral)
+                    ? Column(
+                        children: layout.lateralElements
+                            .map((element) => Card(
+                                  elevation: 2,
+                                  child: ListTile(
+                                    title: Wrap(
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.center,
+                                      spacing: 20,
+                                      children: [
+                                        Text(element.element.name),
+                                        DropdownButton(
+                                          onChanged: (value) {
+                                            if (value != null) {
+                                              final usedPosition = layout
+                                                  .lateralElements
+                                                  .firstWhereOrNull((lateral) =>
+                                                      lateral.position ==
+                                                      value);
+                                              if (usedPosition != null) {
+                                                usedPosition.position =
+                                                    element.position;
+                                                element.position = value;
+                                                layout.lateralElements =
+                                                    layout.lateralElements;
+                                              } else {
+                                                element.position = value;
+                                                layout.lateralElements =
+                                                    layout.lateralElements;
+                                              }
+                                            }
+                                          },
+                                          value: element.position,
+                                          items: LateralPosition.values
+                                              .map((position) =>
+                                                  DropdownMenuItem(
+                                                      value: position,
+                                                      child: Text(
+                                                          position.toString())))
+                                              .toList(),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ))
+                            .toList())
+                    : ReorderableListView(
+                        onReorder: (oldIndex, newIndex) {
+                          if (newIndex > oldIndex) {
+                            newIndex -= 1;
+                          }
+                          final element = layout.playerElements[oldIndex];
+                          layout.playerElements.removeAt(oldIndex);
+                          layout.playerElements.insert(newIndex, element);
+                          layout.playerElements = layout.playerElements;
+                        },
+                        children: layout.playerElements
+                            .map((element) => Card(
+                                elevation: 2,
+                                key: ValueKey(element.name),
+                                child: ListTile(
+                                    title: Text(
+                                  element.name,
+                                ))))
+                            .toList()),
               ),
               const Text("Tipo de controle de volume"),
               DropdownButton(
@@ -136,11 +186,20 @@ class LayoutSettingsScreen extends StatelessWidget {
                   if (value != null) {
                     if (layout.playerElements.contains(PlayerElement.volume) &&
                         value == VolumeType.option) {
-                      layout.playerElements.remove(value);
+                      layout.playerElements.remove(PlayerElement.volume);
+                      layout.lateralElements.removeWhere(
+                          (element) => element.element == PlayerElement.volume);
                       layout.playerElements = layout.playerElements;
                     } else if (!layout.playerElements
                         .contains(PlayerElement.volume)) {
                       layout.playerElements.add(PlayerElement.volume);
+                      layout.lateralElements.add(LateralPlayerElement(
+                          element: PlayerElement.volume,
+                          position: LateralPosition.values.firstWhere(
+                              (position) => !layout.lateralElements
+                                  .map((element) => element.position)
+                                  .contains(position))));
+                      layout.lateralElements = layout.lateralElements;
                       layout.playerElements = layout.playerElements;
                     }
                     layout.volumeType = value;

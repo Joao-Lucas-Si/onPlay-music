@@ -9,7 +9,7 @@ class LayoutSettings {
   var showGenres = true;
   var showPlaylists = true;
   var _containerStyle = ContainerStyle.lateral;
-  var _mainScreens = [
+  var _mainScreens = const [
     MainScreens.home,
     MainScreens.musics,
     MainScreens.artists,
@@ -18,6 +18,26 @@ class LayoutSettings {
     MainScreens.genres,
   ];
   List<MainScreens> _hiddenScreens = [];
+
+  var _lateralElements = [
+    LateralPlayerElement(
+        element: PlayerElement.controls, position: LateralPosition.topBottom),
+    LateralPlayerElement(
+        element: PlayerElement.title, position: LateralPosition.bottom),
+    LateralPlayerElement(
+        element: PlayerElement.options, position: LateralPosition.top),
+    LateralPlayerElement(
+        element: PlayerElement.volume, position: LateralPosition.left),
+    LateralPlayerElement(
+        element: PlayerElement.position, position: LateralPosition.nextLeft),
+  ];
+
+  List<LateralPlayerElement> get lateralElements => _lateralElements;
+
+  set lateralElements(List<LateralPlayerElement> value) {
+    _lateralElements = value;
+    _notify();
+  }
 
   ContainerStyle get containerStyle => _containerStyle;
 
@@ -112,4 +132,23 @@ class LayoutSettings {
     }
     return false;
   }
+}
+
+class LateralPlayerElement {
+  LateralPosition position;
+  final PlayerElement element;
+
+  LateralPlayerElement({required this.element, required this.position});
+}
+
+enum LateralPosition {
+  top,
+  underTop,
+  bottom,
+  topBottom,
+  center,
+  left,
+  nextLeft,
+  nextRight,
+  right;
 }
