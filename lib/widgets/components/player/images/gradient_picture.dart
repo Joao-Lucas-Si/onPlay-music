@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/enums/player_element.dart';
 import 'package:onPlay/localModels/settings/settings.dart';
+import 'package:onPlay/models/music_color.dart';
 import 'package:onPlay/models/song.dart';
-import 'package:onPlay/services/colors/color_adapter.dart';
-import 'package:onPlay/store/player_store.dart';
 import 'package:provider/provider.dart';
 
 class GradientPicture extends StatelessWidget {
@@ -14,7 +13,6 @@ class GradientPicture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final playerStore = Provider.of<PlayerStore>(context);
     final settings = Provider.of<Settings>(context);
     final layout = settings.layout;
     return song.picture != null
@@ -25,7 +23,7 @@ class GradientPicture extends StatelessWidget {
                     : BoxDecoration(
                         gradient: LinearGradient(colors: [
                         Colors.transparent,
-                        musicColor.background ?? Colors.black,
+                        musicColor.background ,
                       ], begin: Alignment.center, end: Alignment.topCenter)),
             child: Container(
                 foregroundDecoration: layout.playerElements.last ==
@@ -34,7 +32,7 @@ class GradientPicture extends StatelessWidget {
                     : BoxDecoration(
                         gradient: LinearGradient(colors: [
                         Colors.transparent,
-                        musicColor.background ?? Colors.black,
+                        musicColor.background,
                       ], begin: Alignment.center, end: Alignment.bottomCenter)),
                 child: Image.memory(
                   song.picture!,

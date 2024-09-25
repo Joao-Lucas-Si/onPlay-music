@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/constants/themes/purple.dart';
-import 'package:onPlay/store/color_store.dart';
+import 'package:onPlay/localModels/settings/settings.dart';
+import 'package:onPlay/store/player_store.dart';
 import 'package:provider/provider.dart';
 
 class AppTheme extends StatefulWidget {
@@ -16,11 +17,14 @@ class AppTheme extends StatefulWidget {
 class _State extends State<AppTheme> {
   @override
   Widget build(BuildContext context) {
-    final colorStore = Provider.of<ColorStorage>(context);
-
-    final primaryColor = (colorStore.background ?? purpleTheme.background);
-    final secondaryColors = colorStore.text ?? purpleTheme.color;
-    final tertiaryColor = colorStore.other ?? purpleTheme.other;
+    final playerStore = Provider.of<PlayerStore>(context);
+    final settings = Provider.of<Settings>(context);
+    final song = playerStore.playingSong;
+    final colors = song?.currentColors(
+        settings.interface.colorPalette, settings.interface.colorTheme);
+    final primaryColor = (colors?.background ?? purpleTheme.background);
+    final secondaryColors = colors?.text ?? purpleTheme.text;
+    final tertiaryColor = colors?.other ?? purpleTheme.other;
 
     return MaterialApp(
       title: 'onPlay',

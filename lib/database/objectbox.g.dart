@@ -17,6 +17,7 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 import '../models/album.dart';
 import '../models/artist.dart';
 import '../models/genre.dart';
+import '../models/music_color.dart';
 import '../models/song.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
@@ -176,6 +177,65 @@ final _entities = <obx_int.ModelEntity>[
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[
+        obx_int.ModelBacklink(
+            name: 'colors', srcEntity: 'MusicColor', srcField: 'song')
+      ]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(5, 8869230512487373120),
+      name: 'MusicColor',
+      lastPropertyId: const obx_int.IdUid(9, 3465104969620754882),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 5558345813382195562),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 7850994761262333986),
+            name: 'songId',
+            type: 11,
+            flags: 520,
+            indexId: const obx_int.IdUid(5, 8923944927584716313),
+            relationTarget: 'Song'),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 6413553713852324861),
+            name: 'dbBackground',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 7279141139604890194),
+            name: 'dbText',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 2265012943410117396),
+            name: 'dbIcon',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 7522163142601365829),
+            name: 'dbInactive',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 6672391655949655437),
+            name: 'dbOther',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(8, 5009152402973785137),
+            name: 'dbTheme',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(9, 3465104969620754882),
+            name: 'dbPalette',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[])
 ];
 
@@ -214,8 +274,8 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(4, 6497590176427579550),
-      lastIndexId: const obx_int.IdUid(4, 7565656267712023963),
+      lastEntityId: const obx_int.IdUid(5, 8869230512487373120),
+      lastIndexId: const obx_int.IdUid(5, 8923944927584716313),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [],
@@ -363,7 +423,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
         model: _entities[3],
         toOneRelations: (Song object) =>
             [object.artist, object.album, object.genre],
-        toManyRelations: (Song object) => {},
+        toManyRelations: (Song object) => {
+              obx_int.RelInfo<MusicColor>.toOneBacklink(
+                      2, object.id, (MusicColor srcObject) => srcObject.song):
+                  object.colors
+            },
         getId: (Song object) => object.id,
         setId: (Song object, int id) {
           object.id = id;
@@ -423,6 +487,66 @@ obx_int.ModelDefinition getObjectBoxModel() {
           object.genre.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 20, 0);
           object.genre.attach(store);
+          obx_int.InternalToManyAccess.setRelInfo<Song>(
+              object.colors,
+              store,
+              obx_int.RelInfo<MusicColor>.toOneBacklink(
+                  2, object.id, (MusicColor srcObject) => srcObject.song));
+          return object;
+        }),
+    MusicColor: obx_int.EntityDefinition<MusicColor>(
+        model: _entities[4],
+        toOneRelations: (MusicColor object) => [object.song],
+        toManyRelations: (MusicColor object) => {},
+        getId: (MusicColor object) => object.id,
+        setId: (MusicColor object, int id) {
+          object.id = id;
+        },
+        objectToFB: (MusicColor object, fb.Builder fbb) {
+          final dbThemeOffset = fbb.writeString(object.dbTheme);
+          final dbPaletteOffset = fbb.writeString(object.dbPalette);
+          fbb.startTable(10);
+          fbb.addInt64(0, object.id);
+          fbb.addInt64(1, object.song.targetId);
+          fbb.addInt64(2, object.dbBackground);
+          fbb.addInt64(3, object.dbText);
+          fbb.addInt64(4, object.dbIcon);
+          fbb.addInt64(5, object.dbInactive);
+          fbb.addInt64(6, object.dbOther);
+          fbb.addOffset(7, dbThemeOffset);
+          fbb.addOffset(8, dbPaletteOffset);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final dbBackgroundParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
+          final dbTextParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
+          final dbIconParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
+          final dbOtherParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0);
+          final dbInactiveParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0);
+          final dbPaletteParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 20, '');
+          final dbThemeParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 18, '');
+          final object = MusicColor(
+              dbBackground: dbBackgroundParam,
+              dbText: dbTextParam,
+              dbIcon: dbIconParam,
+              dbOther: dbOtherParam,
+              dbInactive: dbInactiveParam,
+              dbPalette: dbPaletteParam,
+              dbTheme: dbThemeParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          object.song.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0);
+          object.song.attach(store);
           return object;
         })
   };
@@ -528,4 +652,47 @@ class Song_ {
   /// See [Song.modified].
   static final modified =
       obx.QueryDateProperty<Song>(_entities[3].properties[9]);
+
+  /// see [Song.colors]
+  static final colors =
+      obx.QueryBacklinkToMany<MusicColor, Song>(MusicColor_.song);
+}
+
+/// [MusicColor] entity fields to define ObjectBox queries.
+class MusicColor_ {
+  /// See [MusicColor.id].
+  static final id =
+      obx.QueryIntegerProperty<MusicColor>(_entities[4].properties[0]);
+
+  /// See [MusicColor.song].
+  static final song =
+      obx.QueryRelationToOne<MusicColor, Song>(_entities[4].properties[1]);
+
+  /// See [MusicColor.dbBackground].
+  static final dbBackground =
+      obx.QueryIntegerProperty<MusicColor>(_entities[4].properties[2]);
+
+  /// See [MusicColor.dbText].
+  static final dbText =
+      obx.QueryIntegerProperty<MusicColor>(_entities[4].properties[3]);
+
+  /// See [MusicColor.dbIcon].
+  static final dbIcon =
+      obx.QueryIntegerProperty<MusicColor>(_entities[4].properties[4]);
+
+  /// See [MusicColor.dbInactive].
+  static final dbInactive =
+      obx.QueryIntegerProperty<MusicColor>(_entities[4].properties[5]);
+
+  /// See [MusicColor.dbOther].
+  static final dbOther =
+      obx.QueryIntegerProperty<MusicColor>(_entities[4].properties[6]);
+
+  /// See [MusicColor.dbTheme].
+  static final dbTheme =
+      obx.QueryStringProperty<MusicColor>(_entities[4].properties[7]);
+
+  /// See [MusicColor.dbPalette].
+  static final dbPalette =
+      obx.QueryStringProperty<MusicColor>(_entities[4].properties[8]);
 }

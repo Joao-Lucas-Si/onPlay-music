@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:onPlay/models/music_color.dart';
 import 'package:onPlay/services/colors/color_service.dart';
 
 class ColorAdapter {
@@ -39,46 +40,52 @@ class ColorAdapter {
     var background = colors.background;
     var text = colors.text;
     var other = colors.other;
+    var icon = colors.icon;
+    var inactive = colors.inactive;
 
     // other ??= background;
 
-    if (background != null) {
-      background = _toLight(background, backgroundLight);
-    }
-    if (text != null) {
-      text = _toDark(text, textLight);
-    }
-    if (other != null) {
-      other = _toDark(other, otherLight);
-    }
+    background = _toLight(background, backgroundLight);
+    text = _toDark(text, textLight);
+    other = _toDark(other, otherLight);
 
-    return MusicColor(background: background, other: other, text: text);
+    colors.background = background;
+    colors.text = text;
+    colors.icon = icon;
+    colors.inactive = inactive;
+    colors.other = other;
+
+    return colors;
   }
 
   toTotalDarkTheme(MusicColor colors) {
     var background = colors.background;
     var text = colors.text;
     var other = colors.other;
+    var icon = colors.icon;
+    var inactive = colors.inactive;
 
     // other ??= background;
 
-    if (background != null) {
-      background = _toDark(background, backgroundTotalDark);
-    }
-    if (text != null) {
-      text = _toLight(text, textTotalDark);
-    }
-    if (other != null) {
-      other = _toLight(other, otherTotalDark);
-    }
+    background = _toDark(background, backgroundTotalDark);
+    text = _toLight(text, textTotalDark);
+    other = _toLight(other, otherTotalDark);
 
-    return MusicColor(background: background, other: other, text: text);
+    colors.background = background;
+    colors.text = text;
+    colors.icon = icon;
+    colors.inactive = inactive;
+    colors.other = other;
+
+    return colors;
   }
 
   MusicColor toDarkTheme(MusicColor colors) {
     var background = colors.background;
     var text = colors.text;
     var other = colors.other;
+    var icon = colors.icon;
+    var inactive = colors.inactive;
 
     // if ((text?.computeLuminance() ?? 0) <
     //     (background?.computeLuminance() ?? 0)) {
@@ -90,49 +97,19 @@ class ColorAdapter {
 
     // other ??= background;
 
-    if (background != null) {
-      background = _toDark(background, backgroundDark);
-      background = _toLight(background, backgroundDark);
-      // if (!colorService.isMedium(background)) {
-      //   final lightness = colorService.getLigthness(background);
-      //   if (lightness < ColorService.minMediumNivel) {
-      //     background = colorService.toLighten(
-      //         background, ColorService.minMediumNivel - lightness);
-      //   } else {
-      //     background = colorService.toDarken(
-      //         background, lightness - ColorService.mediumNivel);
-      //   }
-      // }
-    }
-    if (text != null) {
-      text = _toLight(text, textDark);
-    }
-    if (other != null) {
-      other = _toDark(other, otherDark);
-    }
-    return MusicColor(background: background, other: other, text: text);
-  }
-}
+    background = _toDark(background, backgroundDark);
+    background = _toLight(background, backgroundDark);
 
-class MusicColor {
-  final Color? background;
-  final Color? text;
-  final Color? other;
+    text = _toLight(text, textDark);
 
-  const MusicColor({this.background, this.other, this.text});
+    other = _toDark(other, otherDark);
 
-  @override
-  String toString() {
-    return "MusicColor{background: $background, text: $text, other: $other}";
-  }
+    colors.background = background;
+    colors.text = text;
+    colors.icon = icon;
+    colors.inactive = inactive;
+    colors.other = other;
 
-  @override
-  bool operator ==(Object other) {
-    if (other is MusicColor) {
-      return other.background == background &&
-          other.text == text &&
-          other.other == this.other;
-    }
-    return false;
+    return colors;
   }
 }

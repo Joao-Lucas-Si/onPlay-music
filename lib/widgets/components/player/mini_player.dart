@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:onPlay/enums/colors/color_palette.dart';
+import 'package:onPlay/enums/colors/color_theme.dart';
+import 'package:onPlay/localModels/settings/settings.dart';
+import 'package:onPlay/models/music_color.dart';
 import 'package:onPlay/services/notification_service.dart';
-import 'package:onPlay/services/colors/color_adapter.dart';
 import 'package:onPlay/services/player_service.dart';
-import 'package:onPlay/store/color_store.dart';
 import 'package:onPlay/store/player_store.dart';
 import 'package:onPlay/store/song_store.dart';
 import 'package:onPlay/widgets/components/player/buttons/next_button.dart';
@@ -23,9 +25,9 @@ class MiniPlayerState extends State<MiniPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    final colorStore = Provider.of<ColorStorage>(context);
     store = Provider.of<SongStore>(context);
     player = Provider.of<PlayerService>(context);
+    final settings = Provider.of<Settings>(context);
     final playerStore = Provider.of<PlayerStore>(context);
     final song = playerStore.playingSong!;
     final notificationService = Provider.of<NotificationService>(context);
@@ -38,10 +40,16 @@ class MiniPlayerState extends State<MiniPlayer> {
 
     final colorScheme = Theme.of(context).colorScheme;
 
-    final colors = MusicColor(
-        background: colorScheme.primary,
-        text: colorScheme.secondary,
-        other: colorScheme.tertiary);
+    final colors = playerStore.playingSong?.currentColors(settings.interface.colorPalette, settings.interface.colorTheme) ??
+        MusicColor.create(
+          palette: ColorPalette.normal,
+          theme: ColorTheme.totalDark,
+          background: colorScheme.primary,
+          text: colorScheme.secondary,
+          icon: colorScheme.secondary,
+          other: colorScheme.tertiary,
+          inactive: colorScheme.tertiary,
+        );
 
     return Column(children: [
       Container(
@@ -53,7 +61,7 @@ class MiniPlayerState extends State<MiniPlayer> {
             padding: const EdgeInsets.only(top: 5),
             child: Container(
               decoration: BoxDecoration(
-                  color: colorStore.text ?? Colors.white,
+                  color: colors.text,
                   borderRadius: BorderRadius.circular(10)),
               height: 15,
               width: 70,

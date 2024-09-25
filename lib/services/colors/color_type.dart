@@ -23,13 +23,25 @@ enum ColorGroup {
   yellow,
   brown,
   white,
+  grey;
 }
 
 ColorGroup getColorGroup(Color color) {
   // Calcula a matiz (hue) da cor
   final hslColor = HSLColor.fromColor(color);
   final hue = hslColor.hue;
-  // Define os intervalos de matiz para cada grupo de cores
+  final saturation = hslColor.saturation;
+  final lightness = hslColor.lightness;
+
+  if (saturation < 0.2) {
+    if (lightness >= 0.7) {
+      return ColorGroup.white;
+    } else if (lightness <= 0.3) {
+      return ColorGroup.black;
+    } else {
+      return ColorGroup.grey;
+    }
+  }
   if (hue >= 330 || hue < 15) {
     return ColorGroup.red;
   } else if (hue >= 15 && hue < 45) {

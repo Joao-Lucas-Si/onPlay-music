@@ -2,6 +2,8 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:metadata_god/metadata_god.dart';
+import 'package:onPlay/enums/colors/color_palette.dart';
+import 'package:onPlay/enums/colors/color_theme.dart';
 import 'package:onPlay/models/artist.dart';
 import 'package:onPlay/models/album.dart';
 import 'package:onPlay/models/genre.dart';
@@ -33,9 +35,13 @@ class Song {
   final album = ToOne<Album>();
   final genre = ToOne<Genre>();
 
-  // final lightColors = ToOne<MusicColor>();
-  // final darkColors = ToOne<MusicColor>();
-  // final totalDarkColors = ToOne<MusicColor>();
+  @Backlink("song")
+  final colors = ToMany<MusicColor>();
+
+  MusicColor currentColors(ColorPalette palette, ColorTheme theme) {
+    return colors.firstWhere(
+        (color) => color.palette == palette && color.theme == theme);
+  }
 
   Song(
       {required this.path,
@@ -65,6 +71,6 @@ class Song {
 
   @override
   String toString() {
-    return "Song{id: $id, title: $title, path: $path, duration: $duration, year: $year}";
+    return "Song{id: $id, title: $title, path: $path, duration: $duration, year: $year, colors $colors}";
   }
 }

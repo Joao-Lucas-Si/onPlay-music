@@ -5,10 +5,10 @@ import 'package:onPlay/constants/themes/purple.dart';
 import 'package:onPlay/enums/colors/color_palette.dart';
 import 'package:onPlay/enums/colors/color_theme.dart';
 import 'package:onPlay/localModels/settings/settings.dart';
+import 'package:onPlay/models/music_color.dart';
 import 'package:onPlay/services/colors/color_adapter.dart';
 import 'package:onPlay/services/colors/color_type.dart';
 import 'package:palette_generator/palette_generator.dart';
-import 'package:provider/provider.dart';
 
 class ColorService {
   var settings = Settings();
@@ -47,7 +47,7 @@ class ColorService {
     return hsl.lightness;
   }
 
-  Future<PaletteGenerator?> getDominantColor(Uint8List? imageData) async {
+  Future<PaletteGenerator?> getColorInfo(Uint8List? imageData) async {
     if (imageData != null) {
       final paletteGenerator = await PaletteGenerator.fromImageProvider(
         Image.memory(imageData).image,
@@ -57,47 +57,47 @@ class ColorService {
     return null;
   }
 
-  Future<MusicColor> getMusicColors(Uint8List? imageData,
-      {BuildContext? context}) async {
-    final _colorAdapter = ColorAdapter(colorService: this);
-    if (context != null) {
-      settings = Provider.of<Settings>(context, listen: false);
-    }
-    final colorTheme = settings.interface.colorTheme;
-    final defaultValue = MusicColor(
-        background: purpleTheme.background,
-        text: purpleTheme.color,
-        other: purpleTheme.other);
+  Future<MusicColor> getMusicColorFromSong(PaletteGenerator? colorInfo,
+      ColorPalette palette, ColorTheme theme) async {
+    final colorAdapter = ColorAdapter(colorService: this);
+    final defaultValue = purpleTheme;
     var value = defaultValue;
-    if (imageData != null) {
-      final colorInfo = await getDominantColor(imageData);
-      if (colorInfo != null) {
-        value = settings.interface.colorPalette == ColorPalette.polychromatic
-            ? getPolychromaticPallete(colorInfo)
-            : settings.interface.colorPalette == ColorPalette.monocromatic
-                ? getMonocromaticPalette(colorInfo)
-                : getNormalPalette(colorInfo, colorTheme);
-      }
+    if (colorInfo != null) {
+      value = palette == ColorPalette.polychromatic
+          ? getPolychromaticPallete(colorInfo, theme)
+          : palette == ColorPalette.monocromatic
+              ? getMonocromaticPalette(colorInfo, theme)
+              : getNormalPalette(colorInfo, theme);
     }
 
-    value = colorTheme == ColorTheme.totalDark
-        ? _colorAdapter.toTotalDarkTheme(value)
-        : colorTheme == ColorTheme.dark
-            ? _colorAdapter.toDarkTheme(value)
-            : _colorAdapter.toLightTheme(value);
+    value = theme == ColorTheme.totalDark
+        ? colorAdapter.toTotalDarkTheme(value)
+        : theme == ColorTheme.dark
+            ? colorAdapter.toDarkTheme(value)
+            : colorAdapter.toLightTheme(value);
 
     return value;
   }
 
-  MusicColor getMonocromaticPalette(PaletteGenerator colorInfo) {
+  MusicColor getMonocromaticPalette(
+      PaletteGenerator colorInfo, ColorTheme theme) {
     final color = colorInfo.dominantColor?.color ??
         colorInfo.vibrantColor?.color ??
-        colorInfo.mutedColor?.color;
+        colorInfo.mutedColor?.color ??
+        purpleTheme.background;
 
-    return MusicColor(background: color, other: color, text: color);
+    return MusicColor.create(
+        background: color,
+        icon: color,
+        inactive: color,
+        palette: ColorPalette.monocromatic,
+        theme: theme,
+        other: color,
+        text: color);
   }
 
-  MusicColor getPolychromaticPallete(PaletteGenerator colorInfo) {
+  MusicColor getPolychromaticPallete(
+      PaletteGenerator colorInfo, ColorTheme theme) {
     final colors = colorInfo.paletteColors.toList();
     List<_ColorTypeWithPopulation> types = colors
         .map((color) => _ColorTypeWithPopulation(
@@ -105,7 +105,7 @@ class ColorService {
         .toList();
     List<ColorGroup> used = [];
 
-    Color? background, text, other;
+    Color? background, text, icon, inactive, other;
 
     types.sort((i1, i2) => i1.population.compareTo(i2.population));
 
@@ -120,11 +120,16 @@ class ColorService {
       ColorGroup.blue: [ColorGroup.purple]
     };
 
-    while (background == null || text == null || other == null) {
+    while (background == null ||
+        text == null ||
+        other == null ||
+        icon == null ||
+        inactive == null) {
       debugPrint(
           "grupos: ${types.map((possibility) => possibility.type.group).toSet()}");
       var possibilities = types.where((type) =>
-          (![ColorGroup.white, ColorGroup.black].contains(type.type.group)) &&
+          (![ColorGroup.white, ColorGroup.grey, ColorGroup.black]
+              .contains(type.type.group)) &&
           (!used.contains(type.type.group) &&
               (!used.any((used) {
                 try {
@@ -137,49 +142,48 @@ class ColorService {
           types.where((type) => !used.contains(type.type.group));
       final possibilitiesWithSimilars = types.where((type) =>
           (!used.contains(type.type.group)) &&
-          (![ColorGroup.white, ColorGroup.black].contains(type.type.group)));
+          (![ColorGroup.white, ColorGroup.grey, ColorGroup.black]
+              .contains(type.type.group)));
 
       debugPrint(
           "cores ${possibilities.map((possibility) => possibility.type.group).toSet()}");
       debugPrint(
           "similar ${possibilitiesWithSimilars.map((possibility) => possibility.type.group).toSet()}");
 
-      if (possibilities.isNotEmpty ||
-          possibilitiesWithWhiteAndBlack.isNotEmpty ||
-          possibilitiesWithSimilars.isNotEmpty) {
-        possibilities = possibilities.isEmpty
-            ? (possibilitiesWithSimilars.isEmpty
-                ? possibilitiesWithWhiteAndBlack
-                : possibilitiesWithSimilars)
-            : possibilities;
-        if (background == null) {
-          background = possibilities.first.type.color;
-        } else if (text == null) {
-          text = possibilities.first.type.color;
-        } else if (other == null) {
-          other = possibilities.first.type.color;
-        } else {
-          break;
-        }
-        used.add(possibilities.first.type.group);
+      possibilities = possibilities.isEmpty
+          ? (possibilitiesWithSimilars.isEmpty
+              ? possibilitiesWithWhiteAndBlack.isEmpty
+                  ? types
+                  : possibilitiesWithWhiteAndBlack
+              : possibilitiesWithSimilars)
+          : possibilities;
+      final color = possibilities.first.type.color;
+      if (background == null) {
+        background = color;
+      } else if (text == null) {
+        text = color;
+      } else if (icon == null) {
+        icon = color;
+      } else if (inactive == null) {
+        inactive = color;
+      } else if (other == null) {
+        other = color;
       } else {
-        for (final type in types) {
-          if (background == null) {
-            background = type.type.color;
-          } else if (text == null) {
-            text = type.type.color;
-          } else if (other == null) {
-            other = type.type.color;
-          } else {
-            break;
-          }
-        }
+        break;
       }
+      used.add(possibilities.first.type.group);
     }
 
     // debugPrint(used.toString());
 
-    return MusicColor(background: background, other: other, text: text);
+    return MusicColor.create(
+        background: background,
+        icon: icon,
+        inactive: inactive,
+        other: other,
+        text: text,
+        palette: ColorPalette.polychromatic,
+        theme: theme);
   }
 
   MusicColor getNormalPalette(
@@ -193,9 +197,8 @@ class ColorService {
         colorInfo.lightVibrantColor?.color ?? colorInfo.lightMutedColor?.color;
     final muted =
         colorInfo.mutedColor?.color ?? colorInfo.lightMutedColor?.color;
-    Color? background;
-    Color? text;
-    Color? other;
+
+    Color? background, text, other, icon, inactive;
 
     switch (colorTheme) {
       case ColorTheme.totalDark:
@@ -217,7 +220,20 @@ class ColorService {
           other = vibrant ?? dominant;
         }
     }
-    return MusicColor(background: background, text: text, other: other);
+
+    background ??= purpleTheme.background;
+    text ??= purpleTheme.text;
+    other ??= purpleTheme.other;
+    icon ??= purpleTheme.icon;
+    inactive ??= purpleTheme.inactive;
+    return MusicColor.create(
+        background: background,
+        theme: colorTheme,
+        palette: ColorPalette.normal,
+        text: text,
+        inactive: inactive,
+        icon: icon,
+        other: other);
   }
 }
 

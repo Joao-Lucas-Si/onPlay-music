@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:onPlay/enums/player_element.dart';
 import 'package:onPlay/localModels/settings/settings.dart';
+import 'package:onPlay/models/music_color.dart';
 import 'package:onPlay/models/song.dart';
-import 'package:onPlay/services/colors/color_adapter.dart';
 import 'package:onPlay/store/player_store.dart';
 import 'package:onPlay/widgets/components/player/current_playlist.dart';
 import 'package:onPlay/widgets/components/player/get_player_elements.dart';
-import 'package:onPlay/widgets/components/player/images/picture.dart';
 import 'package:provider/provider.dart';
 
 class CardPlayer extends StatelessWidget {
@@ -23,38 +21,43 @@ class CardPlayer extends StatelessWidget {
 
     final elements = getPlayerElements(context, musicColor, song);
     final size = MediaQuery.sizeOf(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-          color: musicColor.background,
-          image: playerStore.playingSong!.picture != null
-              ? DecorationImage(
-                  image: MemoryImage(
-                    playerStore.playingSong!.picture!,
-                  ),
-                  fit: BoxFit.cover)
-              : null),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Picture(musicColor: musicColor, song: song,),
-          Positioned(
-            bottom: size.height * CurrentPlaylist.minSize,
-            child: Align(
+    return Stack(alignment: Alignment.center, children: [
+      SizedBox(
+          height: size.height,
+          width: size.width,
+          child: DecoratedBox(
+              decoration: BoxDecoration(
+                  color: musicColor.background,
+                  image: playerStore.playingSong!.picture != null
+                      ? DecorationImage(
+                          image: MemoryImage(
+                            playerStore.playingSong!.picture!,
+                          ),
+                          fit: BoxFit.cover)
+                      : null))),
+      Positioned.fill(
+          bottom: size.height * (CurrentPlaylist.minSize + 0.01),
+          child: Align(
               alignment: Alignment.bottomCenter,
-              child:Padding(
-              padding: const EdgeInsets.only(left: 5, right: 5),
-              child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: musicColor.background,
-                  ),
-                  child: Padding(
-                      padding: const EdgeInsets.only(bottom: 5, top: 5),
-                      child: Column(
-                        children: [...elements],
-                      )))))),
-        ],
-      ),
-    );
+              child: Padding(
+                  padding: const EdgeInsets.only(left: 2, right: 2),
+                  child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: size.height * 0.4,
+                      ),
+                      child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: musicColor.background,
+                          ),
+                          child: Padding(
+                              padding: const EdgeInsets.only(bottom: 5, top: 5),
+                              child: Expanded(
+                                  child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [...elements],
+                              )))))))),
+    ]);
   }
 }

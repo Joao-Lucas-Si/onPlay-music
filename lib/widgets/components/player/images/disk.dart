@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:onPlay/models/music_color.dart';
 import 'package:onPlay/models/song.dart';
 import 'package:onPlay/services/colors/color_adapter.dart';
 import 'package:onPlay/store/player_store.dart';

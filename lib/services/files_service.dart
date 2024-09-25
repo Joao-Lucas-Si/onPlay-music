@@ -1,5 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:onPlay/enums/colors/color_palette.dart';
+import 'package:onPlay/enums/colors/color_theme.dart';
+import 'package:onPlay/services/colors/color_service.dart';
 import 'package:path/path.dart' as p;
 import 'package:metadata_god/metadata_god.dart';
 import 'package:onPlay/models/song.dart';
@@ -126,6 +129,7 @@ class FilesService {
   }
 
   static Future<Song> getSongByFile(FileSystemEntity file) async {
+    final colorService = ColorService();
     final metadata = await extractMetadataFromFile(file);
     final song = Song.withFileData(
         path: file.path,
@@ -136,7 +140,13 @@ class FilesService {
         year: metadata.year,
         picture: metadata.picture?.data,
         title: metadata.title ?? p.basenameWithoutExtension(file.path));
-
+    final colorInfo = await colorService.getColorInfo(song.picture);
+    for (final theme in ColorTheme.values) {
+      for (final palette in ColorPalette.values) {
+        song.colors.add(await colorService.getMusicColorFromSong(
+            colorInfo, palette, theme));
+      }
+    }
     return song;
   }
 

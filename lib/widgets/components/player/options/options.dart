@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:onPlay/enums/player/title_type.dart';
 import 'package:onPlay/enums/player/volume_type.dart';
 import 'package:onPlay/localModels/settings/settings.dart';
+import 'package:onPlay/models/music_color.dart';
 import 'package:onPlay/models/song.dart';
 import 'package:onPlay/services/colors/color_adapter.dart';
 import 'package:onPlay/widgets/components/player/options/change_palette.dart';

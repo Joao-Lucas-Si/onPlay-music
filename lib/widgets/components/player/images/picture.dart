@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/enums/player/picture_type.dart';
 import 'package:onPlay/localModels/settings/settings.dart';
+import 'package:onPlay/models/music_color.dart';
 import 'package:onPlay/models/song.dart';
-import 'package:onPlay/services/colors/color_adapter.dart';
 import 'package:onPlay/widgets/components/player/images/circular_picture.dart';
 import 'package:onPlay/widgets/components/player/images/disk.dart';
 import 'package:onPlay/widgets/components/player/images/gradient_picture.dart';

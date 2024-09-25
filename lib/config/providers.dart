@@ -4,7 +4,6 @@ import 'package:onPlay/models/managers/box_manager.dart';
 import 'package:onPlay/services/notification_service.dart';
 import 'package:onPlay/services/toast_service.dart';
 import 'package:onPlay/services/player_service.dart';
-import 'package:onPlay/store/color_store.dart';
 import 'package:onPlay/store/player_store.dart';
 import 'package:onPlay/store/song_store.dart';
 import 'package:onPlay/store/volume_store.dart';
@@ -39,12 +38,6 @@ class Providers extends StatelessWidget {
               previous?.update(value) ?? PlayerService(context).update(value)),
       Provider(create: (context) => ToastService(context: context)),
       Provider(create: (context) => NotificationService()),
-      ChangeNotifierProxyProvider<PlayerStore, ColorStorage>(
-          create: (context) => ColorStorage(context: context),
-          update: (context, value, previous) =>
-              previous?.update(value.playingSong, value.playlist, context) ??
-              ColorStorage(context: context)
-                  .update(value.playingSong, value.playlist, context)),
     ], child: app);
   }
 }

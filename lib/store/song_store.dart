@@ -318,6 +318,7 @@ class SongStore extends ChangeNotifier {
   _getDataFromFiles() {
     FilesService.getAllMusics(_setLoading).then((songs) async {
       _songs = songs;
+      debugPrint(_songs.toString());
       notifyListeners();
       _getArtists();
       _getGenres();

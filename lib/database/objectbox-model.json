@@ -150,10 +150,67 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "5:8869230512487373120",
+      "lastPropertyId": "9:3465104969620754882",
+      "name": "MusicColor",
+      "properties": [
+        {
+          "id": "1:5558345813382195562",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7850994761262333986",
+          "name": "songId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "5:8923944927584716313",
+          "relationTarget": "Song"
+        },
+        {
+          "id": "3:6413553713852324861",
+          "name": "dbBackground",
+          "type": 6
+        },
+        {
+          "id": "4:7279141139604890194",
+          "name": "dbText",
+          "type": 6
+        },
+        {
+          "id": "5:2265012943410117396",
+          "name": "dbIcon",
+          "type": 6
+        },
+        {
+          "id": "6:7522163142601365829",
+          "name": "dbInactive",
+          "type": 6
+        },
+        {
+          "id": "7:6672391655949655437",
+          "name": "dbOther",
+          "type": 6
+        },
+        {
+          "id": "8:5009152402973785137",
+          "name": "dbTheme",
+          "type": 9
+        },
+        {
+          "id": "9:3465104969620754882",
+          "name": "dbPalette",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "4:6497590176427579550",
-  "lastIndexId": "4:7565656267712023963",
+  "lastEntityId": "5:8869230512487373120",
+  "lastIndexId": "5:8923944927584716313",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

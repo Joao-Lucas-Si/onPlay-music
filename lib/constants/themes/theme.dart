@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onPlay/models/music_color.dart';
 import 'package:onPlay/services/colors/color_adapter.dart';
 
 class ThemeColors {
@@ -8,11 +9,4 @@ class ThemeColors {
 
   const ThemeColors(
       {required this.light, required this.dark, required this.totalDark});
-}
-
-class ThemeColorValue {
-  final Color background, color, other;
-
-  const ThemeColorValue(
-      {required this.background, required this.color, required this.other});
 }
