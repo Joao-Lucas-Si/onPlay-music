@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/constants/themes/purple.dart';
 import 'package:onPlay/localModels/settings/settings.dart';
+import 'package:onPlay/services/http/services/editor_color_service.dart';
 import 'package:onPlay/store/player_store.dart';
 import 'package:provider/provider.dart';
 
@@ -17,8 +18,9 @@ class AppTheme extends StatefulWidget {
 class _State extends State<AppTheme> {
   @override
   Widget build(BuildContext context) {
-    final playerStore = Provider.of<PlayerStore>(context);
     final settings = Provider.of<Settings>(context);
+    final editorColorService = EditorColorService(settings);
+    final playerStore = Provider.of<PlayerStore>(context);
     final song = playerStore.playingSong;
     final colors = song?.currentColors(
         settings.interface.colorPalette, settings.interface.colorTheme);

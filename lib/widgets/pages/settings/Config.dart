@@ -5,6 +5,7 @@ import 'package:onPlay/widgets/pages/settings/files.dart';
 import 'package:onPlay/widgets/pages/settings/interface.dart';
 import 'package:onPlay/widgets/pages/settings/layout.dart';
 import 'package:onPlay/widgets/pages/settings/player.dart';
+import 'package:onPlay/widgets/pages/settings/share.dart';
 
 class Config extends StatefulWidget {
   static const path = "/settings";
@@ -43,6 +44,10 @@ class _ConfigState extends State<Config> {
             title: "arquivos",
             path: FilesSettingsScreen.path),
         _ConfigCategory(icon: Icons.info, title: "sobre", path: About.path),
+        _ConfigCategory(
+            icon: Icons.share,
+            title: "compartilhamento e conexão",
+            path: ShareSettingsScreen.path),
       ]),
     );
   }

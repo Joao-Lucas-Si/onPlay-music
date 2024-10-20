@@ -3,9 +3,10 @@ import 'package:objectbox/objectbox.dart';
 import 'package:onPlay/enums/colors/color_palette.dart';
 import 'package:onPlay/enums/colors/color_theme.dart';
 import 'package:onPlay/models/song.dart';
+import 'package:onPlay/services/http/serializable.dart';
 
 @Entity()
-class MusicColor {
+class MusicColor extends Serializable {
   @Id()
   int id = 0;
   @Transient()
@@ -14,6 +15,33 @@ class MusicColor {
   late ColorPalette palette;
   @Transient()
   late ColorTheme theme;
+
+  MusicColor.fromJson(Map json) {
+    background = Color(json["background"]);
+    text = Color(json["text"]);
+    icon = Color(json["icon"]);
+    other = Color(json["other"]);
+    inactive = Color(json["inactive"]);
+    palette = ColorPalette.getByName(json["pallete"]);
+    theme = ColorTheme.getByName(json["them"]);
+  }
+
+  Map<String, dynamic> toJson() {
+    String toHex(Color color) {
+      return "#${(color.value).toRadixString(16).padLeft(6, '0').toUpperCase().substring(2)}";
+    }
+
+    debugPrint(text.value.toString());
+    debugPrint(toHex(text));
+
+    return {
+      "background": toHex(background),
+      "text": toHex(text),
+      "icon": toHex(icon),
+      "inactive": toHex(inactive),
+      "other": toHex(other),
+    };
+  }
 
   int get dbBackground => background.value;
   int get dbText => text.value;
@@ -66,6 +94,8 @@ class MusicColor {
       palette: ${palette.name}
     }""";
   }
+
+  MusicColor.empty();
 
   MusicColor.create({
     required this.background,

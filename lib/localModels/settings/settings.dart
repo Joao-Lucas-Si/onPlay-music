@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:onPlay/localModels/settings/interface.dart';
 import 'package:onPlay/localModels/settings/layout.dart';
 import 'package:onPlay/localModels/settings/player.dart';
+import 'package:onPlay/localModels/settings/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends ChangeNotifier {
@@ -13,20 +14,23 @@ class Settings extends ChangeNotifier {
   var recentRange = 30;
   late InterfaceSettings _interface;
   late LayoutSettings _layout;
+  late ShareSettings _share;
   var _player = PlayerSettings();
 
   Settings() {
-    _interface = InterfaceSettings(() {
+    notify() {
       _change = true;
       notifyListeners();
-    });
-    _layout = LayoutSettings(() {
-      _change = true;
-      notifyListeners();
-    });
+    }
+
+    _interface = InterfaceSettings(notify);
+    _layout = LayoutSettings(notify);
+    _share = ShareSettings(notify);
   }
 
   PlayerSettings get player => _player;
+
+  ShareSettings get share => _share;
 
   LayoutSettings get layout => _layout;
 

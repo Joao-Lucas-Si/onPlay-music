@@ -1,7 +1,10 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:onPlay/localModels/settings/settings.dart';
+import 'package:onPlay/services/http/services/editor_color_service.dart';
 import 'package:onPlay/services/wallpaper_service.dart';
 import 'package:onPlay/store/player_store.dart';
+import 'package:provider/provider.dart';
 
 class PlayerService extends ChangeNotifier {
   final AudioPlayer _player = AudioPlayer();
@@ -38,11 +41,15 @@ class PlayerService extends ChangeNotifier {
       if (store!.playlist.isEmpty) {
         _player.stop();
       } else if (store!.playingSong != null && store!.mudarMusica) {
+        final settings = Provider.of<Settings>(context, listen: false);
         WallpaperService().setWallpaper(
             store!.playingSong!,
             MediaQuery.sizeOf(context).width,
             MediaQuery.sizeOf(context).height);
         _player.play(DeviceFileSource(store!.playingSong!.path));
+        EditorColorService(settings).sendColors(store!.playingSong!
+            .currentColors(settings.interface.colorPalette,
+                settings.interface.colorTheme));
         store!.mudarMusica = false;
       }
     }

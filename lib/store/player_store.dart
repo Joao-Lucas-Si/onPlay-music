@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:onPlay/models/song.dart';
+import 'package:onPlay/services/http/services/editor_color_service.dart';
 
 enum PlayModes {
   none("none"),
@@ -21,6 +22,7 @@ class PlayerStore extends ChangeNotifier {
   final maxVelocity = 5;
   var _paused = false;
   var _mode = PlayModes.none;
+
 
   double get velocity => _velocity;
 

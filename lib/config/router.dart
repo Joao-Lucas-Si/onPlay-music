@@ -19,6 +19,7 @@ import 'package:onPlay/widgets/pages/settings/files.dart';
 import 'package:onPlay/widgets/pages/settings/interface.dart';
 import 'package:onPlay/widgets/pages/settings/layout.dart';
 import 'package:onPlay/widgets/pages/settings/player.dart';
+import 'package:onPlay/widgets/pages/settings/share.dart';
 import 'package:onPlay/widgets/pages/song_form.dart';
 import 'package:onPlay/widgets/pages/user_form.dart';
 import 'package:onPlay/widgets/pages/settings/about.dart';
@@ -60,6 +61,10 @@ final router = GoRouter(routes: [
       GoRoute(
         path: FilesSettingsScreen.route,
         builder: (context, state) => const _Layout(body: FilesSettingsScreen()),
+      ),
+      GoRoute(
+        path: ShareSettingsScreen.route,
+        builder: (context, state) => const _Layout(body: ShareSettingsScreen()),
       ),
     ],
     builder: (context, state) => const _Layout(body: Config()),

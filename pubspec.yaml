@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.5.0+1
 
 environment:
-  sdk: '>=3.4.3 <4.0.0'
+  sdk:  ^3.5.3
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -47,9 +47,9 @@ dependencies:
   audioplayers: ^6.1.0
   palette_generator: ^0.3.3+4
   provider: ^6.1.2
-  wallpaper_handler: ^0.0.2
+  # wallpaper_handler: ^0.0.2
   flutter_cache_manager: ^3.3.1
-  flutter_wallpaper_manager: ^0.0.4
+  # flutter_wallpaper_manager: ^0.0.4
   audio_service: ^0.18.15
   shared_preferences: ^2.3.2
   file_picker: ^8.1.2
@@ -62,6 +62,8 @@ dependencies:
   package_info_plus: ^8.0.2
   external_path: ^2.0.1
   marquee: ^2.2.3
+  http: ^1.2.2
+  dio: ^5.7.0
 
 objectbox:
   output_dir: database
@@ -74,7 +76,7 @@ dev_dependencies:
   build_runner: ^2.4.11
   objectbox_generator: any
   # json_serializable: ^6.8.0
-  # The "flutter_lints" package below contains a set of recommended lints to
+  # The "flutter_lfints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
