@@ -1,36 +1,15 @@
-import 'package:objectbox/objectbox.dart';
+import 'package:onPlay/database/objectbox.g.dart';
 import 'package:onPlay/models/genre.dart';
+import 'package:onPlay/models/managers/base_manager.dart';
 
-class GenreManager {
-  Box<Genre> genreBox;
+class GenreManager extends BaseManager<Genre> {
+  GenreManager(super.box);
 
-  GenreManager(this.genreBox);
-
-  List<Genre> getAll() {
-    return genreBox.getAll();
+  void remove(Genre genre) {
+    box.remove(genre.id);
   }
 
-  // List<Song> where() {
-  //   return songBox.get
-  // }
-
-  int count() {
-    return genreBox.count();
-  }
-
-  save(Genre genre) {
-    genreBox.put(genre);
-  }
-
-  saveAll(List<Genre> genres) {
-    genreBox.putMany(genres);
-  }
-
-  removeAll() {
-    genreBox.removeAll();
-  }
-
-  remove(Genre genre) {
-    genreBox.remove(genre.id);
+  void removeEmpty() {
+    box.query(Genre_.songs.relationCount(0)).build().remove();
   }
 }

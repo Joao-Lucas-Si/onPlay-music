@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:onPlay/constants/themes/purple.dart';
 import 'package:onPlay/enums/colors/color_palette.dart';
 import 'package:onPlay/enums/colors/color_theme.dart';
+import 'package:onPlay/enums/card_type.dart';
 import 'package:onPlay/enums/player/controls_type.dart';
 import 'package:onPlay/enums/player/picture_type.dart';
 import 'package:onPlay/enums/player/progress_type.dart';
 import 'package:onPlay/enums/player/title_type.dart';
 import 'package:onPlay/enums/player_element.dart';
-import 'package:onPlay/localModels/settings/layout.dart';
-import 'package:onPlay/localModels/settings/settings.dart';
+import 'package:onPlay/enums/themes.dart';
+import 'package:onPlay/models/album.dart';
+import 'package:onPlay/models/artist.dart';
+import 'package:onPlay/models/genre.dart';
+import 'package:onPlay/models/playlist.dart';
+import 'package:onPlay/models/song.dart';
+import 'package:onPlay/store/settings/layout.dart';
+import 'package:onPlay/store/settings.dart';
+import 'package:onPlay/widgets/components/cards/album_card.dart';
+import 'package:onPlay/widgets/components/cards/artist_card.dart';
+import 'package:onPlay/widgets/components/cards/genre_card.dart';
+import 'package:onPlay/widgets/components/cards/playlist_card.dart';
+import 'package:onPlay/widgets/components/cards/song_card.dart';
+import 'package:onPlay/widgets/components/forms/check.dart';
 import 'package:onPlay/widgets/pages/settings/Config.dart';
 import 'package:provider/provider.dart';
 
@@ -51,6 +65,14 @@ class InterfaceSettingsScreen extends StatelessWidget {
     final settings = Provider.of<Settings>(context);
     final layout = settings.layout;
     final interface = settings.interface;
+    final songExample = Song(
+        path: "",
+        title: "musica",
+        duration: 0,
+        modified: DateTime.now(),
+        year: 0);
+    songExample.colors.add(purpleTheme);
+
     return Scaffold(
         appBar: AppBar(
           title: const Text("configurações de interface"),
@@ -62,6 +84,129 @@ class InterfaceSettingsScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const Text("Card de Música"),
+                  SongCard(song: songExample),
+                  const Text("card colorido"),
+                  UniqueCheck(
+                      value: settings.interface.coloredSongCard,
+                      text: "colorido",
+                      onChanged: (value) {
+                        settings.interface.coloredSongCard = value;
+                      }),
+                  const Text("estilo de card"),
+                  DropdownButton(
+                      value: settings.interface.songCardStyle,
+                      items: CardStyle.values
+                          .map((style) => DropdownMenuItem(
+                                value: style,
+                                child: Text(style.name),
+                              ))
+                          .toList(),
+                      onChanged: (style) {
+                        if (style != null) {
+                          settings.interface.songCardStyle = style;
+                        }
+                      }),
+                  const Text("Card de Artist"),
+                  ArtistCard(
+                    artist: Artist(name: "Artist"),
+                  ),
+                  const Text("card colorido"),
+                  UniqueCheck(
+                      value: settings.interface.coloredArtistCard,
+                      text: "colorido",
+                      onChanged: (value) {
+                        settings.interface.coloredArtistCard = value;
+                      }),
+                  const Text("estilo de card"),
+                  DropdownButton(
+                      value: settings.interface.artistCardStyle,
+                      items: CardStyle.values
+                          .map((style) => DropdownMenuItem(
+                                value: style,
+                                child: Text(style.name),
+                              ))
+                          .toList(),
+                      onChanged: (style) {
+                        if (style != null) {
+                          settings.interface.artistCardStyle = style;
+                        }
+                      }),
+                  const Text("Card de Album"),
+                  AlbumCard(
+                    album: Album(name: "Exemplo"),
+                  ),
+                  const Text("card colorido"),
+                  UniqueCheck(
+                      value: settings.interface.coloredAlbumCard,
+                      text: "colorido",
+                      onChanged: (value) {
+                        settings.interface.coloredAlbumCard = value;
+                      }),
+                  const Text("estilo de card"),
+                  DropdownButton(
+                      value: settings.interface.albumCardStyle,
+                      items: CardStyle.values
+                          .map((style) => DropdownMenuItem(
+                                value: style,
+                                child: Text(style.name),
+                              ))
+                          .toList(),
+                      onChanged: (style) {
+                        if (style != null) {
+                          settings.interface.albumCardStyle = style;
+                        }
+                      }),
+                  const Text("Card de Playlist"),
+                  PlaylistCard(
+                    playlist: Playlist(name: ""),
+                  ),
+                  const Text("card colorido"),
+                  UniqueCheck(
+                      value: settings.interface.coloredPlaylistCard,
+                      text: "colorido",
+                      onChanged: (value) {
+                        settings.interface.coloredPlaylistCard = value;
+                      }),
+                  const Text("estilo de card"),
+                  DropdownButton(
+                      value: settings.interface.playlistCardStyle,
+                      items: CardStyle.values
+                          .map((style) => DropdownMenuItem(
+                                value: style,
+                                child: Text(style.name),
+                              ))
+                          .toList(),
+                      onChanged: (style) {
+                        if (style != null) {
+                          settings.interface.playlistCardStyle = style;
+                        }
+                      }),
+                  const Text("Card de gênero"),
+                  GenreCard(
+                    genre: Genre(name: "Exemplo"),
+                  ),
+                  const Text("card colorido"),
+                  UniqueCheck(
+                      value: settings.interface.coloredGenreCard,
+                      text: "colorido",
+                      onChanged: (value) {
+                        settings.interface.coloredGenreCard = value;
+                      }),
+                  const Text("estilo de card"),
+                  DropdownButton(
+                      value: settings.interface.genreCardStyle,
+                      items: CardStyle.values
+                          .map((style) => DropdownMenuItem(
+                                value: style,
+                                child: Text(style.name),
+                              ))
+                          .toList(),
+                      onChanged: (style) {
+                        if (style != null) {
+                          settings.interface.genreCardStyle = style;
+                        }
+                      }),
                   const Text("estilo dos botões"),
                   DropdownButton(
                       value: interface.controlsType,
@@ -72,8 +217,21 @@ class InterfaceSettingsScreen extends StatelessWidget {
                               ))
                           .toList(),
                       onChanged: (value) {
-                        if (value != null)
+                        if (value != null) {
                           settings.interface.controlsType = value;
+                        }
+                      }),
+                  const Text("tema de cores básico"),
+                  DropdownButton(
+                      value: settings.interface.baseTheme,
+                      items: Themes.values
+                          .map((theme) => DropdownMenuItem(
+                                value: theme,
+                                child: Text(theme.name),
+                              ))
+                          .toList(),
+                      onChanged: (theme) {
+                        if (theme != null) settings.interface.baseTheme = theme;
                       }),
                   const Text("estilo da imagem"),
                   DropdownButton(
@@ -111,8 +269,9 @@ class InterfaceSettingsScreen extends StatelessWidget {
                           temp.insert(0, PlayerElement.picture);
                           layout.playerElements = temp;
                         }
-                        if (value != null)
+                        if (value != null) {
                           settings.interface.pictureType = value;
+                        }
                       }),
                   const Text("tema de cores"),
                   const ThemeCheck(value: ColorTheme.light, text: "claro"),
@@ -140,7 +299,7 @@ class InterfaceSettingsScreen extends StatelessWidget {
                     currentValue: interface.showChangePalette,
                     text: "mostrar opção de mudar paleta no player",
                     onChanged: (value) {
-                      interface.showChangePallete =
+                      interface.showChangePalette =
                           !interface.showChangePalette;
                     },
                   ),
@@ -179,16 +338,14 @@ class InterfaceSettingsScreen extends StatelessWidget {
   }
 }
 
-class Check<T> extends StatelessWidget {
-  final T value;
-  final T currentValue;
+class UniqueCheck extends StatelessWidget {
+  final bool value;
   final String text;
-  final Function(T value) onChanged;
+  final Function(bool value) onChanged;
 
-  const Check(
+  const UniqueCheck(
       {super.key,
       required this.value,
-      required this.currentValue,
       required this.text,
       required this.onChanged});
 
@@ -197,10 +354,10 @@ class Check<T> extends StatelessWidget {
     return Row(
       children: [
         Checkbox(
-          value: currentValue == value,
+          value: value,
           onChanged: (_) {
             if (_ != null) {
-              onChanged(value);
+              onChanged(_);
             }
           },
         ),
@@ -209,6 +366,7 @@ class Check<T> extends StatelessWidget {
     );
   }
 }
+
 
 class ThemeCheck extends StatelessWidget {
   final ColorTheme value;

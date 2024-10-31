@@ -11,4 +11,4 @@ final purpleTheme = MusicColor.create(
     inactive: Colors.purpleAccent[900] ?? Colors.purple,
     background: Colors.purple,
     text: Colors.white,
-    other: Color(0xFF9E9E9E));
+    other: const Color(0xFF9E9E9E));

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:metadata_god/metadata_god.dart';
 import 'package:onPlay/models/song.dart';
 import 'package:onPlay/services/files_service.dart';
+import 'package:onPlay/services/toast_service.dart';
 import 'package:onPlay/store/song_store.dart';
 import 'package:provider/provider.dart';
 
@@ -46,8 +47,9 @@ class _SongFormState extends State<SongForm> {
   @override
   Widget build(BuildContext context) {
     final song = widget.song;
-    //final songStore = Provider.of<SongStore>(context);
+    final toastService = Provider.of<ToastService>(context);
     final songStore = Provider.of<SongStore>(context);
+
     return Scaffold(
       appBar: AppBar(),
       body: SafeArea(
@@ -115,16 +117,24 @@ class _SongFormState extends State<SongForm> {
                         debugPrint("album: $album");
                         debugPrint("genero: $genre");
                         debugPrint("ano: $year");
-                        await FilesService.editMetadata(
-                            song.path,
-                            Metadata(
-                                album: album,
-                                artist: artist,
-                                genre: genre,
-                                title: title,
-                                year: year));
-                        songStore.updateSong(song.path);
-                        GoRouter.of(context).pop();
+                        try {
+                          await FilesService.editMetadata(
+                              song.path,
+                              Metadata(
+                                  album: album,
+                                  artist: artist,
+                                  genre: genre,
+                                  title: title,
+                                  year: year));
+                          songStore.updateSong(song.path);
+                          toastService.showTextToast(
+                              "alterações salvas com sucesso",
+                              context: context);
+                          GoRouter.of(context).pop();
+                        } catch (e) {
+                          toastService.showTextToast(
+                              "Não foi possivel salvar as alterações");
+                        }
                       },
                     ),
                   )

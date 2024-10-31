@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:onPlay/localModels/settings/settings.dart';
+import 'package:onPlay/store/settings.dart';
 import 'package:onPlay/models/song.dart';
 import 'package:onPlay/store/song_store.dart';
 import 'package:onPlay/widgets/components/cards/song_card.dart';
@@ -9,8 +9,8 @@ import 'package:provider/provider.dart';
 
 class Recents extends StatelessWidget {
   Recents({super.key});
-  late SongStore songStore;
-  late Settings settings;
+  late final SongStore songStore;
+  late final Settings settings;
   static const route = "recents";
 
   static const path = "${Home.path}/$route";
@@ -29,7 +29,7 @@ class Recents extends StatelessWidget {
     debugPrint(songStore.songs.map((song) => song.modified).toString());
     return Scaffold(
         appBar: AppBar(
-          title: Text("musicas recentes"),
+          title: const Text("musicas recentes"),
         ),
         body: recentsSongs.isEmpty
             ? const Text("nenhum musica encontrada")
@@ -39,6 +39,7 @@ class Recents extends StatelessWidget {
                   final song = recentsSongs[index];
 
                   return SongCard(
+                    key: ValueKey(song.id),
                     song: song,
                     playlist: recentsSongs,
                   );

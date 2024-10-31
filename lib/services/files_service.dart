@@ -150,8 +150,7 @@ class FilesService {
     return song;
   }
 
-  static Future<List<Song>> getAllMusics(
-      Function(String state) setLoading) async {
+  static Future<List<Song>> getAllMusics(Function(String state) setLoading) async {
     setLoading("coletando os arquivos");
     final files = await getAllMusicFiles(setLoading);
     List<Song> songs = [];
@@ -159,6 +158,7 @@ class FilesService {
       final song = await getSongByFile(file);
       setLoading(song.title);
       songs.add(song);
+      
     }
     setLoading("");
     return songs;

@@ -1,6 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:onPlay/localModels/settings/settings.dart';
+import 'package:onPlay/store/settings.dart';
 import 'package:onPlay/services/http/services/editor_color_service.dart';
 import 'package:onPlay/services/wallpaper_service.dart';
 import 'package:onPlay/store/player_store.dart';
@@ -48,8 +48,9 @@ class PlayerService extends ChangeNotifier {
             MediaQuery.sizeOf(context).height);
         _player.play(DeviceFileSource(store!.playingSong!.path));
         EditorColorService(settings).sendColors(store!.playingSong!
-            .currentColors(settings.interface.colorPalette,
-                settings.interface.colorTheme));
+            .currentColors(
+                settings.interface.colorPalette, settings.interface.colorTheme,
+                context: context));
         store!.mudarMusica = false;
       }
     }

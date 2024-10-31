@@ -18,7 +18,14 @@ import '../models/album.dart';
 import '../models/artist.dart';
 import '../models/genre.dart';
 import '../models/music_color.dart';
+import '../models/playlist.dart';
+import '../models/settings/interface.dart';
+import '../models/settings/layout.dart';
+import '../models/settings/player.dart';
+import '../models/settings/settings.dart';
+import '../models/settings/share.dart';
 import '../models/song.dart';
+import '../models/user_profile.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
@@ -38,11 +45,6 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(2, 2610160443812700902),
             name: 'name',
             type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 5182564456990978250),
-            name: 'picture',
-            type: 23,
             flags: 0),
         obx_int.ModelProperty(
             id: const obx_int.IdUid(4, 961771146083296052),
@@ -72,11 +74,6 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(2, 923523403980957935),
             name: 'name',
             type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 1475912299933615236),
-            name: 'picture',
-            type: 23,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -101,11 +98,6 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(2, 4258590337348061470),
             name: 'name',
             type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 5738142651511766062),
-            name: 'picture',
-            type: 23,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -176,11 +168,13 @@ final _entities = <obx_int.ModelEntity>[
             type: 10,
             flags: 0)
       ],
-      relations: <obx_int.ModelRelation>[],
-      backlinks: <obx_int.ModelBacklink>[
-        obx_int.ModelBacklink(
-            name: 'colors', srcEntity: 'MusicColor', srcField: 'song')
-      ]),
+      relations: <obx_int.ModelRelation>[
+        obx_int.ModelRelation(
+            id: const obx_int.IdUid(3, 7690569768755154711),
+            name: 'colors',
+            targetId: const obx_int.IdUid(5, 8869230512487373120))
+      ],
+      backlinks: <obx_int.ModelBacklink>[]),
   obx_int.ModelEntity(
       id: const obx_int.IdUid(5, 8869230512487373120),
       name: 'MusicColor',
@@ -192,13 +186,6 @@ final _entities = <obx_int.ModelEntity>[
             name: 'id',
             type: 6,
             flags: 1),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 7850994761262333986),
-            name: 'songId',
-            type: 11,
-            flags: 520,
-            indexId: const obx_int.IdUid(5, 8923944927584716313),
-            relationTarget: 'Song'),
         obx_int.ModelProperty(
             id: const obx_int.IdUid(3, 6413553713852324861),
             name: 'dbBackground',
@@ -232,6 +219,364 @@ final _entities = <obx_int.ModelEntity>[
         obx_int.ModelProperty(
             id: const obx_int.IdUid(9, 3465104969620754882),
             name: 'dbPalette',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(6, 2934314663694208747),
+      name: 'Playlist',
+      lastPropertyId: const obx_int.IdUid(3, 3125077617453859936),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 3828699003463814072),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 6501151964883751669),
+            name: 'name',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 3125077617453859936),
+            name: 'userId',
+            type: 11,
+            flags: 520,
+            indexId: const obx_int.IdUid(6, 7788313485866779765),
+            relationTarget: 'UserProfile')
+      ],
+      relations: <obx_int.ModelRelation>[
+        obx_int.ModelRelation(
+            id: const obx_int.IdUid(1, 1714640651402914561),
+            name: 'songs',
+            targetId: const obx_int.IdUid(4, 6497590176427579550))
+      ],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(7, 88431105930997367),
+      name: 'DatabasePlayerSettings',
+      lastPropertyId: const obx_int.IdUid(4, 1848556570147454257),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 6200573323939050195),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 5519772685723583622),
+            name: 'velocityStep',
+            type: 8,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 7999809434121947628),
+            name: 'maxVelocity',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 1848556570147454257),
+            name: 'volumeStep',
+            type: 8,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(8, 6346989537120360199),
+      name: 'DatabaseSettings',
+      lastPropertyId: const obx_int.IdUid(6, 1569665513455864168),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 5492649879089754200),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 786553103394085435),
+            name: 'recentRange',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 6023788294185895299),
+            name: 'interfaceId',
+            type: 11,
+            flags: 520,
+            indexId: const obx_int.IdUid(7, 4243986190520251430),
+            relationTarget: 'DatabaseInterfaceSettings'),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 9125839004558863944),
+            name: 'shareId',
+            type: 11,
+            flags: 520,
+            indexId: const obx_int.IdUid(8, 7948895637201857902),
+            relationTarget: 'DatabaseShareSettings'),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 4794609617023008456),
+            name: 'layoutId',
+            type: 11,
+            flags: 520,
+            indexId: const obx_int.IdUid(9, 2549234341094408931),
+            relationTarget: 'DatabaseLayoutSettings'),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 1569665513455864168),
+            name: 'playerId',
+            type: 11,
+            flags: 520,
+            indexId: const obx_int.IdUid(10, 4417538046858357665),
+            relationTarget: 'DatabasePlayerSettings')
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(9, 2815627667814007811),
+      name: 'DatabaseShareSettings',
+      lastPropertyId: const obx_int.IdUid(2, 6078732247047000981),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 1656930692021190658),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 6078732247047000981),
+            name: 'editorUrls',
+            type: 30,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(10, 1713575689177859023),
+      name: 'UserProfile',
+      lastPropertyId: const obx_int.IdUid(6, 1668568879331343734),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 7325430212055432722),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 3552461870333706012),
+            name: 'name',
+            type: 9,
+            flags: 2080,
+            indexId: const obx_int.IdUid(11, 8368297415295655801)),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 9185213372745912318),
+            name: 'banner',
+            type: 23,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 4096865057018024385),
+            name: 'photo',
+            type: 23,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 6876681336544452087),
+            name: 'current',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 1668568879331343734),
+            name: 'settingsId',
+            type: 11,
+            flags: 520,
+            indexId: const obx_int.IdUid(12, 8877211369580756881),
+            relationTarget: 'DatabaseSettings')
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[
+        obx_int.ModelBacklink(
+            name: 'playlists', srcEntity: 'Playlist', srcField: 'user')
+      ]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(11, 1783439183368047241),
+      name: 'DatabaseLayoutSettings',
+      lastPropertyId: const obx_int.IdUid(7, 2944878772244270136),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 6329027414350276675),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 6035222152268694810),
+            name: 'dbContainerStyle',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 4325039813061252695),
+            name: 'dbMainScreens',
+            type: 30,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 5453335989415707779),
+            name: 'dbHiddenScreens',
+            type: 30,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 1466720086861744307),
+            name: 'dbVolumeType',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 7291842168322318469),
+            name: 'dbPlayerElements',
+            type: 30,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 2944878772244270136),
+            name: 'songGridItems',
+            type: 6,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[
+        obx_int.ModelRelation(
+            id: const obx_int.IdUid(2, 4472535590567062791),
+            name: 'lateralElements',
+            targetId: const obx_int.IdUid(12, 107265284620181940))
+      ],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(12, 107265284620181940),
+      name: 'LateralPlayerElement',
+      lastPropertyId: const obx_int.IdUid(3, 5228668252609080612),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 8631266473723612824),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 3187884672471329317),
+            name: 'dbElement',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 5228668252609080612),
+            name: 'dbPosition',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(13, 533300879031493817),
+      name: 'DatabaseInterfaceSettings',
+      lastPropertyId: const obx_int.IdUid(22, 8730058587949986835),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 6501473581865677363),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 4353151855002356512),
+            name: 'showChangeTheme',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 1058604158813073426),
+            name: 'showChangePalette',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 7143693882026609607),
+            name: 'themeBasedOnTime',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 4805747310418116613),
+            name: 'dbTitleType',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 5005591584744347295),
+            name: 'dbProgressType',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(8, 6652327034148461698),
+            name: 'dbColorPalette',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(9, 1914477881654021767),
+            name: 'dbColorTheme',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(10, 6799555786810443086),
+            name: 'dbPictureType',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(11, 2687349597221271493),
+            name: 'dbControlsType',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(12, 1326573167591469492),
+            name: 'dbBaseTheme',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(13, 4217658101655518446),
+            name: 'coloredSongCard',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(14, 6938215218188448593),
+            name: 'coloredAlbumCard',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(15, 6710049825364518782),
+            name: 'coloredGenreCard',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(16, 7771869454415669964),
+            name: 'coloredArtistCard',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(17, 5678620975604039095),
+            name: 'coloredPlaylistCard',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(18, 1043290662866124199),
+            name: 'dbSongCardStyle',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(19, 4199345951390654570),
+            name: 'dbAlbumCardStyle',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(20, 5359427239481035302),
+            name: 'dbArtistCardStyle',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(21, 2476091790950636473),
+            name: 'dbPlaylistCardStyle',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(22, 8730058587949986835),
+            name: 'dbGenreCardStyle',
             type: 9,
             flags: 0)
       ],
@@ -274,13 +619,19 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(5, 8869230512487373120),
-      lastIndexId: const obx_int.IdUid(5, 8923944927584716313),
-      lastRelationId: const obx_int.IdUid(0, 0),
+      lastEntityId: const obx_int.IdUid(13, 533300879031493817),
+      lastIndexId: const obx_int.IdUid(12, 8877211369580756881),
+      lastRelationId: const obx_int.IdUid(3, 7690569768755154711),
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [],
-      retiredIndexUids: const [],
-      retiredPropertyUids: const [],
+      retiredIndexUids: const [8923944927584716313],
+      retiredPropertyUids: const [
+        353378994051547501,
+        5182564456990978250,
+        1475912299933615236,
+        5738142651511766062,
+        7850994761262333986
+      ],
       retiredRelationUids: const [],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
@@ -301,13 +652,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
         },
         objectToFB: (Album object, fb.Builder fbb) {
           final nameOffset = fbb.writeString(object.name);
-          final pictureOffset = object.picture == null
-              ? null
-              : fbb.writeListInt8(object.picture!);
           fbb.startTable(5);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, nameOffset);
-          fbb.addOffset(2, pictureOffset);
           fbb.addInt64(3, object.artist.targetId);
           fbb.finish(fbb.endTable());
           return object.id;
@@ -317,9 +664,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final rootOffset = buffer.derefObject(0);
           final nameParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 6, '');
-          final pictureParam = const fb.Uint8ListReader(lazy: false)
-              .vTableGetNullable(buffer, rootOffset, 8) as Uint8List?;
-          final object = Album(name: nameParam, picture: pictureParam)
+          final object = Album(name: nameParam)
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
           object.artist.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
@@ -348,13 +693,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
         },
         objectToFB: (Artist object, fb.Builder fbb) {
           final nameOffset = fbb.writeString(object.name);
-          final pictureOffset = object.picture == null
-              ? null
-              : fbb.writeListInt8(object.picture!);
           fbb.startTable(4);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, nameOffset);
-          fbb.addOffset(2, pictureOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -363,9 +704,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final rootOffset = buffer.derefObject(0);
           final nameParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 6, '');
-          final pictureParam = const fb.Uint8ListReader(lazy: false)
-              .vTableGetNullable(buffer, rootOffset, 8) as Uint8List?;
-          final object = Artist(name: nameParam, picture: pictureParam)
+          final object = Artist(name: nameParam)
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
           obx_int.InternalToManyAccess.setRelInfo<Artist>(
               object.songs,
@@ -393,13 +732,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
         },
         objectToFB: (Genre object, fb.Builder fbb) {
           final nameOffset = fbb.writeString(object.name);
-          final pictureOffset = object.picture == null
-              ? null
-              : fbb.writeListInt8(object.picture!);
           fbb.startTable(4);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, nameOffset);
-          fbb.addOffset(2, pictureOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -408,9 +743,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final rootOffset = buffer.derefObject(0);
           final nameParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 6, '');
-          final pictureParam = const fb.Uint8ListReader(lazy: false)
-              .vTableGetNullable(buffer, rootOffset, 8) as Uint8List?;
-          final object = Genre(name: nameParam, picture: pictureParam)
+          final object = Genre(name: nameParam)
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
           obx_int.InternalToManyAccess.setRelInfo<Genre>(
               object.songs,
@@ -423,11 +756,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
         model: _entities[3],
         toOneRelations: (Song object) =>
             [object.artist, object.album, object.genre],
-        toManyRelations: (Song object) => {
-              obx_int.RelInfo<MusicColor>.toOneBacklink(
-                      2, object.id, (MusicColor srcObject) => srcObject.song):
-                  object.colors
-            },
+        toManyRelations: (Song object) =>
+            {obx_int.RelInfo<Song>.toMany(3, object.id): object.colors},
         getId: (Song object) => object.id,
         setId: (Song object, int id) {
           object.id = id;
@@ -488,15 +818,12 @@ obx_int.ModelDefinition getObjectBoxModel() {
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 20, 0);
           object.genre.attach(store);
           obx_int.InternalToManyAccess.setRelInfo<Song>(
-              object.colors,
-              store,
-              obx_int.RelInfo<MusicColor>.toOneBacklink(
-                  2, object.id, (MusicColor srcObject) => srcObject.song));
+              object.colors, store, obx_int.RelInfo<Song>.toMany(3, object.id));
           return object;
         }),
     MusicColor: obx_int.EntityDefinition<MusicColor>(
         model: _entities[4],
-        toOneRelations: (MusicColor object) => [object.song],
+        toOneRelations: (MusicColor object) => [],
         toManyRelations: (MusicColor object) => {},
         getId: (MusicColor object) => object.id,
         setId: (MusicColor object, int id) {
@@ -507,7 +834,6 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final dbPaletteOffset = fbb.writeString(object.dbPalette);
           fbb.startTable(10);
           fbb.addInt64(0, object.id);
-          fbb.addInt64(1, object.song.targetId);
           fbb.addInt64(2, object.dbBackground);
           fbb.addInt64(3, object.dbText);
           fbb.addInt64(4, object.dbIcon);
@@ -544,9 +870,425 @@ obx_int.ModelDefinition getObjectBoxModel() {
               dbPalette: dbPaletteParam,
               dbTheme: dbThemeParam)
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-          object.song.targetId =
+
+          return object;
+        }),
+    Playlist: obx_int.EntityDefinition<Playlist>(
+        model: _entities[5],
+        toOneRelations: (Playlist object) => [object.user],
+        toManyRelations: (Playlist object) =>
+            {obx_int.RelInfo<Playlist>.toMany(1, object.id): object.songs},
+        getId: (Playlist object) => object.id,
+        setId: (Playlist object, int id) {
+          object.id = id;
+        },
+        objectToFB: (Playlist object, fb.Builder fbb) {
+          final nameOffset = fbb.writeString(object.name);
+          fbb.startTable(4);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, nameOffset);
+          fbb.addInt64(2, object.user.targetId);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final nameParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 6, '');
+          final object = Playlist(name: nameParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          object.user.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
+          object.user.attach(store);
+          obx_int.InternalToManyAccess.setRelInfo<Playlist>(object.songs, store,
+              obx_int.RelInfo<Playlist>.toMany(1, object.id));
+          return object;
+        }),
+    DatabasePlayerSettings: obx_int.EntityDefinition<DatabasePlayerSettings>(
+        model: _entities[6],
+        toOneRelations: (DatabasePlayerSettings object) => [],
+        toManyRelations: (DatabasePlayerSettings object) => {},
+        getId: (DatabasePlayerSettings object) => object.id,
+        setId: (DatabasePlayerSettings object, int id) {
+          object.id = id;
+        },
+        objectToFB: (DatabasePlayerSettings object, fb.Builder fbb) {
+          fbb.startTable(5);
+          fbb.addInt64(0, object.id);
+          fbb.addFloat64(1, object.velocityStep);
+          fbb.addInt64(2, object.maxVelocity);
+          fbb.addFloat64(3, object.volumeStep);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final maxVelocityParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
+          final velocityStepParam =
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 6, 0);
+          final volumeStepParam =
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 10, 0);
+          final object = DatabasePlayerSettings(
+              maxVelocity: maxVelocityParam,
+              velocityStep: velocityStepParam,
+              volumeStep: volumeStepParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+
+          return object;
+        }),
+    DatabaseSettings: obx_int.EntityDefinition<DatabaseSettings>(
+        model: _entities[7],
+        toOneRelations: (DatabaseSettings object) =>
+            [object.interface, object.share, object.layout, object.player],
+        toManyRelations: (DatabaseSettings object) => {},
+        getId: (DatabaseSettings object) => object.id,
+        setId: (DatabaseSettings object, int id) {
+          object.id = id;
+        },
+        objectToFB: (DatabaseSettings object, fb.Builder fbb) {
+          fbb.startTable(7);
+          fbb.addInt64(0, object.id);
+          fbb.addInt64(1, object.recentRange);
+          fbb.addInt64(2, object.interface.targetId);
+          fbb.addInt64(3, object.share.targetId);
+          fbb.addInt64(4, object.layout.targetId);
+          fbb.addInt64(5, object.player.targetId);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final recentRangeParam =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0);
-          object.song.attach(store);
+          final object = DatabaseSettings(recentRange: recentRangeParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          object.interface.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
+          object.interface.attach(store);
+          object.share.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
+          object.share.attach(store);
+          object.layout.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
+          object.layout.attach(store);
+          object.player.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0);
+          object.player.attach(store);
+          return object;
+        }),
+    DatabaseShareSettings: obx_int.EntityDefinition<DatabaseShareSettings>(
+        model: _entities[8],
+        toOneRelations: (DatabaseShareSettings object) => [],
+        toManyRelations: (DatabaseShareSettings object) => {},
+        getId: (DatabaseShareSettings object) => object.id,
+        setId: (DatabaseShareSettings object, int id) {
+          object.id = id;
+        },
+        objectToFB: (DatabaseShareSettings object, fb.Builder fbb) {
+          final editorUrlsOffset = fbb.writeList(
+              object.editorUrls.map(fbb.writeString).toList(growable: false));
+          fbb.startTable(3);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, editorUrlsOffset);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final editorUrlsParam = const fb.ListReader<String>(
+                  fb.StringReader(asciiOptimization: true),
+                  lazy: false)
+              .vTableGet(buffer, rootOffset, 6, []);
+          final object = DatabaseShareSettings(editorUrls: editorUrlsParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+
+          return object;
+        }),
+    UserProfile: obx_int.EntityDefinition<UserProfile>(
+        model: _entities[9],
+        toOneRelations: (UserProfile object) => [object.settings],
+        toManyRelations: (UserProfile object) => {
+              obx_int.RelInfo<Playlist>.toOneBacklink(
+                      3, object.id, (Playlist srcObject) => srcObject.user):
+                  object.playlists
+            },
+        getId: (UserProfile object) => object.id,
+        setId: (UserProfile object, int id) {
+          object.id = id;
+        },
+        objectToFB: (UserProfile object, fb.Builder fbb) {
+          final nameOffset = fbb.writeString(object.name);
+          final bannerOffset =
+              object.banner == null ? null : fbb.writeListInt8(object.banner!);
+          final photoOffset =
+              object.photo == null ? null : fbb.writeListInt8(object.photo!);
+          fbb.startTable(7);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, nameOffset);
+          fbb.addOffset(2, bannerOffset);
+          fbb.addOffset(3, photoOffset);
+          fbb.addBool(4, object.current);
+          fbb.addInt64(5, object.settings.targetId);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final nameParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 6, '');
+          final bannerParam = const fb.Uint8ListReader(lazy: false)
+              .vTableGetNullable(buffer, rootOffset, 8) as Uint8List?;
+          final photoParam = const fb.Uint8ListReader(lazy: false)
+              .vTableGetNullable(buffer, rootOffset, 10) as Uint8List?;
+          final currentParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 12, false);
+          final object = UserProfile(
+              name: nameParam,
+              banner: bannerParam,
+              photo: photoParam,
+              current: currentParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          object.settings.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0);
+          object.settings.attach(store);
+          obx_int.InternalToManyAccess.setRelInfo<UserProfile>(
+              object.playlists,
+              store,
+              obx_int.RelInfo<Playlist>.toOneBacklink(
+                  3, object.id, (Playlist srcObject) => srcObject.user));
+          return object;
+        }),
+    DatabaseLayoutSettings: obx_int.EntityDefinition<DatabaseLayoutSettings>(
+        model: _entities[10],
+        toOneRelations: (DatabaseLayoutSettings object) => [],
+        toManyRelations: (DatabaseLayoutSettings object) => {
+              obx_int.RelInfo<DatabaseLayoutSettings>.toMany(2, object.id):
+                  object.lateralElements
+            },
+        getId: (DatabaseLayoutSettings object) => object.id,
+        setId: (DatabaseLayoutSettings object, int id) {
+          object.id = id;
+        },
+        objectToFB: (DatabaseLayoutSettings object, fb.Builder fbb) {
+          final dbContainerStyleOffset =
+              fbb.writeString(object.dbContainerStyle);
+          final dbMainScreensOffset = fbb.writeList(object.dbMainScreens
+              .map(fbb.writeString)
+              .toList(growable: false));
+          final dbHiddenScreensOffset = fbb.writeList(object.dbHiddenScreens
+              .map(fbb.writeString)
+              .toList(growable: false));
+          final dbVolumeTypeOffset = fbb.writeString(object.dbVolumeType);
+          final dbPlayerElementsOffset = fbb.writeList(object.dbPlayerElements
+              .map(fbb.writeString)
+              .toList(growable: false));
+          fbb.startTable(8);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, dbContainerStyleOffset);
+          fbb.addOffset(2, dbMainScreensOffset);
+          fbb.addOffset(3, dbHiddenScreensOffset);
+          fbb.addOffset(4, dbVolumeTypeOffset);
+          fbb.addOffset(5, dbPlayerElementsOffset);
+          fbb.addInt64(6, object.songGridItems);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+
+          final object = DatabaseLayoutSettings()
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
+            ..dbContainerStyle = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 6, '')
+            ..dbMainScreens = const fb.ListReader<String>(
+                    fb.StringReader(asciiOptimization: true),
+                    lazy: false)
+                .vTableGet(buffer, rootOffset, 8, [])
+            ..dbHiddenScreens = const fb.ListReader<String>(
+                    fb.StringReader(asciiOptimization: true),
+                    lazy: false)
+                .vTableGet(buffer, rootOffset, 10, [])
+            ..dbVolumeType = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 12, '')
+            ..dbPlayerElements = const fb.ListReader<String>(
+                    fb.StringReader(asciiOptimization: true),
+                    lazy: false)
+                .vTableGet(buffer, rootOffset, 14, [])
+            ..songGridItems =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0);
+          obx_int.InternalToManyAccess.setRelInfo<DatabaseLayoutSettings>(
+              object.lateralElements,
+              store,
+              obx_int.RelInfo<DatabaseLayoutSettings>.toMany(2, object.id));
+          return object;
+        }),
+    LateralPlayerElement: obx_int.EntityDefinition<LateralPlayerElement>(
+        model: _entities[11],
+        toOneRelations: (LateralPlayerElement object) => [],
+        toManyRelations: (LateralPlayerElement object) => {},
+        getId: (LateralPlayerElement object) => object.id,
+        setId: (LateralPlayerElement object, int id) {
+          object.id = id;
+        },
+        objectToFB: (LateralPlayerElement object, fb.Builder fbb) {
+          final dbElementOffset = fbb.writeString(object.dbElement);
+          final dbPositionOffset = fbb.writeString(object.dbPosition);
+          fbb.startTable(4);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, dbElementOffset);
+          fbb.addOffset(2, dbPositionOffset);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final dbPositionParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 8, '');
+          final dbElementParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 6, '');
+          final object = LateralPlayerElement(
+              dbPosition: dbPositionParam, dbElement: dbElementParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+
+          return object;
+        }),
+    DatabaseInterfaceSettings: obx_int.EntityDefinition<
+            DatabaseInterfaceSettings>(
+        model: _entities[12],
+        toOneRelations: (DatabaseInterfaceSettings object) => [],
+        toManyRelations: (DatabaseInterfaceSettings object) => {},
+        getId: (DatabaseInterfaceSettings object) => object.id,
+        setId: (DatabaseInterfaceSettings object, int id) {
+          object.id = id;
+        },
+        objectToFB: (DatabaseInterfaceSettings object, fb.Builder fbb) {
+          final dbTitleTypeOffset = fbb.writeString(object.dbTitleType);
+          final dbProgressTypeOffset = fbb.writeString(object.dbProgressType);
+          final dbColorPaletteOffset = fbb.writeString(object.dbColorPalette);
+          final dbColorThemeOffset = fbb.writeString(object.dbColorTheme);
+          final dbPictureTypeOffset = fbb.writeString(object.dbPictureType);
+          final dbControlsTypeOffset = fbb.writeString(object.dbControlsType);
+          final dbBaseThemeOffset = fbb.writeString(object.dbBaseTheme);
+          final dbSongCardStyleOffset = fbb.writeString(object.dbSongCardStyle);
+          final dbAlbumCardStyleOffset =
+              fbb.writeString(object.dbAlbumCardStyle);
+          final dbArtistCardStyleOffset =
+              fbb.writeString(object.dbArtistCardStyle);
+          final dbPlaylistCardStyleOffset =
+              fbb.writeString(object.dbPlaylistCardStyle);
+          final dbGenreCardStyleOffset =
+              fbb.writeString(object.dbGenreCardStyle);
+          fbb.startTable(23);
+          fbb.addInt64(0, object.id);
+          fbb.addBool(1, object.showChangeTheme);
+          fbb.addBool(2, object.showChangePalette);
+          fbb.addBool(3, object.themeBasedOnTime);
+          fbb.addOffset(5, dbTitleTypeOffset);
+          fbb.addOffset(6, dbProgressTypeOffset);
+          fbb.addOffset(7, dbColorPaletteOffset);
+          fbb.addOffset(8, dbColorThemeOffset);
+          fbb.addOffset(9, dbPictureTypeOffset);
+          fbb.addOffset(10, dbControlsTypeOffset);
+          fbb.addOffset(11, dbBaseThemeOffset);
+          fbb.addBool(12, object.coloredSongCard);
+          fbb.addBool(13, object.coloredAlbumCard);
+          fbb.addBool(14, object.coloredGenreCard);
+          fbb.addBool(15, object.coloredArtistCard);
+          fbb.addBool(16, object.coloredPlaylistCard);
+          fbb.addOffset(17, dbSongCardStyleOffset);
+          fbb.addOffset(18, dbAlbumCardStyleOffset);
+          fbb.addOffset(19, dbArtistCardStyleOffset);
+          fbb.addOffset(20, dbPlaylistCardStyleOffset);
+          fbb.addOffset(21, dbGenreCardStyleOffset);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final showChangePaletteParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 8, false);
+          final showChangeThemeParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 6, false);
+          final themeBasedOnTimeParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 10, false);
+          final dbControlsTypeParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 24, '');
+          final dbPictureTypeParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 22, '');
+          final dbColorPaletteParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 18, '');
+          final dbTitleTypeParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 14, '');
+          final dbProgressTypeParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 16, '');
+          final dbBaseThemeParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 26, '');
+          final dbColorThemeParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 20, '');
+          final coloredAlbumCardParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 30, false);
+          final coloredGenreCardParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 32, false);
+          final coloredArtistCardParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 34, false);
+          final coloredPlaylistCardParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 36, false);
+          final coloredSongCardParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 28, false);
+          final dbSongCardStyleParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 38, '');
+          final dbAlbumCardStyleParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 40, '');
+          final dbGenreCardStyleParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 46, '');
+          final dbArtistCardStyleParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 42, '');
+          final dbPlaylistCardStyleParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 44, '');
+          final object = DatabaseInterfaceSettings(
+              showChangePalette: showChangePaletteParam,
+              showChangeTheme: showChangeThemeParam,
+              themeBasedOnTime: themeBasedOnTimeParam,
+              dbControlsType: dbControlsTypeParam,
+              dbPictureType: dbPictureTypeParam,
+              dbColorPalette: dbColorPaletteParam,
+              dbTitleType: dbTitleTypeParam,
+              dbProgressType: dbProgressTypeParam,
+              dbBaseTheme: dbBaseThemeParam,
+              dbColorTheme: dbColorThemeParam,
+              coloredAlbumCard: coloredAlbumCardParam,
+              coloredGenreCard: coloredGenreCardParam,
+              coloredArtistCard: coloredArtistCardParam,
+              coloredPlaylistCard: coloredPlaylistCardParam,
+              coloredSongCard: coloredSongCardParam,
+              dbSongCardStyle: dbSongCardStyleParam,
+              dbAlbumCardStyle: dbAlbumCardStyleParam,
+              dbGenreCardStyle: dbGenreCardStyleParam,
+              dbArtistCardStyle: dbArtistCardStyleParam,
+              dbPlaylistCardStyle: dbPlaylistCardStyleParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+
           return object;
         })
   };
@@ -563,13 +1305,9 @@ class Album_ {
   static final name =
       obx.QueryStringProperty<Album>(_entities[0].properties[1]);
 
-  /// See [Album.picture].
-  static final picture =
-      obx.QueryByteVectorProperty<Album>(_entities[0].properties[2]);
-
   /// See [Album.artist].
   static final artist =
-      obx.QueryRelationToOne<Album, Artist>(_entities[0].properties[3]);
+      obx.QueryRelationToOne<Album, Artist>(_entities[0].properties[2]);
 
   /// see [Album.songs]
   static final songs = obx.QueryBacklinkToMany<Song, Album>(Song_.album);
@@ -584,10 +1322,6 @@ class Artist_ {
   /// See [Artist.name].
   static final name =
       obx.QueryStringProperty<Artist>(_entities[1].properties[1]);
-
-  /// See [Artist.picture].
-  static final picture =
-      obx.QueryByteVectorProperty<Artist>(_entities[1].properties[2]);
 
   /// see [Artist.songs]
   static final songs = obx.QueryBacklinkToMany<Song, Artist>(Song_.artist);
@@ -604,10 +1338,6 @@ class Genre_ {
   /// See [Genre.name].
   static final name =
       obx.QueryStringProperty<Genre>(_entities[2].properties[1]);
-
-  /// See [Genre.picture].
-  static final picture =
-      obx.QueryByteVectorProperty<Genre>(_entities[2].properties[2]);
 
   /// see [Genre.songs]
   static final songs = obx.QueryBacklinkToMany<Song, Genre>(Song_.genre);
@@ -655,7 +1385,7 @@ class Song_ {
 
   /// see [Song.colors]
   static final colors =
-      obx.QueryBacklinkToMany<MusicColor, Song>(MusicColor_.song);
+      obx.QueryRelationToMany<Song, MusicColor>(_entities[3].relations[0]);
 }
 
 /// [MusicColor] entity fields to define ObjectBox queries.
@@ -664,35 +1394,303 @@ class MusicColor_ {
   static final id =
       obx.QueryIntegerProperty<MusicColor>(_entities[4].properties[0]);
 
-  /// See [MusicColor.song].
-  static final song =
-      obx.QueryRelationToOne<MusicColor, Song>(_entities[4].properties[1]);
-
   /// See [MusicColor.dbBackground].
   static final dbBackground =
-      obx.QueryIntegerProperty<MusicColor>(_entities[4].properties[2]);
+      obx.QueryIntegerProperty<MusicColor>(_entities[4].properties[1]);
 
   /// See [MusicColor.dbText].
   static final dbText =
-      obx.QueryIntegerProperty<MusicColor>(_entities[4].properties[3]);
+      obx.QueryIntegerProperty<MusicColor>(_entities[4].properties[2]);
 
   /// See [MusicColor.dbIcon].
   static final dbIcon =
-      obx.QueryIntegerProperty<MusicColor>(_entities[4].properties[4]);
+      obx.QueryIntegerProperty<MusicColor>(_entities[4].properties[3]);
 
   /// See [MusicColor.dbInactive].
   static final dbInactive =
-      obx.QueryIntegerProperty<MusicColor>(_entities[4].properties[5]);
+      obx.QueryIntegerProperty<MusicColor>(_entities[4].properties[4]);
 
   /// See [MusicColor.dbOther].
   static final dbOther =
-      obx.QueryIntegerProperty<MusicColor>(_entities[4].properties[6]);
+      obx.QueryIntegerProperty<MusicColor>(_entities[4].properties[5]);
 
   /// See [MusicColor.dbTheme].
   static final dbTheme =
-      obx.QueryStringProperty<MusicColor>(_entities[4].properties[7]);
+      obx.QueryStringProperty<MusicColor>(_entities[4].properties[6]);
 
   /// See [MusicColor.dbPalette].
   static final dbPalette =
-      obx.QueryStringProperty<MusicColor>(_entities[4].properties[8]);
+      obx.QueryStringProperty<MusicColor>(_entities[4].properties[7]);
+}
+
+/// [Playlist] entity fields to define ObjectBox queries.
+class Playlist_ {
+  /// See [Playlist.id].
+  static final id =
+      obx.QueryIntegerProperty<Playlist>(_entities[5].properties[0]);
+
+  /// See [Playlist.name].
+  static final name =
+      obx.QueryStringProperty<Playlist>(_entities[5].properties[1]);
+
+  /// See [Playlist.user].
+  static final user =
+      obx.QueryRelationToOne<Playlist, UserProfile>(_entities[5].properties[2]);
+
+  /// see [Playlist.songs]
+  static final songs =
+      obx.QueryRelationToMany<Playlist, Song>(_entities[5].relations[0]);
+}
+
+/// [DatabasePlayerSettings] entity fields to define ObjectBox queries.
+class DatabasePlayerSettings_ {
+  /// See [DatabasePlayerSettings.id].
+  static final id = obx.QueryIntegerProperty<DatabasePlayerSettings>(
+      _entities[6].properties[0]);
+
+  /// See [DatabasePlayerSettings.velocityStep].
+  static final velocityStep = obx.QueryDoubleProperty<DatabasePlayerSettings>(
+      _entities[6].properties[1]);
+
+  /// See [DatabasePlayerSettings.maxVelocity].
+  static final maxVelocity = obx.QueryIntegerProperty<DatabasePlayerSettings>(
+      _entities[6].properties[2]);
+
+  /// See [DatabasePlayerSettings.volumeStep].
+  static final volumeStep = obx.QueryDoubleProperty<DatabasePlayerSettings>(
+      _entities[6].properties[3]);
+}
+
+/// [DatabaseSettings] entity fields to define ObjectBox queries.
+class DatabaseSettings_ {
+  /// See [DatabaseSettings.id].
+  static final id =
+      obx.QueryIntegerProperty<DatabaseSettings>(_entities[7].properties[0]);
+
+  /// See [DatabaseSettings.recentRange].
+  static final recentRange =
+      obx.QueryIntegerProperty<DatabaseSettings>(_entities[7].properties[1]);
+
+  /// See [DatabaseSettings.interface].
+  static final interface =
+      obx.QueryRelationToOne<DatabaseSettings, DatabaseInterfaceSettings>(
+          _entities[7].properties[2]);
+
+  /// See [DatabaseSettings.share].
+  static final share =
+      obx.QueryRelationToOne<DatabaseSettings, DatabaseShareSettings>(
+          _entities[7].properties[3]);
+
+  /// See [DatabaseSettings.layout].
+  static final layout =
+      obx.QueryRelationToOne<DatabaseSettings, DatabaseLayoutSettings>(
+          _entities[7].properties[4]);
+
+  /// See [DatabaseSettings.player].
+  static final player =
+      obx.QueryRelationToOne<DatabaseSettings, DatabasePlayerSettings>(
+          _entities[7].properties[5]);
+}
+
+/// [DatabaseShareSettings] entity fields to define ObjectBox queries.
+class DatabaseShareSettings_ {
+  /// See [DatabaseShareSettings.id].
+  static final id = obx.QueryIntegerProperty<DatabaseShareSettings>(
+      _entities[8].properties[0]);
+
+  /// See [DatabaseShareSettings.editorUrls].
+  static final editorUrls =
+      obx.QueryStringVectorProperty<DatabaseShareSettings>(
+          _entities[8].properties[1]);
+}
+
+/// [UserProfile] entity fields to define ObjectBox queries.
+class UserProfile_ {
+  /// See [UserProfile.id].
+  static final id =
+      obx.QueryIntegerProperty<UserProfile>(_entities[9].properties[0]);
+
+  /// See [UserProfile.name].
+  static final name =
+      obx.QueryStringProperty<UserProfile>(_entities[9].properties[1]);
+
+  /// See [UserProfile.banner].
+  static final banner =
+      obx.QueryByteVectorProperty<UserProfile>(_entities[9].properties[2]);
+
+  /// See [UserProfile.photo].
+  static final photo =
+      obx.QueryByteVectorProperty<UserProfile>(_entities[9].properties[3]);
+
+  /// See [UserProfile.current].
+  static final current =
+      obx.QueryBooleanProperty<UserProfile>(_entities[9].properties[4]);
+
+  /// See [UserProfile.settings].
+  static final settings = obx.QueryRelationToOne<UserProfile, DatabaseSettings>(
+      _entities[9].properties[5]);
+
+  /// see [UserProfile.playlists]
+  static final playlists =
+      obx.QueryBacklinkToMany<Playlist, UserProfile>(Playlist_.user);
+}
+
+/// [DatabaseLayoutSettings] entity fields to define ObjectBox queries.
+class DatabaseLayoutSettings_ {
+  /// See [DatabaseLayoutSettings.id].
+  static final id = obx.QueryIntegerProperty<DatabaseLayoutSettings>(
+      _entities[10].properties[0]);
+
+  /// See [DatabaseLayoutSettings.dbContainerStyle].
+  static final dbContainerStyle =
+      obx.QueryStringProperty<DatabaseLayoutSettings>(
+          _entities[10].properties[1]);
+
+  /// See [DatabaseLayoutSettings.dbMainScreens].
+  static final dbMainScreens =
+      obx.QueryStringVectorProperty<DatabaseLayoutSettings>(
+          _entities[10].properties[2]);
+
+  /// See [DatabaseLayoutSettings.dbHiddenScreens].
+  static final dbHiddenScreens =
+      obx.QueryStringVectorProperty<DatabaseLayoutSettings>(
+          _entities[10].properties[3]);
+
+  /// See [DatabaseLayoutSettings.dbVolumeType].
+  static final dbVolumeType = obx.QueryStringProperty<DatabaseLayoutSettings>(
+      _entities[10].properties[4]);
+
+  /// See [DatabaseLayoutSettings.dbPlayerElements].
+  static final dbPlayerElements =
+      obx.QueryStringVectorProperty<DatabaseLayoutSettings>(
+          _entities[10].properties[5]);
+
+  /// See [DatabaseLayoutSettings.songGridItems].
+  static final songGridItems = obx.QueryIntegerProperty<DatabaseLayoutSettings>(
+      _entities[10].properties[6]);
+
+  /// see [DatabaseLayoutSettings.lateralElements]
+  static final lateralElements =
+      obx.QueryRelationToMany<DatabaseLayoutSettings, LateralPlayerElement>(
+          _entities[10].relations[0]);
+}
+
+/// [LateralPlayerElement] entity fields to define ObjectBox queries.
+class LateralPlayerElement_ {
+  /// See [LateralPlayerElement.id].
+  static final id = obx.QueryIntegerProperty<LateralPlayerElement>(
+      _entities[11].properties[0]);
+
+  /// See [LateralPlayerElement.dbElement].
+  static final dbElement = obx.QueryStringProperty<LateralPlayerElement>(
+      _entities[11].properties[1]);
+
+  /// See [LateralPlayerElement.dbPosition].
+  static final dbPosition = obx.QueryStringProperty<LateralPlayerElement>(
+      _entities[11].properties[2]);
+}
+
+/// [DatabaseInterfaceSettings] entity fields to define ObjectBox queries.
+class DatabaseInterfaceSettings_ {
+  /// See [DatabaseInterfaceSettings.id].
+  static final id = obx.QueryIntegerProperty<DatabaseInterfaceSettings>(
+      _entities[12].properties[0]);
+
+  /// See [DatabaseInterfaceSettings.showChangeTheme].
+  static final showChangeTheme =
+      obx.QueryBooleanProperty<DatabaseInterfaceSettings>(
+          _entities[12].properties[1]);
+
+  /// See [DatabaseInterfaceSettings.showChangePalette].
+  static final showChangePalette =
+      obx.QueryBooleanProperty<DatabaseInterfaceSettings>(
+          _entities[12].properties[2]);
+
+  /// See [DatabaseInterfaceSettings.themeBasedOnTime].
+  static final themeBasedOnTime =
+      obx.QueryBooleanProperty<DatabaseInterfaceSettings>(
+          _entities[12].properties[3]);
+
+  /// See [DatabaseInterfaceSettings.dbTitleType].
+  static final dbTitleType = obx.QueryStringProperty<DatabaseInterfaceSettings>(
+      _entities[12].properties[4]);
+
+  /// See [DatabaseInterfaceSettings.dbProgressType].
+  static final dbProgressType =
+      obx.QueryStringProperty<DatabaseInterfaceSettings>(
+          _entities[12].properties[5]);
+
+  /// See [DatabaseInterfaceSettings.dbColorPalette].
+  static final dbColorPalette =
+      obx.QueryStringProperty<DatabaseInterfaceSettings>(
+          _entities[12].properties[6]);
+
+  /// See [DatabaseInterfaceSettings.dbColorTheme].
+  static final dbColorTheme =
+      obx.QueryStringProperty<DatabaseInterfaceSettings>(
+          _entities[12].properties[7]);
+
+  /// See [DatabaseInterfaceSettings.dbPictureType].
+  static final dbPictureType =
+      obx.QueryStringProperty<DatabaseInterfaceSettings>(
+          _entities[12].properties[8]);
+
+  /// See [DatabaseInterfaceSettings.dbControlsType].
+  static final dbControlsType =
+      obx.QueryStringProperty<DatabaseInterfaceSettings>(
+          _entities[12].properties[9]);
+
+  /// See [DatabaseInterfaceSettings.dbBaseTheme].
+  static final dbBaseTheme = obx.QueryStringProperty<DatabaseInterfaceSettings>(
+      _entities[12].properties[10]);
+
+  /// See [DatabaseInterfaceSettings.coloredSongCard].
+  static final coloredSongCard =
+      obx.QueryBooleanProperty<DatabaseInterfaceSettings>(
+          _entities[12].properties[11]);
+
+  /// See [DatabaseInterfaceSettings.coloredAlbumCard].
+  static final coloredAlbumCard =
+      obx.QueryBooleanProperty<DatabaseInterfaceSettings>(
+          _entities[12].properties[12]);
+
+  /// See [DatabaseInterfaceSettings.coloredGenreCard].
+  static final coloredGenreCard =
+      obx.QueryBooleanProperty<DatabaseInterfaceSettings>(
+          _entities[12].properties[13]);
+
+  /// See [DatabaseInterfaceSettings.coloredArtistCard].
+  static final coloredArtistCard =
+      obx.QueryBooleanProperty<DatabaseInterfaceSettings>(
+          _entities[12].properties[14]);
+
+  /// See [DatabaseInterfaceSettings.coloredPlaylistCard].
+  static final coloredPlaylistCard =
+      obx.QueryBooleanProperty<DatabaseInterfaceSettings>(
+          _entities[12].properties[15]);
+
+  /// See [DatabaseInterfaceSettings.dbSongCardStyle].
+  static final dbSongCardStyle =
+      obx.QueryStringProperty<DatabaseInterfaceSettings>(
+          _entities[12].properties[16]);
+
+  /// See [DatabaseInterfaceSettings.dbAlbumCardStyle].
+  static final dbAlbumCardStyle =
+      obx.QueryStringProperty<DatabaseInterfaceSettings>(
+          _entities[12].properties[17]);
+
+  /// See [DatabaseInterfaceSettings.dbArtistCardStyle].
+  static final dbArtistCardStyle =
+      obx.QueryStringProperty<DatabaseInterfaceSettings>(
+          _entities[12].properties[18]);
+
+  /// See [DatabaseInterfaceSettings.dbPlaylistCardStyle].
+  static final dbPlaylistCardStyle =
+      obx.QueryStringProperty<DatabaseInterfaceSettings>(
+          _entities[12].properties[19]);
+
+  /// See [DatabaseInterfaceSettings.dbGenreCardStyle].
+  static final dbGenreCardStyle =
+      obx.QueryStringProperty<DatabaseInterfaceSettings>(
+          _entities[12].properties[20]);
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/enums/player/container_style.dart';
 import 'package:onPlay/enums/player/picture_type.dart';
-import 'package:onPlay/localModels/settings/settings.dart';
+import 'package:onPlay/store/settings.dart';
 import 'package:onPlay/services/colors/color_service.dart';
 import 'package:onPlay/store/player_store.dart';
 import 'package:onPlay/widgets/components/player/current_playlist.dart';
@@ -55,7 +55,8 @@ class _PlayerState extends State<Player> {
           itemBuilder: (context, index) {
             final song = playerStore.playlist[index];
             final color = song.currentColors(
-                settings.interface.colorPalette, settings.interface.colorTheme);
+                settings.interface.colorPalette, settings.interface.colorTheme,
+                context: context);
             return interfaceSettings.pictureType == PictureType.background
                 ? (layoutSettings.containerStyle == ContainerStyle.lateral
                     ? LateralPlayer(song: song, musicColor: color)

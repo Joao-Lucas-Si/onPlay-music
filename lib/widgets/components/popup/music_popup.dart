@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onPlay/models/song.dart';
+import 'package:onPlay/store/player_store.dart';
+import 'package:onPlay/widgets/components/dialogs/playlist_dialog.dart';
 import 'package:onPlay/widgets/pages/song_form.dart';
+import 'package:provider/provider.dart';
 
 class MusicPopup extends StatelessWidget {
   final Color? color;
@@ -11,6 +14,8 @@ class MusicPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final playerStore = Provider.of<PlayerStore>(context);
+
     final items = [
       _Item(content: "Editar", value: "edit"),
       _Item(content: "adicionar na lista atual", value: "currentPlaylist"),
@@ -25,11 +30,22 @@ class MusicPopup extends StatelessWidget {
             case "edit":
               GoRouter.of(context).push(SongForm.url, extra: song);
               break;
+            case "currentPlaylist":
+              playerStore.addSong(song);
+              break;
+            case "addAsNext":
+              playerStore.addSongToNext(song);
+              break;
+            case "addToPlaylist":
+              showDialog(
+                  context: context,
+                  builder: (context) => PlaylistDialog(song: song));
+              break;
           }
         },
         itemBuilder: (context) => items
             .map((item) =>
-                PopupMenuItem(child: Text(item.content), value: item.value))
+                PopupMenuItem(value: item.value, child: Text(item.content)))
             .toList());
   }
 }

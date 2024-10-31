@@ -2,32 +2,50 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:onPlay/localModels/User.dart';
+import 'package:go_router/go_router.dart';
+import 'package:onPlay/models/managers/box_manager.dart';
+import 'package:onPlay/models/managers/user_manager.dart';
+import 'package:onPlay/models/settings/settings.dart';
+import 'package:onPlay/models/user_profile.dart';
+import 'package:provider/provider.dart';
 
 class UserForm extends StatefulWidget {
-  const UserForm({super.key});
+  final bool newUser;
+  const UserForm({super.key, this.newUser = false});
   @override
   createState() => _UserfFormState();
 }
 
-class _UserfFormState extends State {
+class _UserfFormState extends State<UserForm> {
   var nameController = TextEditingController(text: "");
-  UserModel? user;
+  UserProfile? user;
+  late UserManager userManager;
 
   @override
   void initState() {
     super.initState();
-    UserModel.colect().then((value) {
-      setState(() {
-        user = value;
-      });
-    });
+    final managers = Provider.of<BoxManager>(context, listen: false);
+    userManager = managers.userManager;
+    user =
+        widget.newUser ? UserProfile(name: "") : userManager.getActiveProfile();
+    if (widget.newUser) {
+      user!.settings.target = DatabaseSettings(recentRange: 30);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+            // leading: Center(
+            //   child: IconButton(
+            //       onPressed: () {
+            //         final goRouter = GoRouter.of(context);
+            //         goRouter.pop();
+            //       },
+            //       icon: const Icon(Icons.arrow_back)),
+            // ),
+            ),
         body: user != null
             ? Column(
                 children: <Widget>[
@@ -36,7 +54,7 @@ class _UserfFormState extends State {
                     onChanged: (value) {
                       setState(() {
                         user!.name = value;
-                        user!.save();
+                        userManager.save(user!);
                       });
                     },
                     decoration: const InputDecoration(
@@ -50,13 +68,12 @@ class _UserfFormState extends State {
                         final image = File(result.files.first.path ?? "")
                             .readAsBytesSync();
                         setState(() {
-                          user!.image = image;
-                          user!.save();
+                          user!.photo = image;
                         });
                       }
                     },
-                    child: user!.image != null
-                        ? Image.memory(user!.image!, width: 100, height: 100)
+                    child: user!.photo != null
+                        ? Image.memory(user!.photo!, width: 100, height: 100)
                         : const Text("escolha uma image"),
                   ),
                   GestureDetector(
@@ -68,7 +85,6 @@ class _UserfFormState extends State {
                             .readAsBytesSync();
                         setState(() {
                           user!.banner = image;
-                          user!.save();
                         });
                       }
                     },
@@ -79,7 +95,16 @@ class _UserfFormState extends State {
                             height: 100,
                           )
                         : const Text("escolha uma image"),
-                  )
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        userManager.save(user!);
+                        GoRouter.of(context).pop(UniqueKey());
+                      },
+                      child: const Text(
+                        "salvar",
+                        style: TextStyle(color: Colors.white),
+                      ))
                 ],
               )
             : const Text("carregando"));

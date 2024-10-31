@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onPlay/enums/main_screens.dart';
-import 'package:onPlay/localModels/settings/settings.dart';
+import 'package:onPlay/store/settings.dart';
 import 'package:onPlay/store/player_store.dart';
 import 'package:onPlay/store/song_store.dart';
 import 'package:onPlay/widgets/components/layouts/songs_popup.dart';
@@ -66,9 +66,9 @@ class _MainScreensState extends State<MainScreen> {
         case MainScreens.musics:
           return const Songs();
         case MainScreens.playlists:
-          return Playlist();
+          return const Playlist();
         case MainScreens.albums:
-          return Albums();
+          return const Albums();
         case MainScreens.genres:
           return const Genres();
         case MainScreens.artists:
@@ -127,7 +127,7 @@ class _MainScreensState extends State<MainScreen> {
                         GoRouter.of(context).push("/settings");
                       },
                       icon: Icon(Icons.settings, color: colorScheme.secondary)),
-                  currentPage == 1 ? SongsPopup() : null,
+                  currentPage == 1 ? const SongsPopup() : null,
                 ].nonNulls.toList(),
               ),
               body: PageView(

@@ -20,11 +20,6 @@
           "type": 9
         },
         {
-          "id": "3:5182564456990978250",
-          "name": "picture",
-          "type": 23
-        },
-        {
           "id": "4:961771146083296052",
           "name": "artistId",
           "type": 11,
@@ -50,11 +45,6 @@
           "id": "2:923523403980957935",
           "name": "name",
           "type": 9
-        },
-        {
-          "id": "3:1475912299933615236",
-          "name": "picture",
-          "type": 23
         }
       ],
       "relations": []
@@ -74,11 +64,6 @@
           "id": "2:4258590337348061470",
           "name": "name",
           "type": 9
-        },
-        {
-          "id": "3:5738142651511766062",
-          "name": "picture",
-          "type": 23
         }
       ],
       "relations": []
@@ -149,7 +134,13 @@
           "type": 10
         }
       ],
-      "relations": []
+      "relations": [
+        {
+          "id": "3:7690569768755154711",
+          "name": "colors",
+          "targetId": "5:8869230512487373120"
+        }
+      ]
     },
     {
       "id": "5:8869230512487373120",
@@ -161,14 +152,6 @@
           "name": "id",
           "type": 6,
           "flags": 1
-        },
-        {
-          "id": "2:7850994761262333986",
-          "name": "songId",
-          "type": 11,
-          "flags": 520,
-          "indexId": "5:8923944927584716313",
-          "relationTarget": "Song"
         },
         {
           "id": "3:6413553713852324861",
@@ -207,17 +190,389 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "6:2934314663694208747",
+      "lastPropertyId": "3:3125077617453859936",
+      "name": "Playlist",
+      "properties": [
+        {
+          "id": "1:3828699003463814072",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:6501151964883751669",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:3125077617453859936",
+          "name": "userId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "6:7788313485866779765",
+          "relationTarget": "UserProfile"
+        }
+      ],
+      "relations": [
+        {
+          "id": "1:1714640651402914561",
+          "name": "songs",
+          "targetId": "4:6497590176427579550"
+        }
+      ]
+    },
+    {
+      "id": "7:88431105930997367",
+      "lastPropertyId": "4:1848556570147454257",
+      "name": "DatabasePlayerSettings",
+      "properties": [
+        {
+          "id": "1:6200573323939050195",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5519772685723583622",
+          "name": "velocityStep",
+          "type": 8
+        },
+        {
+          "id": "3:7999809434121947628",
+          "name": "maxVelocity",
+          "type": 6
+        },
+        {
+          "id": "4:1848556570147454257",
+          "name": "volumeStep",
+          "type": 8
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "8:6346989537120360199",
+      "lastPropertyId": "6:1569665513455864168",
+      "name": "DatabaseSettings",
+      "properties": [
+        {
+          "id": "1:5492649879089754200",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:786553103394085435",
+          "name": "recentRange",
+          "type": 6
+        },
+        {
+          "id": "3:6023788294185895299",
+          "name": "interfaceId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "7:4243986190520251430",
+          "relationTarget": "DatabaseInterfaceSettings"
+        },
+        {
+          "id": "4:9125839004558863944",
+          "name": "shareId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "8:7948895637201857902",
+          "relationTarget": "DatabaseShareSettings"
+        },
+        {
+          "id": "5:4794609617023008456",
+          "name": "layoutId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "9:2549234341094408931",
+          "relationTarget": "DatabaseLayoutSettings"
+        },
+        {
+          "id": "6:1569665513455864168",
+          "name": "playerId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "10:4417538046858357665",
+          "relationTarget": "DatabasePlayerSettings"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "9:2815627667814007811",
+      "lastPropertyId": "2:6078732247047000981",
+      "name": "DatabaseShareSettings",
+      "properties": [
+        {
+          "id": "1:1656930692021190658",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:6078732247047000981",
+          "name": "editorUrls",
+          "type": 30
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "10:1713575689177859023",
+      "lastPropertyId": "6:1668568879331343734",
+      "name": "UserProfile",
+      "properties": [
+        {
+          "id": "1:7325430212055432722",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3552461870333706012",
+          "name": "name",
+          "type": 9,
+          "flags": 2080,
+          "indexId": "11:8368297415295655801"
+        },
+        {
+          "id": "3:9185213372745912318",
+          "name": "banner",
+          "type": 23
+        },
+        {
+          "id": "4:4096865057018024385",
+          "name": "photo",
+          "type": 23
+        },
+        {
+          "id": "5:6876681336544452087",
+          "name": "current",
+          "type": 1
+        },
+        {
+          "id": "6:1668568879331343734",
+          "name": "settingsId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "12:8877211369580756881",
+          "relationTarget": "DatabaseSettings"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "11:1783439183368047241",
+      "lastPropertyId": "7:2944878772244270136",
+      "name": "DatabaseLayoutSettings",
+      "properties": [
+        {
+          "id": "1:6329027414350276675",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:6035222152268694810",
+          "name": "dbContainerStyle",
+          "type": 9
+        },
+        {
+          "id": "3:4325039813061252695",
+          "name": "dbMainScreens",
+          "type": 30
+        },
+        {
+          "id": "4:5453335989415707779",
+          "name": "dbHiddenScreens",
+          "type": 30
+        },
+        {
+          "id": "5:1466720086861744307",
+          "name": "dbVolumeType",
+          "type": 9
+        },
+        {
+          "id": "6:7291842168322318469",
+          "name": "dbPlayerElements",
+          "type": 30
+        },
+        {
+          "id": "7:2944878772244270136",
+          "name": "songGridItems",
+          "type": 6
+        }
+      ],
+      "relations": [
+        {
+          "id": "2:4472535590567062791",
+          "name": "lateralElements",
+          "targetId": "12:107265284620181940"
+        }
+      ]
+    },
+    {
+      "id": "12:107265284620181940",
+      "lastPropertyId": "3:5228668252609080612",
+      "name": "LateralPlayerElement",
+      "properties": [
+        {
+          "id": "1:8631266473723612824",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3187884672471329317",
+          "name": "dbElement",
+          "type": 9
+        },
+        {
+          "id": "3:5228668252609080612",
+          "name": "dbPosition",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "13:533300879031493817",
+      "lastPropertyId": "22:8730058587949986835",
+      "name": "DatabaseInterfaceSettings",
+      "properties": [
+        {
+          "id": "1:6501473581865677363",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4353151855002356512",
+          "name": "showChangeTheme",
+          "type": 1
+        },
+        {
+          "id": "3:1058604158813073426",
+          "name": "showChangePalette",
+          "type": 1
+        },
+        {
+          "id": "4:7143693882026609607",
+          "name": "themeBasedOnTime",
+          "type": 1
+        },
+        {
+          "id": "6:4805747310418116613",
+          "name": "dbTitleType",
+          "type": 9
+        },
+        {
+          "id": "7:5005591584744347295",
+          "name": "dbProgressType",
+          "type": 9
+        },
+        {
+          "id": "8:6652327034148461698",
+          "name": "dbColorPalette",
+          "type": 9
+        },
+        {
+          "id": "9:1914477881654021767",
+          "name": "dbColorTheme",
+          "type": 9
+        },
+        {
+          "id": "10:6799555786810443086",
+          "name": "dbPictureType",
+          "type": 9
+        },
+        {
+          "id": "11:2687349597221271493",
+          "name": "dbControlsType",
+          "type": 9
+        },
+        {
+          "id": "12:1326573167591469492",
+          "name": "dbBaseTheme",
+          "type": 9
+        },
+        {
+          "id": "13:4217658101655518446",
+          "name": "coloredSongCard",
+          "type": 1
+        },
+        {
+          "id": "14:6938215218188448593",
+          "name": "coloredAlbumCard",
+          "type": 1
+        },
+        {
+          "id": "15:6710049825364518782",
+          "name": "coloredGenreCard",
+          "type": 1
+        },
+        {
+          "id": "16:7771869454415669964",
+          "name": "coloredArtistCard",
+          "type": 1
+        },
+        {
+          "id": "17:5678620975604039095",
+          "name": "coloredPlaylistCard",
+          "type": 1
+        },
+        {
+          "id": "18:1043290662866124199",
+          "name": "dbSongCardStyle",
+          "type": 9
+        },
+        {
+          "id": "19:4199345951390654570",
+          "name": "dbAlbumCardStyle",
+          "type": 9
+        },
+        {
+          "id": "20:5359427239481035302",
+          "name": "dbArtistCardStyle",
+          "type": 9
+        },
+        {
+          "id": "21:2476091790950636473",
+          "name": "dbPlaylistCardStyle",
+          "type": 9
+        },
+        {
+          "id": "22:8730058587949986835",
+          "name": "dbGenreCardStyle",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "5:8869230512487373120",
-  "lastIndexId": "5:8923944927584716313",
-  "lastRelationId": "0:0",
+  "lastEntityId": "13:533300879031493817",
+  "lastIndexId": "12:8877211369580756881",
+  "lastRelationId": "3:7690569768755154711",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
-  "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredIndexUids": [
+    8923944927584716313
+  ],
+  "retiredPropertyUids": [
+    353378994051547501,
+    5182564456990978250,
+    1475912299933615236,
+    5738142651511766062,
+    7850994761262333986
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:onPlay/models/song.dart';
-import 'package:onPlay/services/http/services/editor_color_service.dart';
 
 enum PlayModes {
   none("none"),
@@ -23,7 +22,6 @@ class PlayerStore extends ChangeNotifier {
   var _paused = false;
   var _mode = PlayModes.none;
 
-
   double get velocity => _velocity;
 
   set velocity(double value) {
@@ -41,6 +39,16 @@ class PlayerStore extends ChangeNotifier {
   PlayModes get mode => _mode;
 
   List<Song> get playlist => _playlist;
+
+  addSong(Song song) {
+    _playlist.add(song);
+    notifyListeners();
+  }
+
+  addSongToNext(Song song) {
+    _playlist.insert((_currentSong ?? 0) + 1, song);
+    notifyListeners();
+  }
 
   set playlist(List<Song> playlist) {
     _playlist = playlist;

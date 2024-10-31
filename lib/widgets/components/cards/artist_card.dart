@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:onPlay/enums/card_type.dart';
 import 'package:onPlay/models/artist.dart';
+import 'package:onPlay/store/settings.dart';
+import 'package:onPlay/widgets/components/cards/item/circular_card.dart';
+import 'package:onPlay/widgets/components/cards/item/image_card.dart';
+import 'package:onPlay/widgets/components/cards/item/item_params.dart';
+import 'package:onPlay/widgets/components/cards/item/list_item_card.dart';
+import 'package:onPlay/widgets/components/cards/item/normal_card.dart';
+import 'package:provider/provider.dart';
 
 class ArtistCard extends StatelessWidget {
   final Artist artist;
@@ -9,22 +17,26 @@ class ArtistCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final settings = Provider.of<Settings>(context);
+    final params = ItemParams(
+        title: artist.name,
+        isInGrid: settings.layout.artistGridItems > 1,
+        extra: Text(artist.songs.length.toString()),
+        image: artist.picture,
+        isColored: settings.interface.coloredArtistCard,
+        colors: artist.getColors(settings));
+    final style = settings.interface.artistCardStyle;
     return GestureDetector(
       onTap: () {
         GoRouter.of(context).push("/artist", extra: artist);
       },
-      child: Column(
-        children: [
-          artist.picture != null
-              ? Image.memory(artist.picture!)
-              : const Icon(
-                  Icons.no_accounts,
-                  size: 200,
-                ),
-          Text(artist.name),
-          Text(artist.songs.length.toString())
-        ],
-      ),
+      child: style == CardStyle.normal
+          ? NormalCard(params: params)
+          : style == CardStyle.image
+              ? ImageItemCard(params: params)
+              : style == CardStyle.listItem
+                  ? ListItemCard(params: params)
+                  : CircularCard(params: params),
     );
   }
 }

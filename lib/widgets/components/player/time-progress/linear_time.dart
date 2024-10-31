@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/models/music_color.dart';
-import 'package:onPlay/services/colors/color_adapter.dart';
 import 'package:onPlay/services/player_service.dart';
 import 'package:onPlay/store/player_store.dart';
 import 'package:onPlay/widgets/components/player/time-progress/toMinutes.dart';

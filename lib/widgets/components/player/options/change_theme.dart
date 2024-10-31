@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/enums/colors/color_theme.dart';
-import 'package:onPlay/localModels/settings/settings.dart';
+import 'package:onPlay/store/settings.dart';
 import 'package:onPlay/models/music_color.dart';
-import 'package:onPlay/services/colors/color_adapter.dart';
 import 'package:provider/provider.dart';
 
 class ChangeTheme extends StatelessWidget {

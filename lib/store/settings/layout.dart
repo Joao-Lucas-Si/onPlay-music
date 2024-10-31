@@ -1,15 +1,17 @@
-import 'dart:convert';
 import 'package:onPlay/enums/player/container_style.dart';
 import 'package:onPlay/enums/main_screens.dart';
 import 'package:onPlay/enums/player_element.dart';
 import 'package:onPlay/enums/player/volume_type.dart';
+import 'package:onPlay/models/settings/layout.dart';
 
 class LayoutSettings {
-  var showArtists = true;
-  var showGenres = true;
-  var showPlaylists = true;
+  var _songGridItems = 1,
+      _artistGridItems = 1,
+      _genreGridItems = 1,
+      _playlistGridItems = 1,
+      _albumGridItems = 2;
   var _containerStyle = ContainerStyle.lateral;
-  var _mainScreens = const [
+  var _mainScreens = [
     MainScreens.home,
     MainScreens.musics,
     MainScreens.artists,
@@ -18,6 +20,41 @@ class LayoutSettings {
     MainScreens.genres,
   ];
   List<MainScreens> _hiddenScreens = [];
+
+  int get songGridItems => _songGridItems;
+
+  set songGridItems(int items) {
+    _songGridItems = items;
+    _notify();
+  }
+
+  int get artistGridItems => _artistGridItems;
+
+  set artistGridItems(int items) {
+    _artistGridItems = items;
+    _notify();
+  }
+
+  int get albumGridItems => _albumGridItems;
+
+  set albumGridItems(int items) {
+    _albumGridItems = items;
+    _notify();
+  }
+
+  int get playlistGridItems => _playlistGridItems;
+
+  set playlistGridItems(int items) {
+    _playlistGridItems = items;
+    _notify();
+  }
+
+  int get genreGridItems => _genreGridItems;
+
+  set genreGridItems(int items) {
+    _genreGridItems = items;
+    _notify();
+  }
 
   var _lateralElements = [
     LateralPlayerElement(
@@ -57,6 +94,7 @@ class LayoutSettings {
     final screen = _mainScreens[oldIndex];
     _mainScreens.removeAt(oldIndex);
     _mainScreens.insert(newIndex, screen);
+    _mainScreens = _mainScreens;
     _notify();
   }
 
@@ -98,37 +136,36 @@ class LayoutSettings {
     _notify();
   }
 
-  LayoutSettings(Function() notify) {
-    _notify = notify;
-  }
+  LayoutSettings(
+      {required Function(LayoutSettings data) notify,
+      DatabaseLayoutSettings? database}) {
+    _notify = () {
+      notify(this);
+    };
+    if (database != null) {
+      _playerElements = database.playerElements;
+      _containerStyle = database.containerStyle;
+      _volumeType = database.volumeType;
+      _songGridItems = database.songGridItems;
+      _artistGridItems = database.artistGridItems;
+      _albumGridItems = database.albumGridItems;
+      _playlistGridItems = database.playlistGridItems;
 
-  toJson() {
-    return json.encode(
-      this,
-      toEncodable: (object) {
-        final jsonMap = {};
-        jsonMap["showArtists"] = showArtists;
-        jsonMap["showGenres"] = showGenres;
-        jsonMap["showPlaylists "] = showPlaylists;
-        return jsonMap;
-      },
-    );
-  }
+      _genreGridItems = database.genreGridItems;
 
-  static toObject(Map<String, dynamic> map) {
-    // final obj = InterfaceSettings();
-    // obj.primaryColor = map["primaryColor"];
-    // obj.colorSchemeType = map["colorSchemeType"];
-    // return obj;
+      _mainScreens = database.mainScreens;
+      _lateralElements = database.lateralElements
+          .map((element) => LateralPlayerElement(
+              element: element.element, position: element.position))
+          .toList();
+      _hiddenScreens = database.hiddenScreens;
+    }
   }
 
   @override
   bool operator ==(Object other) {
     if (other is LayoutSettings) {
-      return showArtists == other.showArtists &&
-          showGenres == other.showArtists &&
-          other.showPlaylists == showPlaylists &&
-          other.volumeType == volumeType;
+      return other.volumeType == volumeType;
     }
     return false;
   }
@@ -151,4 +188,7 @@ enum LateralPosition {
   nextLeft,
   nextRight,
   right;
+
+  static LateralPosition getByName(String name) =>
+      LateralPosition.values.firstWhere((position) => position.name == name);
 }

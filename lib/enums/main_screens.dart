@@ -9,4 +9,8 @@ enum MainScreens {
   final String name;
 
   const MainScreens(this.name);
+
+  static MainScreens fromString(String name) {
+    return MainScreens.values.firstWhere((value) => value.name == name);
+  }
 }

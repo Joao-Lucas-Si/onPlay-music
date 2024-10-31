@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/models/music_color.dart';
-import 'package:onPlay/services/colors/color_adapter.dart';
 import 'package:onPlay/store/player_store.dart';
 import 'package:provider/provider.dart';
 

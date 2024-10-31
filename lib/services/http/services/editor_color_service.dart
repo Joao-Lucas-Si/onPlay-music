@@ -1,18 +1,19 @@
 import 'package:onPlay/constants/endpoints/color_extension_endpoints.dart';
-import 'package:onPlay/localModels/settings/settings.dart';
+import 'package:onPlay/store/settings.dart';
 import 'package:onPlay/models/music_color.dart';
 import 'package:onPlay/services/http/http_request.dart';
 
 class EditorColorService {
   late HttpRequest<MusicColor> request;
+  Settings settings;
 
-  EditorColorService(Settings settings) {
-    request = HttpRequest(
-        settings.share.editorUrl, (json) => MusicColor.fromJson(json));
-  }
+  EditorColorService(this.settings);
 
   sendColors(MusicColor colors) async {
-    request.postRequestWithoutResponse(
-        ColorExtensionEndpoints.changeTheme, colors);
+    for (var url in settings.share.editorUrls) {
+      request = HttpRequest(url, (json) => MusicColor.fromJson(json));
+      request.postRequestWithoutResponse(
+          ColorExtensionEndpoints.changeTheme, colors);
+    }
   }
 }

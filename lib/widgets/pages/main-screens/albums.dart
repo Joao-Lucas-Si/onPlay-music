@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/models/album.dart';
+import 'package:onPlay/store/settings.dart';
 import 'package:onPlay/store/song_store.dart';
 import 'package:onPlay/widgets/components/cards/album_card.dart';
 import 'package:provider/provider.dart';
 
 class Albums extends StatefulWidget {
+  const Albums({super.key});
+
   @override
   createState() => _AlbumsState();
 }
@@ -21,17 +24,32 @@ class _AlbumsState extends State<Albums> {
   @override
   Widget build(BuildContext context) {
     store = Provider.of<SongStore>(context);
+    final settings = Provider.of<Settings>(context);
+    final gridItems = settings.layout.albumGridItems;
     return Scaffold(
       body: store.loading != ""
           ? Text(store.loading)
           : albums.isEmpty
               ? const Text("nenhuma album encontrado")
-              : ListView.builder(
-                  itemCount: albums.length,
-                  itemBuilder: (context, index) {
-                    final album = albums[index];
-                    return AlbumCard(album: album);
-                  }),
+              : gridItems == 1
+                  ? ListView.builder(
+                      itemCount: albums.length,
+                      itemBuilder: (context, index) {
+                        final album = albums[index];
+                        return AlbumCard(
+                          album: album,
+                          key: ValueKey(album.id),
+                        );
+                      })
+                  : GridView.builder(
+                      itemCount: albums.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: gridItems),
+                      itemBuilder: (context, index) => AlbumCard(
+                        album: albums[index],
+                        key: ValueKey(albums[index].id),
+                      ),
+                    ),
     );
   }
 }

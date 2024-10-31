@@ -27,7 +27,7 @@ class GenreScreen extends StatelessWidget {
             genre.name,
             style: const TextStyle(fontSize: 30),
           ),
-          ...genre.songs.map((song) => SongCard(song: song)).toList()
+          ...genre.songs.map((song) => SongCard(song: song))
         ],
       )),
     );

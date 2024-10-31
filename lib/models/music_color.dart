@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:objectbox/objectbox.dart';
 import 'package:onPlay/enums/colors/color_palette.dart';
 import 'package:onPlay/enums/colors/color_theme.dart';
-import 'package:onPlay/models/song.dart';
 import 'package:onPlay/services/http/serializable.dart';
 
 @Entity()
@@ -26,6 +25,7 @@ class MusicColor extends Serializable {
     theme = ColorTheme.getByName(json["them"]);
   }
 
+  @override
   Map<String, dynamic> toJson() {
     String toHex(Color color) {
       return "#${(color.value).toRadixString(16).padLeft(6, '0').toUpperCase().substring(2)}";
@@ -79,8 +79,6 @@ class MusicColor extends Serializable {
   set dbOther(int value) {
     other = Color(value);
   }
-
-  final song = ToOne<Song>();
 
   @override
   String toString() {

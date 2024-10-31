@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onPlay/widgets/components/layouts/user_header.dart';
 import 'package:onPlay/widgets/pages/home/recent.dart';
+import 'package:onPlay/widgets/pages/profiles.dart';
 
 class Home extends StatelessWidget {
   static const path = "/home";
@@ -13,9 +14,25 @@ class Home extends StatelessWidget {
     return Scaffold(
         body: Column(
       children: [
-        UserHeader(),
-        SizedBox(
-          height: 50,
+        const UserHeader(
+          key: ValueKey("user-header"),
+        ),
+        const SizedBox(
+          height: 25,
+        ),
+        TextButton(
+            onPressed: () {
+              GoRouter.of(context).push(ProfilesPage.path);
+            },
+            style: ButtonStyle(
+                minimumSize: WidgetStatePropertyAll(
+                    Size(MediaQuery.sizeOf(context).width * 0.9, 40))),
+            child: const Text(
+              "trocar perfil",
+              style: TextStyle(color: Colors.white),
+            )),
+        const SizedBox(
+          height: 25,
         ),
         SizedBox(
           height: 200,

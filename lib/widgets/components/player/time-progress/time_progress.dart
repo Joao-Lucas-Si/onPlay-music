@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/enums/player/progress_type.dart';
-import 'package:onPlay/localModels/settings/settings.dart';
+import 'package:onPlay/store/settings.dart';
 import 'package:onPlay/models/music_color.dart';
-import 'package:onPlay/services/colors/color_adapter.dart';
 import 'package:onPlay/widgets/components/player/time-progress/linear_time.dart';
 import 'package:onPlay/widgets/components/player/time-progress/skip_time.dart';
 import 'package:provider/provider.dart';

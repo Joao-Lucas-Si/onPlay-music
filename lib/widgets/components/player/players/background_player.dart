@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/models/music_color.dart';
 import 'package:onPlay/models/song.dart';
-import 'package:onPlay/services/colors/color_adapter.dart';
 import 'package:onPlay/widgets/components/player/current_playlist.dart';
 import 'package:onPlay/widgets/components/player/get_player_elements.dart';
 
@@ -65,7 +64,7 @@ class BackgroundPlayer extends StatelessWidget {
                             tileMode: TileMode.decal,
                             end: Alignment.bottomCenter)),
                     child: Padding(
-                        padding: EdgeInsets.only(left: 5, right: 5),
+                        padding: const EdgeInsets.only(left: 5, right: 5),
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: elements)))))

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/models/artist.dart';
+import 'package:onPlay/store/settings.dart';
 import 'package:onPlay/store/song_store.dart';
 import 'package:onPlay/widgets/components/cards/artist_card.dart';
 import 'package:provider/provider.dart';
@@ -22,15 +23,30 @@ class _ArtistsState extends State<Artists> {
   @override
   Widget build(BuildContext context) {
     store = Provider.of<SongStore>(context);
+    final settings = Provider.of<Settings>(context);
+    final gridItems = settings.layout.songGridItems;
     return Scaffold(
       body: store.loading != ""
           ? Text(store.loading)
-          : ListView.builder(
-              itemCount: artists.length,
-              itemBuilder: (context, index) {
-                final artist = artists[index];
-                return ArtistCard(artist: artist);
-              }),
+          : (gridItems == 1
+              ? ListView.builder(
+                  itemCount: artists.length,
+                  itemBuilder: (context, index) {
+                    final artist = artists[index];
+                    return ArtistCard(
+                      artist: artist,
+                      key: ValueKey(artist.id),
+                    );
+                  })
+              : GridView.builder(
+                  itemCount: artists.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: gridItems),
+                  itemBuilder: (context, index) => ArtistCard(
+                    artist: artists[index],
+                    key: ValueKey(artists[index].id),
+                  ),
+                )),
     );
   }
 }

@@ -43,11 +43,11 @@ class _ConfigState extends State<Config> {
             icon: Icons.file_copy,
             title: "arquivos",
             path: FilesSettingsScreen.path),
-        _ConfigCategory(icon: Icons.info, title: "sobre", path: About.path),
         _ConfigCategory(
             icon: Icons.share,
             title: "compartilhamento e conexão",
             path: ShareSettingsScreen.path),
+        _ConfigCategory(icon: Icons.info, title: "sobre", path: About.path),
       ]),
     );
   }
@@ -58,7 +58,7 @@ class _ConfigCategory extends StatelessWidget {
   final String path;
   final IconData icon;
   const _ConfigCategory(
-      {super.key, required this.title, required this.path, required this.icon});
+      {required this.title, required this.path, required this.icon});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

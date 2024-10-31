@@ -1,8 +1,12 @@
 import 'dart:typed_data';
 
+import 'package:onPlay/constants/themes/purple.dart';
+import 'package:onPlay/models/music_color.dart';
 import 'package:onPlay/models/song.dart';
 import 'package:onPlay/models/album.dart';
 import 'package:objectbox/objectbox.dart';
+import 'package:collection/collection.dart';
+import 'package:onPlay/store/settings.dart';
 
 @Entity()
 class Artist {
@@ -10,8 +14,14 @@ class Artist {
   int id = 0;
   final String name;
 
-  @Property(type: PropertyType.byteVector)
-  Uint8List? picture;
+  @Transient()
+  Uint8List? get picture =>
+      songs.firstWhereOrNull((song) => song.picture != null)?.picture;
+  @Transient()
+  MusicColor getColors(Settings settings) =>
+      songs.firstWhereOrNull((song) => song.picture != null)?.currentColors(
+          settings.interface.colorPalette, settings.interface.colorTheme) ??
+      purpleTheme;
 
   @Backlink("artist")
   final songs = ToMany<Song>();
@@ -20,7 +30,6 @@ class Artist {
 
   Artist({
     required this.name,
-    this.picture,
   });
 
   @override
@@ -29,5 +38,11 @@ class Artist {
       return (other.id != 0 && id != 0 && other.id == id) || other.name == name;
     }
     return false;
+  }
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return "Artist(name: $name, songs: ${songs.length}, albums: ${albums.length})";
   }
 }

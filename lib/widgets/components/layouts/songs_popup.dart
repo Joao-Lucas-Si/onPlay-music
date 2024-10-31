@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:onPlay/enums/sorting/song_sorting.dart';
 import 'package:onPlay/store/song_store.dart';
 import 'package:provider/provider.dart';
 
 class SongsPopup extends StatefulWidget {
+  const SongsPopup({super.key});
+
   @override
   createState() => _SongsPopup();
 }
@@ -12,10 +15,11 @@ class _SongsPopup extends State<SongsPopup> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final sorts = [
-      PopupOption(value: "name", text: "nome"),
-      PopupOption(value: "year", text: "ano"),
-      PopupOption(value: "duration", text: "duração"),
-      PopupOption(value: "modification_date", text: "data de modificação")
+      PopupOption(value: SongSorting.name, text: "nome"),
+      PopupOption(value: SongSorting.year, text: "ano"),
+      PopupOption(value: SongSorting.duration, text: "duração"),
+      PopupOption(value: SongSorting.modificationDate, text: "data de modificação"),
+      PopupOption(value: SongSorting.color, text: "cor")
     ];
     final orders = [
       PopupOption(text: "crescente", value: "asc"),
@@ -31,16 +35,16 @@ class _SongsPopup extends State<SongsPopup> {
           if (["desc", "asc"].contains(value)) {
             store.order = value;
           } else {
-            store.sort = value;
+            store.sort = SongSorting.fromString(value);
           }
         },
         itemBuilder: (context) => [
               ...sorts.map((sort) => PopupMenuItem(
-                    value: sort.value,
+                    value: sort.value.name,
                     child: PopupItem(
-                      currentValue: store.sort,
+                      currentValue: store.sort.name,
                       text: sort.text,
-                      value: sort.value,
+                      value: sort.value.name,
                     ),
                   )),
               const PopupMenuDivider(),
@@ -89,8 +93,8 @@ class PopupItem extends StatelessWidget {
   }
 }
 
-class PopupOption {
-  String value;
+class PopupOption<T> {
+  T value;
   String text;
 
   PopupOption({required this.value, required this.text});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/enums/colors/color_palette.dart';
 import 'package:onPlay/enums/colors/color_theme.dart';
-import 'package:onPlay/localModels/settings/settings.dart';
+import 'package:onPlay/store/settings.dart';
 import 'package:onPlay/models/music_color.dart';
 import 'package:onPlay/services/notification_service.dart';
 import 'package:onPlay/services/player_service.dart';
@@ -40,7 +40,9 @@ class MiniPlayerState extends State<MiniPlayer> {
 
     final colorScheme = Theme.of(context).colorScheme;
 
-    final colors = playerStore.playingSong?.currentColors(settings.interface.colorPalette, settings.interface.colorTheme) ??
+    final colors = playerStore.playingSong?.currentColors(
+            settings.interface.colorPalette, settings.interface.colorTheme,
+            context: context) ??
         MusicColor.create(
           palette: ColorPalette.normal,
           theme: ColorTheme.totalDark,
@@ -61,8 +63,7 @@ class MiniPlayerState extends State<MiniPlayer> {
             padding: const EdgeInsets.only(top: 5),
             child: Container(
               decoration: BoxDecoration(
-                  color: colors.text,
-                  borderRadius: BorderRadius.circular(10)),
+                  color: colors.text, borderRadius: BorderRadius.circular(10)),
               height: 15,
               width: 70,
             )),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/models/music_color.dart';
 import 'package:onPlay/models/song.dart';
-import 'package:onPlay/services/colors/color_adapter.dart';
 import 'package:onPlay/widgets/components/marquee.dart';
 
 class LoopTitle extends StatelessWidget {

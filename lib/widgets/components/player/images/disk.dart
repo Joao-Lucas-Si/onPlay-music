@@ -1,10 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:onPlay/models/music_color.dart';
 import 'package:onPlay/models/song.dart';
-import 'package:onPlay/services/colors/color_adapter.dart';
 import 'package:onPlay/store/player_store.dart';
 import 'package:onPlay/widgets/components/player/buttons/next_button.dart';
 import 'package:onPlay/widgets/components/player/buttons/play_button.dart';
@@ -29,7 +27,7 @@ class _State extends State<Disk> with SingleTickerProviderStateMixin {
   late PlayerStore playerStore;
 
   late final AnimationController _controller =
-      AnimationController(vsync: this, duration: Duration(seconds: 10))
+      AnimationController(vsync: this, duration: const Duration(seconds: 10))
         ..repeat();
 
   @override

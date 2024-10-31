@@ -5,12 +5,10 @@ class ToastService {
 
   ToastService({required this.context});
 
-  showTextToast(String text) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  showTextToast(String text, {BuildContext? context}) {
+    ScaffoldMessenger.of(context ?? this.context).showSnackBar(SnackBar(
       content: Text(text),
       duration: const Duration(seconds: 2),
     ));
   }
-
-  
 }

@@ -1,32 +1,15 @@
+import 'package:flutter/material.dart';
 import 'package:onPlay/database/objectbox.g.dart';
 import 'package:onPlay/models/album.dart';
+import 'package:onPlay/models/managers/base_manager.dart';
 
-class AlbumManager {
-  Box<Album> albumBox;
+class AlbumManager extends BaseManager<Album> {
+  AlbumManager(super.box);
 
-  AlbumManager(this.albumBox);
-
-  List<Album> getAll() {
-    return albumBox.getAll();
-  }
-
-  // List<Song> where() {
-  //   return songBox.get
-  // }
-
-  int count() {
-    return albumBox.count();
-  }
-
-  save(Album album) {
-    albumBox.put(album);
-  }
-
-  saveAll(List<Album> albums) {
-    albumBox.putMany(albums);
-  }
-
-  removeAll() {
-    albumBox.removeAll();
+  void deleteEmpty() {
+    debugPrint("removendo vazios");
+    box.query(Album_.songs.relationCount(0)).build().remove();
+    debugPrint(
+        box.query(Album_.songs.relationCount(0)).build().find().toString());
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:onPlay/models/artist.dart';
 import 'package:onPlay/models/genre.dart';
 import 'package:onPlay/models/song.dart';
@@ -12,6 +11,8 @@ import 'package:onPlay/widgets/components/cards/song_card.dart';
 import 'package:provider/provider.dart';
 
 class Search extends StatefulWidget {
+  const Search({super.key});
+
   @override
   createState() => SearchState();
 }
@@ -52,7 +53,7 @@ class SearchState extends State<Search> {
               ? searchGenres(query)
               : name == "albums"
                   ? searchAlbums(query)
-                  : [].where((a) => true).toList();
+                  : [];
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +124,7 @@ class SearchState extends State<Search> {
                         textColor: colorScheme.tertiary,
                         textStyle: const TextStyle(fontSize: 14),
                         label: Text(
-                          search(category.name, "").length.toString(),
+                          search(category.name, query).length.toString(),
                         ),
                         isLabelVisible: true,
                         offset: const Offset(8, 15),

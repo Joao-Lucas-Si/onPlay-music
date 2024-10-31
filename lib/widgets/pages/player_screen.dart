@@ -15,18 +15,18 @@ class _PlayerScreen extends State<PlayerScreen> {
   final minSize = 0.12;
   final maxSize = 1.0;
 
-  Widget playerType = MiniPlayer();
+  Widget playerType = const MiniPlayer();
 
   changePlayer() {
     if (draggableController.size <= (minSize + 0.1) &&
         playerType is! MiniPlayer) {
       setState(() {
-        playerType = MiniPlayer();
+        playerType = const MiniPlayer();
       });
     } else if (playerType is! Player &&
         draggableController.size > (minSize + 0.1)) {
       setState(() {
-        playerType = Player();
+        playerType = const Player();
       });
     }
   }

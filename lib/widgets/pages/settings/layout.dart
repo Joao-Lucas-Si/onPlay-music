@@ -5,8 +5,9 @@ import 'package:onPlay/enums/player/container_style.dart';
 import 'package:onPlay/enums/player/picture_type.dart';
 import 'package:onPlay/enums/player_element.dart';
 import 'package:onPlay/enums/player/volume_type.dart';
-import 'package:onPlay/localModels/settings/layout.dart';
-import 'package:onPlay/localModels/settings/settings.dart';
+import 'package:onPlay/store/settings/layout.dart';
+import 'package:onPlay/store/settings.dart';
+import 'package:onPlay/widgets/components/forms/check.dart';
 import 'package:onPlay/widgets/pages/settings/Config.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +28,57 @@ class LayoutSettingsScreen extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Text("telas"),
+              const Text("Tela de musicas"),
+              Check(
+                value: 2,
+                currentValue: settings.layout.songGridItems,
+                text: "mostrar em grid",
+                onChanged: (value) {
+                  settings.layout.songGridItems =
+                      settings.layout.songGridItems == 2 ? 1 : 2;
+                },
+              ),
+              const Text("Tela de gêneros"),
+              Check(
+                value: 2,
+                currentValue: settings.layout.genreGridItems,
+                text: "mostrar em grid",
+                onChanged: (value) {
+                  settings.layout.genreGridItems =
+                      settings.layout.genreGridItems == 2 ? 1 : 2;
+                },
+              ),
+              const Text("Tela de artistas"),
+              Check(
+                value: 2,
+                currentValue: settings.layout.artistGridItems,
+                text: "mostrar em grid",
+                onChanged: (value) {
+                  settings.layout.artistGridItems =
+                      settings.layout.artistGridItems == 2 ? 1 : 2;
+                },
+              ),
+              const Text("Tela de albuns"),
+              Check(
+                value: 2,
+                currentValue: settings.layout.albumGridItems,
+                text: "mostrar em grid",
+                onChanged: (value) {
+                  settings.layout.albumGridItems =
+                      settings.layout.albumGridItems == 2 ? 1 : 2;
+                },
+              ),
+              const Text("Tela de playlist"),
+              Check(
+                value: 2,
+                currentValue: settings.layout.playlistGridItems,
+                text: "mostrar em grid",
+                onChanged: (value) {
+                  settings.layout.playlistGridItems =
+                      settings.layout.playlistGridItems == 2 ? 1 : 2;
+                },
+              ),
+              const Text("telas"),
               SizedBox(
                 height: layout.mainScreens.length * 65,
                 child: ReorderableListView(
@@ -42,14 +93,14 @@ class LayoutSettingsScreen extends StatelessWidget {
                                 secondaryBackground: Container(
                                   alignment: Alignment.centerRight,
                                   color: Colors.red,
-                                  padding: EdgeInsets.only(right: 10),
-                                  child: Text("ocultar"),
+                                  padding: const EdgeInsets.only(right: 10),
+                                  child: const Text("ocultar"),
                                 ),
                                 background: Container(
                                   alignment: Alignment.centerLeft,
                                   color: Colors.red,
-                                  padding: EdgeInsets.only(left: 10),
-                                  child: Text("ocultar"),
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: const Text("ocultar"),
                                 ),
                                 key: UniqueKey(),
                                 onDismissed: (direction) {
@@ -64,10 +115,10 @@ class LayoutSettingsScreen extends StatelessWidget {
                                 )))))
                         .toList()),
               ),
-              Text("telas ocultadas"),
-              layout.hiddenScreens.length == 0
-                  ? Text("todos os elementos estão visiveis")
-                  : SizedBox.shrink(),
+              const Text("telas ocultadas"),
+              layout.hiddenScreens.isEmpty
+                  ? const Text("todos os elementos estão visiveis")
+                  : const SizedBox.shrink(),
               SizedBox(
                 height: layout.hiddenScreens.length * 65,
                 child: Column(
@@ -80,14 +131,14 @@ class LayoutSettingsScreen extends StatelessWidget {
                             secondaryBackground: Container(
                               alignment: Alignment.centerRight,
                               color: Colors.red,
-                              padding: EdgeInsets.only(right: 10),
-                              child: Text("desocultar"),
+                              padding: const EdgeInsets.only(right: 10),
+                              child: const Text("desocultar"),
                             ),
                             background: Container(
                               alignment: Alignment.centerLeft,
                               color: Colors.red,
-                              padding: EdgeInsets.only(left: 10),
-                              child: Text("desocultar"),
+                              padding: const EdgeInsets.only(left: 10),
+                              child: const Text("desocultar"),
                             ),
                             direction: DismissDirection.horizontal,
                             onDismissed: (direction) {
@@ -224,7 +275,7 @@ class LayoutSettingsScreen extends StatelessWidget {
                   }
                 },
               ),
-              SizedBox.square(
+              const SizedBox.square(
                 dimension: 100,
               )
             ],

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:onPlay/models/album.dart';
 import 'package:onPlay/models/artist.dart';
 import 'package:onPlay/models/genre.dart';
+import 'package:onPlay/models/playlist.dart';
 import 'package:onPlay/models/song.dart';
 import 'package:onPlay/store/player_store.dart';
 import 'package:onPlay/widgets/components/player/player.dart';
@@ -10,6 +11,8 @@ import 'package:onPlay/widgets/pages/artist.dart';
 import 'package:onPlay/widgets/pages/genre.dart';
 import 'package:onPlay/widgets/pages/home/home.dart';
 import 'package:onPlay/widgets/pages/home/recent.dart';
+import 'package:onPlay/widgets/pages/playlist.dart';
+import 'package:onPlay/widgets/pages/profiles.dart';
 import 'package:onPlay/widgets/pages/settings/Config.dart';
 import 'package:onPlay/widgets/pages/album.dart';
 import 'package:onPlay/widgets/pages/main-screens/main_screens.dart';
@@ -28,7 +31,9 @@ import 'package:provider/provider.dart';
 final router = GoRouter(routes: [
   GoRoute(
     path: "/",
-    builder: (context, state) => const MainScreen(),
+    builder: (context, state) => MainScreen(
+      key: state.extra as UniqueKey?,
+    ),
   ),
   GoRoute(path: Home.path, redirect: (context, state) => Recents.path, routes: [
     GoRoute(
@@ -71,11 +76,12 @@ final router = GoRouter(routes: [
   ),
   GoRoute(
     path: "/search",
-    builder: (context, state) => _Layout(body: Search()),
+    builder: (context, state) => const _Layout(body: Search()),
   ),
   GoRoute(
       path: "/user",
-      builder: (context, state) => const _Layout(body: UserForm())),
+      builder: (context, state) =>
+          _Layout(body: UserForm(newUser: state.extra as bool? ?? false))),
   GoRoute(
     path: "/album",
     builder: (context, state) =>
@@ -94,7 +100,18 @@ final router = GoRouter(routes: [
   GoRoute(path: "/player", builder: (context, state) => const Player()),
   GoRoute(
       path: SongForm.url,
-      builder: (context, state) => SongForm(song: state.extra as Song))
+      builder: (context, state) => SongForm(song: state.extra as Song)),
+  GoRoute(
+    path: ProfilesPage.path,
+    builder: (context, state) => ProfilesPage(
+      key: UniqueKey(),
+    ),
+  ),
+  GoRoute(
+    path: PlaylistPage.path,
+    builder: (context, state) =>
+        _Layout(body: PlaylistPage(playlist: state.extra as Playlist)),
+  )
 ]);
 
 class _Layout extends StatelessWidget {

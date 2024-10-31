@@ -4,14 +4,14 @@ import 'package:flutter/widgets.dart';
 import 'package:onPlay/constants/themes/purple.dart';
 import 'package:onPlay/enums/colors/color_palette.dart';
 import 'package:onPlay/enums/colors/color_theme.dart';
-import 'package:onPlay/localModels/settings/settings.dart';
+import 'package:onPlay/store/settings.dart';
 import 'package:onPlay/models/music_color.dart';
 import 'package:onPlay/services/colors/color_adapter.dart';
 import 'package:onPlay/services/colors/color_type.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 class ColorService {
-  var settings = Settings();
+  late Settings settings;
 
   Color toDarken(Color color, [double amount = .1]) {
     // assert(amount >= 0 && amount <= 1);
@@ -60,7 +60,15 @@ class ColorService {
   Future<MusicColor> getMusicColorFromSong(PaletteGenerator? colorInfo,
       ColorPalette palette, ColorTheme theme) async {
     final colorAdapter = ColorAdapter(colorService: this);
-    final defaultValue = purpleTheme;
+    final defaultValue = MusicColor.create(
+        background: purpleTheme.background,
+        text: purpleTheme.text,
+        icon: purpleTheme.icon,
+        other: purpleTheme.other,
+        inactive: purpleTheme.inactive,
+        palette: palette,
+        theme: theme);
+
     var value = defaultValue;
     if (colorInfo != null) {
       value = palette == ColorPalette.polychromatic
@@ -112,8 +120,8 @@ class ColorService {
     types = types.reversed.toList();
 
     final similars = {
-      ColorGroup.red: [ColorGroup.yellow, ColorGroup.orange, ColorGroup.pink],
-      ColorGroup.yellow: [ColorGroup.red, ColorGroup.orange],
+      ColorGroup.red: [ColorGroup.orange, ColorGroup.pink],
+      ColorGroup.yellow: [ColorGroup.orange],
       ColorGroup.orange: [ColorGroup.red, ColorGroup.yellow],
       ColorGroup.pink: [ColorGroup.red, ColorGroup.purple],
       ColorGroup.purple: [ColorGroup.blue, ColorGroup.pink],
@@ -125,8 +133,8 @@ class ColorService {
         other == null ||
         icon == null ||
         inactive == null) {
-      debugPrint(
-          "grupos: ${types.map((possibility) => possibility.type.group).toSet()}");
+      // debugPrint(
+      //     "grupos: ${types.map((possibility) => possibility.type.group).toSet()}");
       var possibilities = types.where((type) =>
           (![ColorGroup.white, ColorGroup.grey, ColorGroup.black]
               .contains(type.type.group)) &&
@@ -145,10 +153,10 @@ class ColorService {
           (![ColorGroup.white, ColorGroup.grey, ColorGroup.black]
               .contains(type.type.group)));
 
-      debugPrint(
-          "cores ${possibilities.map((possibility) => possibility.type.group).toSet()}");
-      debugPrint(
-          "similar ${possibilitiesWithSimilars.map((possibility) => possibility.type.group).toSet()}");
+      // debugPrint(
+      //     "cores ${possibilities.map((possibility) => possibility.type.group).toSet()}");
+      // debugPrint(
+      //     "similar ${possibilitiesWithSimilars.map((possibility) => possibility.type.group).toSet()}");
 
       possibilities = possibilities.isEmpty
           ? (possibilitiesWithSimilars.isEmpty

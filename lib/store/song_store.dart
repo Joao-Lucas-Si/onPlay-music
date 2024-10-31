@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onPlay/enums/sorting/song_sorting.dart';
 import 'package:onPlay/models/artist.dart';
 import 'package:onPlay/models/managers/box_manager.dart';
 import 'package:onPlay/models/genre.dart';
@@ -20,7 +21,7 @@ class SongStore extends ChangeNotifier {
   List<Song> _songs = [];
   String _loading = "";
   List<Artist> _artists = [];
-  String _sort = "modification_date";
+  SongSorting _sort = SongSorting.color;
   String _order = "desc";
   String _artistSort = "name";
   String _artistOrder = "desc";
@@ -47,14 +48,19 @@ class SongStore extends ChangeNotifier {
 
   String get order => _order;
 
-  String get sort => _sort;
+  SongSorting get sort => _sort;
 
   set order(String value) {
     _order = value;
     notifyListeners();
   }
 
-  set sort(String value) {
+  setSongSortByName(String name) {
+    _sort = SongSorting.fromString(name);
+    notifyListeners();
+  }
+
+  set sort(SongSorting value) {
     _sort = value;
     notifyListeners();
   }
@@ -83,9 +89,9 @@ class SongStore extends ChangeNotifier {
 
   activeListeners() async {
     final dirs = await FilesService.getMusicFolders();
-    print(dirs);
+    // print(dirs);
     for (final dir in dirs) {
-      print(dir);
+      // print(dir);
       FilesService.listenDirectory(
         dir: dir,
         onCreate: (event) async {
@@ -132,6 +138,7 @@ class SongStore extends ChangeNotifier {
   updateSong(String path) async {
     debugPrint("musica modificada");
     final newData = await FilesService.getSongByPath(path);
+    debugPrint(newData.metadata?.artist);
     final oldData = _songs.firstWhere((song) => song.path == path);
 
     oldData.year = newData.year;
@@ -140,26 +147,37 @@ class SongStore extends ChangeNotifier {
     oldData.modified = newData.modified;
     oldData.picture = newData.picture;
 
+    oldData.metadata = newData.metadata;
+
     final album = _getAlbum(oldData);
     final artist = _getArtist(oldData);
+
+    debugPrint(artist.toString());
     final genre = _getGenre(oldData);
 
-    if (album != oldData.album.target) {
-      album.songs.add(oldData);
-      oldData.album.target = album;
-    }
+    // if (album.name != oldData.album.target?.name) {
+    //   album.songs.add(oldData);
+    //   oldData.album.target = album;
+    // }
+
+    // if (artist.name != oldData.artist.target?.name) {
+    //   album.songs.add(oldData);
+    //   oldData.artist.target = artist;
+    // }
 
     _addAlbum(album);
     _addArtist(artist);
     _addGenre(genre);
 
-    oldData.artist.target = newData.artist.target;
-    oldData.genre.target = newData.genre.target;
+    // oldData.artist.target = newData.artist.target;
+    // oldData.genre.target = newData.genre.target;
 
-    debugPrint("$oldData foi modificado para $newData");
+    // debugPrint("$oldData foi modificado para $newData");
 
     _saveOneToDb(oldData);
-
+    _artistManager.removeEmpty();
+    _albumManager.deleteEmpty();
+    _genreManager.removeEmpty();
     notifyListeners();
   }
 
@@ -172,16 +190,12 @@ class SongStore extends ChangeNotifier {
     var artist = _artists.firstWhereOrNull((value) =>
         value.name.toLowerCase() ==
         (song.metadata?.artist?.toLowerCase() ?? "desconhecido"));
-    if (artist != null) {
-      if (artist.picture == null && song.picture != null) {
-        artist.picture = song.picture;
-      }
-    } else {
-      artist = Artist(
-          name: song.metadata?.artist ?? "desconhecido", picture: song.picture);
-    }
+    artist ??= Artist(name: song.metadata?.artist ?? "desconhecido");
+
+    debugPrint(artist.name);
+
     song.artist.target = artist;
-    artist.songs.add(song);
+    if (!artist.songs.contains(song)) artist.songs.add(song);
     return artist;
   }
 
@@ -204,20 +218,16 @@ class SongStore extends ChangeNotifier {
     var genre = _genres.firstWhereOrNull((value) =>
         value.name.toLowerCase() ==
         (song.metadata?.genre?.toLowerCase() ?? "desconhecido"));
-    if (genre != null) {
-      if (genre.picture == null && song.picture != null) {
-        genre.picture = song.picture;
-      }
-    } else {
-      genre = Genre(
-          name: song.metadata != null &&
-                  song.metadata!.genre != null &&
-                  song.metadata!.genre!.trim() != ""
-              ? song.metadata!.genre!
-              : "desconhecido",
-          picture: song.picture);
-    }
-    genre.songs.add(song);
+
+    genre ??= Genre(
+      name: (song.metadata != null &&
+              song.metadata!.genre != null &&
+              song.metadata!.genre!.trim() != "")
+          ? song.metadata!.genre!
+          : "desconhecido",
+    );
+
+    if (!genre.songs.contains(song)) genre.songs.add(song);
     song.genre.target = genre;
     return genre;
   }
@@ -242,30 +252,25 @@ class SongStore extends ChangeNotifier {
         value.name.toLowerCase() == song.metadata?.album?.toLowerCase() &&
         song.metadata?.artist?.toLowerCase() ==
             value.artist.target?.name.toLowerCase());
-    if (album != null) {
-      if (album.picture == null && song.picture != null) {
-        album.picture = song.picture;
-      }
-      album.songs.add(song);
-    } else {
+
+    album ??= Album(name: song.metadata?.album ?? "desconhecido");
+    if (album.artist.target == null) {
       final artist = _artists.firstWhereOrNull((artist) =>
           artist.name.toLowerCase() == song.artist.target?.name.toLowerCase());
-
-      album = Album(
-          name: song.metadata?.album ?? "desconhecido", picture: song.picture);
-      album.artist.target = artist;
+      album.artist.target ??= artist;
 
       if (artist != null) artist.albums.add(album);
     }
+
     return album;
   }
 
   _getAlbums() {
     _setLoading("procurando albuns");
     _albums = [];
-    for (final song in songs) {
+    for (final song in _songs) {
       final album = _getAlbum(song);
-      album.songs.add(song);
+      if (!album.songs.contains(song)) album.songs.add(song);
       _addAlbum(album);
     }
     _setLoading("");
@@ -290,6 +295,9 @@ class SongStore extends ChangeNotifier {
 
   _remove(Song song) {
     _songManager.remove(song);
+    _albumManager.deleteEmpty();
+    _artistManager.removeEmpty();
+    _genreManager.removeEmpty();
   }
 
   _saveToDb() {
@@ -297,10 +305,15 @@ class SongStore extends ChangeNotifier {
     _albumManager.removeAll();
     _artistManager.removeAll();
     _genreManager.removeAll();
+    debugPrint(_genres.toString());
+    _genreManager.saveAll([..._genres]);
     _songManager.saveAll(_songs);
     _albumManager.saveAll(_albums);
     _artistManager.saveAll(_artists);
-    _genreManager.saveAll(_genres);
+    _genres = _genreManager.getAll();
+    _songs = _songManager.getAll();
+    _albums = _albumManager.getAll();
+    notifyListeners();
   }
 
   _saveOneToDb(Song song) {
@@ -316,10 +329,12 @@ class SongStore extends ChangeNotifier {
   }
 
   _getDataFromFiles() {
+    _songs = [];
+    notifyListeners();
     FilesService.getAllMusics(_setLoading).then((songs) async {
       _songs = songs;
-      debugPrint(_songs.toString());
-      notifyListeners();
+      debugPrint(_songs.where((song) => song.colors.isEmpty).toString());
+
       _getArtists();
       _getGenres();
       _getAlbums();

@@ -4,6 +4,8 @@ import 'package:onPlay/widgets/components/layouts/songs_popup.dart';
 import 'package:provider/provider.dart';
 
 class SongsPopup extends StatefulWidget {
+  const SongsPopup({super.key});
+
   @override
   createState() => _SongsPopup();
 }

@@ -10,6 +10,7 @@ class AlbumScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
         appBar: AppBar(),
         body: SingleChildScrollView(
@@ -24,10 +25,7 @@ class AlbumScreen extends StatelessWidget {
             ),
             album.artist.target != null
                 ? MiniArtistCard(artist: album.artist.target!)
-                : Container(
-                    height: 0,
-                    width: 0,
-                  ),
+                : const SizedBox.shrink(),
             ...album.songs.map(
               (song) => SongCard(
                 song: song,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:onPlay/localModels/settings/settings.dart';
+import 'package:onPlay/store/settings.dart';
 import 'package:onPlay/models/music_color.dart';
 import 'package:onPlay/models/song.dart';
 import 'package:onPlay/store/player_store.dart';

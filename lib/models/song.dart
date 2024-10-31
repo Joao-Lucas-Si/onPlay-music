@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:metadata_god/metadata_god.dart';
+import 'package:onPlay/constants/themes/purple.dart';
 import 'package:onPlay/enums/colors/color_palette.dart';
 import 'package:onPlay/enums/colors/color_theme.dart';
 import 'package:onPlay/models/artist.dart';
@@ -9,6 +11,9 @@ import 'package:onPlay/models/album.dart';
 import 'package:onPlay/models/genre.dart';
 import 'package:objectbox/objectbox.dart';
 import 'package:onPlay/models/music_color.dart';
+import 'package:onPlay/services/getBaseTheme.dart';
+import 'package:onPlay/store/settings.dart';
+import 'package:provider/provider.dart';
 
 @Entity()
 class Song {
@@ -30,17 +35,21 @@ class Song {
   @Transient()
   FileSystemEntity? file;
 
-  //relatioships
   final artist = ToOne<Artist>();
   final album = ToOne<Album>();
   final genre = ToOne<Genre>();
 
-  @Backlink("song")
   final colors = ToMany<MusicColor>();
 
-  MusicColor currentColors(ColorPalette palette, ColorTheme theme) {
+  MusicColor currentColors(ColorPalette palette, ColorTheme theme,
+      {BuildContext? context}) {
     return colors.firstWhere(
-        (color) => color.palette == palette && color.theme == theme);
+        (color) => color.palette == palette && color.theme == theme,
+        orElse: () => context != null
+            ? getBaseTheme(Provider.of<Settings>(context, listen: false)
+                .interface
+                .baseTheme)
+            : purpleTheme);
   }
 
   Song(

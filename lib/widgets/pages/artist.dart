@@ -48,7 +48,7 @@ class ArtistScreen extends StatelessWidget {
                     playlist: artist.songs,
                     showArtist: false,
                   ))
-              .toList()
+              
         ])));
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/models/music_color.dart';
-import 'package:onPlay/services/colors/color_adapter.dart';
 import 'package:onPlay/widgets/components/player/buttons/next_button.dart';
 import 'package:onPlay/widgets/components/player/buttons/play_button.dart';
 import 'package:onPlay/widgets/components/player/buttons/previous_button.dart';

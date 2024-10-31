@@ -13,12 +13,13 @@ class App extends StatelessWidget {
   const App({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      builder: (context, child) =>
-          child != null ? AppTheme(child: child) : const Text("not found"),
+    return ScaffoldMessenger(child: MaterialApp.router(
+      builder: (context, child) => child != null
+          ? ScaffoldMessenger(child: AppTheme(child: child))
+          : const Text("not found"),
       routerDelegate: router.routerDelegate,
       routeInformationParser: router.routeInformationParser,
       routeInformationProvider: router.routeInformationProvider,
-    );
+    ));
   }
 }
