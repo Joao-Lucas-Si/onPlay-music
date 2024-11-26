@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:onPlay/enums/card_type.dart';
+import 'package:onPlay/enums/card_style.dart';
 import 'package:onPlay/models/genre.dart';
 import 'package:onPlay/store/settings.dart';
 import 'package:onPlay/widgets/components/cards/item/circular_card.dart';
@@ -24,7 +24,7 @@ class GenreCard extends StatelessWidget {
         extra: Text(genre.songs.length.toString()),
         image: genre.picture,
         isColored: settings.interface.coloredGenreCard,
-        colors: genre.getColors(settings));
+        colors: genre.getColors(context));
     final style = settings.interface.genreCardStyle;
     return GestureDetector(
         onTap: () {

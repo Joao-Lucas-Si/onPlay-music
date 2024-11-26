@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:onPlay/models/managers/box_manager.dart';
 import 'package:onPlay/store/settings.dart';
+import 'package:onPlay/store/user_store.dart';
 import 'package:onPlay/widgets/components/user_avatar.dart';
 import 'package:provider/provider.dart';
 
@@ -12,11 +12,9 @@ class ProfilesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final managers = Provider.of<BoxManager>(context);
+    final userStore = Provider.of<UserStore>(context);
 
-    final userManager = managers.userManager;
-
-    final users = userManager.getAll();
+    final users = userStore.profiles;
 
     final settings = Provider.of<Settings>(context);
 
@@ -55,12 +53,7 @@ class ProfilesPage extends StatelessWidget {
                                     TextButton(
                                         onPressed: () {
                                           if (!user.current) {
-                                            final activeUser =
-                                                userManager.getActiveProfile();
-                                            activeUser.current = false;
-                                            user.current = true;
-                                            userManager
-                                                .saveAll([activeUser, user]);
+                                            userStore.changeProfile(user);
                                             settings.reload();
 
                                             GoRouter.of(context)

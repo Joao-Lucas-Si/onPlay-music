@@ -1,8 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:onPlay/enums/colors/color_palette.dart';
-import 'package:onPlay/enums/colors/color_theme.dart';
+import 'package:onPlay/dtos/metadata_dto.dart';
+import "package:collection/collection.dart";
 import 'package:onPlay/services/colors/color_service.dart';
+import 'package:onPlay/services/http/adapters/http_adapter.dart';
+import 'package:onPlay/services/http/services/youtube_service.dart';
+import 'package:onPlay/services/metadata/metadata_service.dart';
 import 'package:path/path.dart' as p;
 import 'package:metadata_god/metadata_god.dart';
 import 'package:onPlay/models/song.dart';
@@ -10,15 +13,15 @@ import 'package:external_path/external_path.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class FilesService {
+  static final _metadataService = MetadataService();
   static bool permission = false;
   static Future<bool> requestPermission() async {
     if (FilesService.permission) {
       return FilesService.permission;
-    } else {
-      final permission = await Permission.storage.request();
-      FilesService.permission = permission.isGranted;
-      return permission.isGranted;
     }
+    final permission = await Permission.storage.request();
+    FilesService.permission = permission.isGranted;
+    return permission.isGranted;
   }
 
   static listenDirectory({
@@ -55,10 +58,6 @@ class FilesService {
         }
       },
     );
-  }
-
-  static Future<Metadata> extractMetadata(String path) async {
-    return await MetadataGod.readMetadata(file: path);
   }
 
   static Future<List<Directory>> getMusicFolders() async {
@@ -105,7 +104,7 @@ class FilesService {
               .any((extension) => path.endsWith('.$extension'))) {
             if (setLoading != null) {
               setLoading(
-                  "arquivo ${(await extractMetadata(path)).title ?? ""}");
+                  "arquivo ${(await _metadataService.read(path)).title ?? ""}");
             }
             musics.add(entity);
           }
@@ -128,29 +127,64 @@ class FilesService {
     await MetadataGod.writeMetadata(file: path, metadata: metadata);
   }
 
+  static Future<void> writeAudioFile(Song song, BuildContext context) async {
+    final dirs = await getMusicFolders();
+    final dir = dirs.first;
+    final file = File("${dir.path}/${song.title.replaceAll(" ", "+")}.mp3");
+    debugPrint(file.path);
+    final httpService = HttpAdapter();
+    final youtubeService = YoutubeService(context);
+    final video = await youtubeService.getVideo(song.path);
+    debugPrint(video?.formatStreams?.length.toString());
+    video?.formatStreams?.forEach((stream) {
+      debugPrint(stream.type);
+      debugPrint(stream.url);
+    });
+    debugPrint(video?.adaptiveFormats?.length.toString());
+    // video?.adaptiveFormats?.forEach((stream) {
+    //   debugPrint(stream.type);
+    //   debugPrint(stream.url);
+    // });
+    // debugPrint(video?.adaptiveFormats
+    //     ?.firstWhereOrNull(
+    //         (format) => format.type?.startsWith("audio") ?? false)
+    //     ?.url);
+    debugPrint((await httpService.getBytes(video?.adaptiveFormats
+                ?.firstWhereOrNull(
+                    (format) => format.type?.startsWith("audio") ?? false)
+                ?.url ??
+            ""))
+        .toString());
+    final songFile = await file.writeAsBytes(
+      await httpService.getBytes(video?.adaptiveFormats
+              ?.firstWhereOrNull(
+                  (format) => format.type?.startsWith("audio") ?? false)
+              ?.url ??
+          ""),
+    );
+    debugPrint(songFile.path);
+    await _metadataService.write(songFile.path, song.generateMetadata());
+  }
+
   static Future<Song> getSongByFile(FileSystemEntity file) async {
     final colorService = ColorService();
-    final metadata = await extractMetadataFromFile(file);
+    final metadata = await _metadataService.read(file.path);
     final song = Song.withFileData(
         path: file.path,
         modified: file.statSync().modified,
         metadata: metadata,
         file: file,
-        duration: metadata.duration?.inSeconds,
+        pictureMimeType: metadata.imageMimeType,
+        duration: metadata.duration,
         year: metadata.year,
-        picture: metadata.picture?.data,
+        picture: metadata.image,
         title: metadata.title ?? p.basenameWithoutExtension(file.path));
-    final colorInfo = await colorService.getColorInfo(song.picture);
-    for (final theme in ColorTheme.values) {
-      for (final palette in ColorPalette.values) {
-        song.colors.add(await colorService.getMusicColorFromSong(
-            colorInfo, palette, theme));
-      }
-    }
+    song.colors.addAll(await colorService.getAllColorFromSong(song));
     return song;
   }
 
-  static Future<List<Song>> getAllMusics(Function(String state) setLoading) async {
+  static Future<List<Song>> getAllMusics(
+      Function(String state) setLoading) async {
     setLoading("coletando os arquivos");
     final files = await getAllMusicFiles(setLoading);
     List<Song> songs = [];
@@ -158,24 +192,58 @@ class FilesService {
       final song = await getSongByFile(file);
       setLoading(song.title);
       songs.add(song);
-      
     }
     setLoading("");
     return songs;
   }
 
-  static Future<Metadata> extractMetadataFromFile(FileSystemEntity file) async {
-    return await MetadataGod.readMetadata(file: file.path);
-  }
-
-  static Future<List<Metadata>> extractAllMetadata() async {
+  static Future<List<SongMetadata>> extractAllMetadata() async {
     final files = await getAllMusicFiles(null);
-    List<Metadata> metadatas = [];
+    List<SongMetadata> metadatas = [];
 
     for (FileSystemEntity file in files) {
-      metadatas.add(await extractMetadataFromFile(file));
+      metadatas.add(await _metadataService.read(file.path));
     }
 
     return metadatas;
   }
 }
+/*
+private fun saveAudioMetadata(filePath: String, title: String, artist: String, album: String, genre: String = "Unknown", year: String = "2024") {
+    try {
+        // Carregar o arquivo MP3
+        val mp3File = Mp3File(filePath)
+
+        // Verificar se já existe uma tag ID3v2
+        if (mp3File.hasId3v2Tag()) {
+            // Se já existe, apenas atualizamos os metadados
+            val id3v2 = mp3File.id3v2Tag
+            id3v2.title = title
+            id3v2.artist = artist
+            id3v2.album = album
+            id3v2.genre = genre
+            id3v2.year = year
+            mp3File.save(filePath) // Salva as alterações no arquivo
+        } else {
+            // Se não existe, cria uma nova tag ID3v2
+            val id3v2 = ID3v2()
+
+            // Definir os metadados
+            id3v2.title = title
+            id3v2.artist = artist
+            id3v2.album = album
+            id3v2.genre = genre
+            id3v2.year = year
+
+            // Adicionar a nova tag ID3v2 ao arquivo
+            mp3File.id3v2Tag = id3v2
+
+            // Salvar o arquivo com a nova tag ID3v2
+            mp3File.save(filePath)
+        }
+    } catch (e: Exception) {
+        Log.e("AudioMetadata", "Erro ao salvar metadados: ${e.message}")
+        throw e
+    }
+} 
+ */

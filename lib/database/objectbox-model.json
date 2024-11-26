@@ -70,7 +70,7 @@
     },
     {
       "id": "4:6497590176427579550",
-      "lastPropertyId": "10:2942306982142154184",
+      "lastPropertyId": "13:4939538193196402726",
       "name": "Song",
       "properties": [
         {
@@ -132,6 +132,24 @@
           "id": "10:2942306982142154184",
           "name": "modified",
           "type": 10
+        },
+        {
+          "id": "11:2475855671905137680",
+          "name": "isOnline",
+          "type": 1
+        },
+        {
+          "id": "12:3786932038971008213",
+          "name": "pictureMimeType",
+          "type": 9
+        },
+        {
+          "id": "13:4939538193196402726",
+          "name": "preferredColorsId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "14:6389748139120428627",
+          "relationTarget": "MusicColor"
         }
       ],
       "relations": [
@@ -255,7 +273,7 @@
     },
     {
       "id": "8:6346989537120360199",
-      "lastPropertyId": "6:1569665513455864168",
+      "lastPropertyId": "7:5118955864889774580",
       "name": "DatabaseSettings",
       "properties": [
         {
@@ -300,6 +318,14 @@
           "flags": 520,
           "indexId": "10:4417538046858357665",
           "relationTarget": "DatabasePlayerSettings"
+        },
+        {
+          "id": "7:5118955864889774580",
+          "name": "sourceId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "13:6356786125335292857",
+          "relationTarget": "DatabaseSourceSettings"
         }
       ],
       "relations": []
@@ -369,7 +395,7 @@
     },
     {
       "id": "11:1783439183368047241",
-      "lastPropertyId": "7:2944878772244270136",
+      "lastPropertyId": "11:7583224691474521751",
       "name": "DatabaseLayoutSettings",
       "properties": [
         {
@@ -382,11 +408,6 @@
           "id": "2:6035222152268694810",
           "name": "dbContainerStyle",
           "type": 9
-        },
-        {
-          "id": "3:4325039813061252695",
-          "name": "dbMainScreens",
-          "type": 30
         },
         {
           "id": "4:5453335989415707779",
@@ -406,6 +427,26 @@
         {
           "id": "7:2944878772244270136",
           "name": "songGridItems",
+          "type": 6
+        },
+        {
+          "id": "8:658664062384816679",
+          "name": "artistGridItems",
+          "type": 6
+        },
+        {
+          "id": "9:7240781589085401520",
+          "name": "genreGridItems",
+          "type": 6
+        },
+        {
+          "id": "10:7606295383735195973",
+          "name": "albumGridItems",
+          "type": 6
+        },
+        {
+          "id": "11:7583224691474521751",
+          "name": "playlistGridItems",
           "type": 6
         }
       ],
@@ -443,7 +484,7 @@
     },
     {
       "id": "13:533300879031493817",
-      "lastPropertyId": "22:8730058587949986835",
+      "lastPropertyId": "27:6277370637889217542",
       "name": "DatabaseInterfaceSettings",
       "properties": [
         {
@@ -551,13 +592,52 @@
           "id": "22:8730058587949986835",
           "name": "dbGenreCardStyle",
           "type": 9
+        },
+        {
+          "id": "23:4501206641889980179",
+          "name": "themeChangeTimer",
+          "type": 6
+        },
+        {
+          "id": "24:3717689960032247305",
+          "name": "dbAlbumRelationStyle",
+          "type": 9
+        },
+        {
+          "id": "25:2909805147225544902",
+          "name": "dbGenreRelationStyle",
+          "type": 9
+        },
+        {
+          "id": "27:6277370637889217542",
+          "name": "dbArtistRelationStyle",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "14:6347683925110699099",
+      "lastPropertyId": "2:533927472569115788",
+      "name": "DatabaseSourceSettings",
+      "properties": [
+        {
+          "id": "1:8026814027408079714",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:533927472569115788",
+          "name": "invidiousInstances",
+          "type": 30
         }
       ],
       "relations": []
     }
   ],
-  "lastEntityId": "13:533300879031493817",
-  "lastIndexId": "12:8877211369580756881",
+  "lastEntityId": "14:6347683925110699099",
+  "lastIndexId": "14:6389748139120428627",
   "lastRelationId": "3:7690569768755154711",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
@@ -571,7 +651,9 @@
     5182564456990978250,
     1475912299933615236,
     5738142651511766062,
-    7850994761262333986
+    7850994761262333986,
+    4325039813061252695,
+    766543068697314630
   ],
   "retiredRelationUids": [],
   "version": 1

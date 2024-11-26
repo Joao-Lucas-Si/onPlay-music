@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_linux
+  audiotags
   objectbox_flutter_libs
   open_file_linux
 )

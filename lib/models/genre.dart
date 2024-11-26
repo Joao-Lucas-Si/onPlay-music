@@ -1,11 +1,11 @@
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:onPlay/constants/themes/purple.dart';
 import 'package:onPlay/models/music_color.dart';
 import 'package:onPlay/models/song.dart';
 import 'package:objectbox/objectbox.dart';
 import "package:collection/collection.dart";
-import 'package:onPlay/store/settings.dart';
 
 @Entity()
 class Genre {
@@ -13,9 +13,8 @@ class Genre {
   int id = 0;
   String name;
 
-  MusicColor getColors(Settings settings) =>
-      songs.firstWhereOrNull((song) => song.picture != null)?.currentColors(
-          settings.interface.colorPalette, settings.interface.colorTheme) ??
+  MusicColor getColors(BuildContext context) =>
+      songs.firstWhereOrNull((song) => song.picture != null)?.currentColors(context) ??
       purpleTheme;
 
   @Transient()

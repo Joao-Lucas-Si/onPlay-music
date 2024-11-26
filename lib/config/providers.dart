@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:onPlay/store/content/album_store.dart';
+import 'package:onPlay/store/content/artist_store.dart';
+import 'package:onPlay/store/content/genre_store.dart';
 import 'package:onPlay/store/settings.dart';
 import 'package:onPlay/models/managers/box_manager.dart';
 import 'package:onPlay/services/notification_service.dart';
 import 'package:onPlay/services/toast_service.dart';
-import 'package:onPlay/services/player_service.dart';
 import 'package:onPlay/store/player_store.dart';
-import 'package:onPlay/store/song_store.dart';
-import 'package:onPlay/store/volume_store.dart';
+import 'package:onPlay/store/content/song_store.dart';
+import 'package:onPlay/store/user_store.dart';
+import 'package:onPlay/store/device/volume_store.dart';
 import 'package:provider/provider.dart';
 
 class Providers extends StatefulWidget {
@@ -19,7 +22,6 @@ class Providers extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _State();
   }
 }
@@ -46,8 +48,8 @@ class _State extends State<Providers> {
                 body: Center(
                     child: Image.asset(
                   "assets/ic_launcher.png",
-                  width: 200,
-                  height: 200,
+                  width: 500,
+                  height: 500,
                 ))),
           )
         : MultiProvider(providers: [
@@ -55,19 +57,34 @@ class _State extends State<Providers> {
             ChangeNotifierProvider(
               create: (context) => managers!,
             ),
+            ChangeNotifierProxyProvider<BoxManager, ArtistStore>(
+                create: ArtistStore.new,
+                update: (context, value, previous) =>
+                    previous?.init(value) ?? ArtistStore(context).init(value)),
+            ChangeNotifierProxyProvider<BoxManager, GenreStore>(
+                create: GenreStore.new,
+                update: (context, value, previous) =>
+                    previous?.init(value) ?? GenreStore(context).init(value)),
+            ChangeNotifierProxyProvider<BoxManager, AlbumStore>(
+                create: AlbumStore.new,
+                update: (context, value, previous) =>
+                    previous?.init(value) ?? AlbumStore(context).init(value)),
             ChangeNotifierProxyProvider<BoxManager, SongStore>(
-                create: (context) => SongStore(),
+                create: SongStore.new,
                 update: (context, value, previous) =>
-                    previous?.init(value) ?? SongStore().init(value)),
-            ChangeNotifierProvider(
-              create: (context) => PlayerStore(),
-            ),
+                    previous?.init(value) ?? SongStore(context).init(value)),
             ChangeNotifierProvider(create: (context) => Settings(context)),
-            ChangeNotifierProxyProvider<PlayerStore, PlayerService>(
-                create: (context) => PlayerService(context),
-                update: (context, value, previous) =>
-                    previous?.update(value) ??
-                    PlayerService(context).update(value)),
+            ChangeNotifierProvider(
+              create: (context) => PlayerStore(context),
+            ),
+            // ChangeNotifierProxyProvider<PlayerStore, PlayerService>(
+            //     create: (context) => PlayerService(context),
+            //     update: (context, value, previous) =>
+            //         previous?.update(value) ??
+            //         PlayerService(context).update(value)),
+            ChangeNotifierProvider(
+              create: (context) => UserStore(context),
+            ),
             Provider(create: (context) => ToastService(context: context)),
             Provider(create: (context) => NotificationService()),
           ], child: widget.app);

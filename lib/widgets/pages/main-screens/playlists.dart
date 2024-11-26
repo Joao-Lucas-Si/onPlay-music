@@ -18,7 +18,7 @@ class Playlist extends StatelessWidget {
 
     debugPrint(playlists.length.toString());
     final settings = Provider.of<Settings>(context);
-    final gridItems = settings.layout.albumGridItems;
+    final gridItems = settings.layout.playlistGridItems;
     return gridItems == 1
         ? Scaffold(
             body: ListView.builder(

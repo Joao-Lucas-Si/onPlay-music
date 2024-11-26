@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:onPlay/enums/card_type.dart';
+import 'package:onPlay/enums/card_style.dart';
 import 'package:onPlay/store/settings.dart';
 import 'package:onPlay/models/song.dart';
 import 'package:onPlay/store/player_store.dart';
@@ -33,8 +33,7 @@ class SongCard extends StatelessWidget {
         ? [...playlist!.where((music) => music.path != song.path)]
         : [];
     newPlaylist.shuffle();
-    final colors = song.currentColors(
-        settings.interface.colorPalette, settings.interface.colorTheme);
+    final colors = song.currentColors(context);
 
     final style = settings.interface.songCardStyle;
     final params = ItemParams(
@@ -44,7 +43,10 @@ class SongCard extends StatelessWidget {
         option: MusicPopup(song: song),
         colors: colors,
         extra: song.artist.target != null
-            ? MiniArtistCard(artist: song.artist.target!)
+            ? MiniArtistCard(
+                artist: song.artist.target!,
+                isInGrid: settings.layout.songGridItems > 1,
+              )
             : null,
         image: song.picture);
     return GestureDetector(

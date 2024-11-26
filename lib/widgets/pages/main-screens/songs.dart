@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/enums/sorting/song_sorting.dart';
 import 'package:onPlay/models/song.dart';
+import 'package:onPlay/services/colors/color_type.dart';
 import 'package:onPlay/store/settings.dart';
-import 'package:onPlay/store/song_store.dart';
+import 'package:onPlay/store/content/song_store.dart';
 import 'package:onPlay/widgets/components/cards/song_card.dart';
 import 'package:provider/provider.dart';
 
@@ -32,16 +33,25 @@ class _SongsState extends State<Songs> {
       songs.sort(
           (a, b) => a.modified?.compareTo(b.modified ?? DateTime(0)) ?? 0);
     } else if (sort == SongSorting.color) {
-      songs.sort((a, b) => a
-          .currentColors(
-              settings.interface.colorPalette, settings.interface.colorTheme)
-          .background
-          .value
-          .compareTo(b
-              .currentColors(settings.interface.colorPalette,
-                  settings.interface.colorTheme)
-              .background
-              .value));
+      songs.sort((a, b) {
+        final aColor = HSLColor.fromColor(a.currentColors(context).background);
+        final bColor = HSLColor.fromColor(b.currentColors(context).background);
+        // final hueCompare = aColor.hue.compareTo(bColor.hue);
+        final aColorGroup = getColorGroup(aColor.toColor());
+        final bColorGroup = getColorGroup(bColor.toColor());
+        final groupCompare =
+            aColorGroup.priority.compareTo(bColorGroup.priority);
+        if (groupCompare == 0) {
+          final saturationCompare =
+              -aColor.saturation.compareTo(bColor.saturation);
+          final lightnessCompare = aColor.lightness.compareTo(bColor.lightness);
+          if (lightnessCompare == 0) {
+            return saturationCompare;
+          }
+          return lightnessCompare;
+        }
+        return groupCompare;
+      });
     } else {
       songs.sort(
         (a, b) => a.year?.compareTo(b.year ?? 0) ?? 0,
@@ -64,6 +74,29 @@ class _SongsState extends State<Songs> {
       body: Center(
           child: Stack(
         children: [
+          // ListView(
+          //   children: songs
+          // .sorted((a, b) =>
+          //     getColorType(a.currentColors(context).background)
+          //         .group
+          //         .priority
+          //         .compareTo(
+          //             getColorType(b.currentColors(context).background)
+          //                 .group
+          //                 .priority))
+          //       .map((song) => Column(children: [
+          //             Text(
+          //               "${getColorType(song.currentColors(context).background).group.name} - ${HSLColor.fromColor(song.currentColors(context).background).lightness.toStringAsFixed(2)}",
+          //               style: TextStyle(
+          //                   fontSize: 40,
+          //                   backgroundColor:
+          //                       song.currentColors(context).background,
+          //                   color: song.currentColors(context).text),
+          //             ),
+          //             SongCard(song: song)
+          //           ]))
+          //       .toList(),
+          // )
           store.songs.isEmpty
               ? const Text("nenhuma música encontrada")
               : (settings.layout.songGridItems == 1
@@ -84,7 +117,7 @@ class _SongsState extends State<Songs> {
                         playlist: songs,
                         key: ValueKey(songs[index].id),
                       ),
-                    ))
+                    )),
         ],
       )),
     );

@@ -24,6 +24,7 @@ import '../models/settings/layout.dart';
 import '../models/settings/player.dart';
 import '../models/settings/settings.dart';
 import '../models/settings/share.dart';
+import '../models/settings/source.dart';
 import '../models/song.dart';
 import '../models/user_profile.dart';
 
@@ -108,7 +109,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(4, 6497590176427579550),
       name: 'Song',
-      lastPropertyId: const obx_int.IdUid(10, 2942306982142154184),
+      lastPropertyId: const obx_int.IdUid(13, 4939538193196402726),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -166,7 +167,24 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(10, 2942306982142154184),
             name: 'modified',
             type: 10,
-            flags: 0)
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(11, 2475855671905137680),
+            name: 'isOnline',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(12, 3786932038971008213),
+            name: 'pictureMimeType',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(13, 4939538193196402726),
+            name: 'preferredColorsId',
+            type: 11,
+            flags: 520,
+            indexId: const obx_int.IdUid(14, 6389748139120428627),
+            relationTarget: 'MusicColor')
       ],
       relations: <obx_int.ModelRelation>[
         obx_int.ModelRelation(
@@ -287,7 +305,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(8, 6346989537120360199),
       name: 'DatabaseSettings',
-      lastPropertyId: const obx_int.IdUid(6, 1569665513455864168),
+      lastPropertyId: const obx_int.IdUid(7, 5118955864889774580),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -327,7 +345,14 @@ final _entities = <obx_int.ModelEntity>[
             type: 11,
             flags: 520,
             indexId: const obx_int.IdUid(10, 4417538046858357665),
-            relationTarget: 'DatabasePlayerSettings')
+            relationTarget: 'DatabasePlayerSettings'),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 5118955864889774580),
+            name: 'sourceId',
+            type: 11,
+            flags: 520,
+            indexId: const obx_int.IdUid(13, 6356786125335292857),
+            relationTarget: 'DatabaseSourceSettings')
       ],
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[]),
@@ -398,7 +423,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(11, 1783439183368047241),
       name: 'DatabaseLayoutSettings',
-      lastPropertyId: const obx_int.IdUid(7, 2944878772244270136),
+      lastPropertyId: const obx_int.IdUid(11, 7583224691474521751),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -410,11 +435,6 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(2, 6035222152268694810),
             name: 'dbContainerStyle',
             type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 4325039813061252695),
-            name: 'dbMainScreens',
-            type: 30,
             flags: 0),
         obx_int.ModelProperty(
             id: const obx_int.IdUid(4, 5453335989415707779),
@@ -434,6 +454,26 @@ final _entities = <obx_int.ModelEntity>[
         obx_int.ModelProperty(
             id: const obx_int.IdUid(7, 2944878772244270136),
             name: 'songGridItems',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(8, 658664062384816679),
+            name: 'artistGridItems',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(9, 7240781589085401520),
+            name: 'genreGridItems',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(10, 7606295383735195973),
+            name: 'albumGridItems',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(11, 7583224691474521751),
+            name: 'playlistGridItems',
             type: 6,
             flags: 0)
       ],
@@ -471,7 +511,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(13, 533300879031493817),
       name: 'DatabaseInterfaceSettings',
-      lastPropertyId: const obx_int.IdUid(22, 8730058587949986835),
+      lastPropertyId: const obx_int.IdUid(27, 6277370637889217542),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -578,6 +618,45 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(22, 8730058587949986835),
             name: 'dbGenreCardStyle',
             type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(23, 4501206641889980179),
+            name: 'themeChangeTimer',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(24, 3717689960032247305),
+            name: 'dbAlbumRelationStyle',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(25, 2909805147225544902),
+            name: 'dbGenreRelationStyle',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(27, 6277370637889217542),
+            name: 'dbArtistRelationStyle',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(14, 6347683925110699099),
+      name: 'DatabaseSourceSettings',
+      lastPropertyId: const obx_int.IdUid(2, 533927472569115788),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 8026814027408079714),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 533927472569115788),
+            name: 'invidiousInstances',
+            type: 30,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -619,8 +698,8 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(13, 533300879031493817),
-      lastIndexId: const obx_int.IdUid(12, 8877211369580756881),
+      lastEntityId: const obx_int.IdUid(14, 6347683925110699099),
+      lastIndexId: const obx_int.IdUid(14, 6389748139120428627),
       lastRelationId: const obx_int.IdUid(3, 7690569768755154711),
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [],
@@ -630,7 +709,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
         5182564456990978250,
         1475912299933615236,
         5738142651511766062,
-        7850994761262333986
+        7850994761262333986,
+        4325039813061252695,
+        766543068697314630
       ],
       retiredRelationUids: const [],
       modelVersion: 5,
@@ -755,7 +836,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
     Song: obx_int.EntityDefinition<Song>(
         model: _entities[3],
         toOneRelations: (Song object) =>
-            [object.artist, object.album, object.genre],
+            [object.artist, object.album, object.genre, object.preferredColors],
         toManyRelations: (Song object) =>
             {obx_int.RelInfo<Song>.toMany(3, object.id): object.colors},
         getId: (Song object) => object.id,
@@ -768,7 +849,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final pictureOffset = object.picture == null
               ? null
               : fbb.writeListInt8(object.picture!);
-          fbb.startTable(11);
+          final pictureMimeTypeOffset = object.pictureMimeType == null
+              ? null
+              : fbb.writeString(object.pictureMimeType!);
+          fbb.startTable(14);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, titleOffset);
           fbb.addOffset(2, pathOffset);
@@ -779,6 +863,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addInt64(7, object.album.targetId);
           fbb.addInt64(8, object.genre.targetId);
           fbb.addInt64(9, object.modified?.millisecondsSinceEpoch);
+          fbb.addBool(10, object.isOnline);
+          fbb.addOffset(11, pictureMimeTypeOffset);
+          fbb.addInt64(12, object.preferredColors.targetId);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -793,6 +880,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
               .vTableGetNullable(buffer, rootOffset, 14) as Uint8List?;
           final titleParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 6, '');
+          final pictureMimeTypeParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 26);
+          final isOnlineParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 24, false);
           final durationParam =
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 10);
           final modifiedParam = modifiedValue == null
@@ -804,6 +896,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
               path: pathParam,
               picture: pictureParam,
               title: titleParam,
+              pictureMimeType: pictureMimeTypeParam,
+              isOnline: isOnlineParam,
               duration: durationParam,
               modified: modifiedParam,
               year: yearParam)
@@ -817,6 +911,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
           object.genre.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 20, 0);
           object.genre.attach(store);
+          object.preferredColors.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 28, 0);
+          object.preferredColors.attach(store);
           obx_int.InternalToManyAccess.setRelInfo<Song>(
               object.colors, store, obx_int.RelInfo<Song>.toMany(3, object.id));
           return object;
@@ -941,21 +1038,27 @@ obx_int.ModelDefinition getObjectBoxModel() {
         }),
     DatabaseSettings: obx_int.EntityDefinition<DatabaseSettings>(
         model: _entities[7],
-        toOneRelations: (DatabaseSettings object) =>
-            [object.interface, object.share, object.layout, object.player],
+        toOneRelations: (DatabaseSettings object) => [
+              object.interface,
+              object.share,
+              object.layout,
+              object.player,
+              object.source
+            ],
         toManyRelations: (DatabaseSettings object) => {},
         getId: (DatabaseSettings object) => object.id,
         setId: (DatabaseSettings object, int id) {
           object.id = id;
         },
         objectToFB: (DatabaseSettings object, fb.Builder fbb) {
-          fbb.startTable(7);
+          fbb.startTable(8);
           fbb.addInt64(0, object.id);
           fbb.addInt64(1, object.recentRange);
           fbb.addInt64(2, object.interface.targetId);
           fbb.addInt64(3, object.share.targetId);
           fbb.addInt64(4, object.layout.targetId);
           fbb.addInt64(5, object.player.targetId);
+          fbb.addInt64(6, object.source.targetId);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -978,6 +1081,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
           object.player.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0);
           object.player.attach(store);
+          object.source.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0);
+          object.source.attach(store);
           return object;
         }),
     DatabaseShareSettings: obx_int.EntityDefinition<DatabaseShareSettings>(
@@ -1078,9 +1184,6 @@ obx_int.ModelDefinition getObjectBoxModel() {
         objectToFB: (DatabaseLayoutSettings object, fb.Builder fbb) {
           final dbContainerStyleOffset =
               fbb.writeString(object.dbContainerStyle);
-          final dbMainScreensOffset = fbb.writeList(object.dbMainScreens
-              .map(fbb.writeString)
-              .toList(growable: false));
           final dbHiddenScreensOffset = fbb.writeList(object.dbHiddenScreens
               .map(fbb.writeString)
               .toList(growable: false));
@@ -1088,14 +1191,17 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final dbPlayerElementsOffset = fbb.writeList(object.dbPlayerElements
               .map(fbb.writeString)
               .toList(growable: false));
-          fbb.startTable(8);
+          fbb.startTable(12);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, dbContainerStyleOffset);
-          fbb.addOffset(2, dbMainScreensOffset);
           fbb.addOffset(3, dbHiddenScreensOffset);
           fbb.addOffset(4, dbVolumeTypeOffset);
           fbb.addOffset(5, dbPlayerElementsOffset);
           fbb.addInt64(6, object.songGridItems);
+          fbb.addInt64(7, object.artistGridItems);
+          fbb.addInt64(8, object.genreGridItems);
+          fbb.addInt64(9, object.albumGridItems);
+          fbb.addInt64(10, object.playlistGridItems);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -1107,10 +1213,6 @@ obx_int.ModelDefinition getObjectBoxModel() {
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
             ..dbContainerStyle = const fb.StringReader(asciiOptimization: true)
                 .vTableGet(buffer, rootOffset, 6, '')
-            ..dbMainScreens = const fb.ListReader<String>(
-                    fb.StringReader(asciiOptimization: true),
-                    lazy: false)
-                .vTableGet(buffer, rootOffset, 8, [])
             ..dbHiddenScreens = const fb.ListReader<String>(
                     fb.StringReader(asciiOptimization: true),
                     lazy: false)
@@ -1122,7 +1224,15 @@ obx_int.ModelDefinition getObjectBoxModel() {
                     lazy: false)
                 .vTableGet(buffer, rootOffset, 14, [])
             ..songGridItems =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0);
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0)
+            ..artistGridItems =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 18, 0)
+            ..genreGridItems =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 20, 0)
+            ..albumGridItems =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 22, 0)
+            ..playlistGridItems =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 24, 0);
           obx_int.InternalToManyAccess.setRelInfo<DatabaseLayoutSettings>(
               object.lateralElements,
               store,
@@ -1186,7 +1296,13 @@ obx_int.ModelDefinition getObjectBoxModel() {
               fbb.writeString(object.dbPlaylistCardStyle);
           final dbGenreCardStyleOffset =
               fbb.writeString(object.dbGenreCardStyle);
-          fbb.startTable(23);
+          final dbAlbumRelationStyleOffset =
+              fbb.writeString(object.dbAlbumRelationStyle);
+          final dbGenreRelationStyleOffset =
+              fbb.writeString(object.dbGenreRelationStyle);
+          final dbArtistRelationStyleOffset =
+              fbb.writeString(object.dbArtistRelationStyle);
+          fbb.startTable(28);
           fbb.addInt64(0, object.id);
           fbb.addBool(1, object.showChangeTheme);
           fbb.addBool(2, object.showChangePalette);
@@ -1208,6 +1324,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addOffset(19, dbArtistCardStyleOffset);
           fbb.addOffset(20, dbPlaylistCardStyleOffset);
           fbb.addOffset(21, dbGenreCardStyleOffset);
+          fbb.addInt64(22, object.themeChangeTimer);
+          fbb.addOffset(23, dbAlbumRelationStyleOffset);
+          fbb.addOffset(24, dbGenreRelationStyleOffset);
+          fbb.addOffset(26, dbArtistRelationStyleOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -1245,6 +1365,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
               const fb.BoolReader().vTableGet(buffer, rootOffset, 30, false);
           final coloredGenreCardParam =
               const fb.BoolReader().vTableGet(buffer, rootOffset, 32, false);
+          final themeChangeTimerParam =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 48);
           final coloredArtistCardParam =
               const fb.BoolReader().vTableGet(buffer, rootOffset, 34, false);
           final coloredPlaylistCardParam =
@@ -1266,6 +1388,15 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final dbPlaylistCardStyleParam =
               const fb.StringReader(asciiOptimization: true)
                   .vTableGet(buffer, rootOffset, 44, '');
+          final dbArtistRelationStyleParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 56, '');
+          final dbAlbumRelationStyleParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 50, '');
+          final dbGenreRelationStyleParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 52, '');
           final object = DatabaseInterfaceSettings(
               showChangePalette: showChangePaletteParam,
               showChangeTheme: showChangeThemeParam,
@@ -1279,6 +1410,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
               dbColorTheme: dbColorThemeParam,
               coloredAlbumCard: coloredAlbumCardParam,
               coloredGenreCard: coloredGenreCardParam,
+              themeChangeTimer: themeChangeTimerParam,
               coloredArtistCard: coloredArtistCardParam,
               coloredPlaylistCard: coloredPlaylistCardParam,
               coloredSongCard: coloredSongCardParam,
@@ -1286,7 +1418,42 @@ obx_int.ModelDefinition getObjectBoxModel() {
               dbAlbumCardStyle: dbAlbumCardStyleParam,
               dbGenreCardStyle: dbGenreCardStyleParam,
               dbArtistCardStyle: dbArtistCardStyleParam,
-              dbPlaylistCardStyle: dbPlaylistCardStyleParam)
+              dbPlaylistCardStyle: dbPlaylistCardStyleParam,
+              dbArtistRelationStyle: dbArtistRelationStyleParam,
+              dbAlbumRelationStyle: dbAlbumRelationStyleParam,
+              dbGenreRelationStyle: dbGenreRelationStyleParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+
+          return object;
+        }),
+    DatabaseSourceSettings: obx_int.EntityDefinition<DatabaseSourceSettings>(
+        model: _entities[13],
+        toOneRelations: (DatabaseSourceSettings object) => [],
+        toManyRelations: (DatabaseSourceSettings object) => {},
+        getId: (DatabaseSourceSettings object) => object.id,
+        setId: (DatabaseSourceSettings object, int id) {
+          object.id = id;
+        },
+        objectToFB: (DatabaseSourceSettings object, fb.Builder fbb) {
+          final invidiousInstancesOffset = fbb.writeList(object
+              .invidiousInstances
+              .map(fbb.writeString)
+              .toList(growable: false));
+          fbb.startTable(3);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, invidiousInstancesOffset);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final invidiousInstancesParam = const fb.ListReader<String>(
+                  fb.StringReader(asciiOptimization: true),
+                  lazy: false)
+              .vTableGet(buffer, rootOffset, 6, []);
+          final object = DatabaseSourceSettings(
+              invidiousInstances: invidiousInstancesParam)
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
           return object;
@@ -1382,6 +1549,18 @@ class Song_ {
   /// See [Song.modified].
   static final modified =
       obx.QueryDateProperty<Song>(_entities[3].properties[9]);
+
+  /// See [Song.isOnline].
+  static final isOnline =
+      obx.QueryBooleanProperty<Song>(_entities[3].properties[10]);
+
+  /// See [Song.pictureMimeType].
+  static final pictureMimeType =
+      obx.QueryStringProperty<Song>(_entities[3].properties[11]);
+
+  /// See [Song.preferredColors].
+  static final preferredColors =
+      obx.QueryRelationToOne<Song, MusicColor>(_entities[3].properties[12]);
 
   /// see [Song.colors]
   static final colors =
@@ -1490,6 +1669,11 @@ class DatabaseSettings_ {
   static final player =
       obx.QueryRelationToOne<DatabaseSettings, DatabasePlayerSettings>(
           _entities[7].properties[5]);
+
+  /// See [DatabaseSettings.source].
+  static final source =
+      obx.QueryRelationToOne<DatabaseSettings, DatabaseSourceSettings>(
+          _entities[7].properties[6]);
 }
 
 /// [DatabaseShareSettings] entity fields to define ObjectBox queries.
@@ -1546,28 +1730,43 @@ class DatabaseLayoutSettings_ {
       obx.QueryStringProperty<DatabaseLayoutSettings>(
           _entities[10].properties[1]);
 
-  /// See [DatabaseLayoutSettings.dbMainScreens].
-  static final dbMainScreens =
-      obx.QueryStringVectorProperty<DatabaseLayoutSettings>(
-          _entities[10].properties[2]);
-
   /// See [DatabaseLayoutSettings.dbHiddenScreens].
   static final dbHiddenScreens =
       obx.QueryStringVectorProperty<DatabaseLayoutSettings>(
-          _entities[10].properties[3]);
+          _entities[10].properties[2]);
 
   /// See [DatabaseLayoutSettings.dbVolumeType].
   static final dbVolumeType = obx.QueryStringProperty<DatabaseLayoutSettings>(
-      _entities[10].properties[4]);
+      _entities[10].properties[3]);
 
   /// See [DatabaseLayoutSettings.dbPlayerElements].
   static final dbPlayerElements =
       obx.QueryStringVectorProperty<DatabaseLayoutSettings>(
-          _entities[10].properties[5]);
+          _entities[10].properties[4]);
 
   /// See [DatabaseLayoutSettings.songGridItems].
   static final songGridItems = obx.QueryIntegerProperty<DatabaseLayoutSettings>(
-      _entities[10].properties[6]);
+      _entities[10].properties[5]);
+
+  /// See [DatabaseLayoutSettings.artistGridItems].
+  static final artistGridItems =
+      obx.QueryIntegerProperty<DatabaseLayoutSettings>(
+          _entities[10].properties[6]);
+
+  /// See [DatabaseLayoutSettings.genreGridItems].
+  static final genreGridItems =
+      obx.QueryIntegerProperty<DatabaseLayoutSettings>(
+          _entities[10].properties[7]);
+
+  /// See [DatabaseLayoutSettings.albumGridItems].
+  static final albumGridItems =
+      obx.QueryIntegerProperty<DatabaseLayoutSettings>(
+          _entities[10].properties[8]);
+
+  /// See [DatabaseLayoutSettings.playlistGridItems].
+  static final playlistGridItems =
+      obx.QueryIntegerProperty<DatabaseLayoutSettings>(
+          _entities[10].properties[9]);
 
   /// see [DatabaseLayoutSettings.lateralElements]
   static final lateralElements =
@@ -1693,4 +1892,36 @@ class DatabaseInterfaceSettings_ {
   static final dbGenreCardStyle =
       obx.QueryStringProperty<DatabaseInterfaceSettings>(
           _entities[12].properties[20]);
+
+  /// See [DatabaseInterfaceSettings.themeChangeTimer].
+  static final themeChangeTimer =
+      obx.QueryIntegerProperty<DatabaseInterfaceSettings>(
+          _entities[12].properties[21]);
+
+  /// See [DatabaseInterfaceSettings.dbAlbumRelationStyle].
+  static final dbAlbumRelationStyle =
+      obx.QueryStringProperty<DatabaseInterfaceSettings>(
+          _entities[12].properties[22]);
+
+  /// See [DatabaseInterfaceSettings.dbGenreRelationStyle].
+  static final dbGenreRelationStyle =
+      obx.QueryStringProperty<DatabaseInterfaceSettings>(
+          _entities[12].properties[23]);
+
+  /// See [DatabaseInterfaceSettings.dbArtistRelationStyle].
+  static final dbArtistRelationStyle =
+      obx.QueryStringProperty<DatabaseInterfaceSettings>(
+          _entities[12].properties[24]);
+}
+
+/// [DatabaseSourceSettings] entity fields to define ObjectBox queries.
+class DatabaseSourceSettings_ {
+  /// See [DatabaseSourceSettings.id].
+  static final id = obx.QueryIntegerProperty<DatabaseSourceSettings>(
+      _entities[13].properties[0]);
+
+  /// See [DatabaseSourceSettings.invidiousInstances].
+  static final invidiousInstances =
+      obx.QueryStringVectorProperty<DatabaseSourceSettings>(
+          _entities[13].properties[1]);
 }

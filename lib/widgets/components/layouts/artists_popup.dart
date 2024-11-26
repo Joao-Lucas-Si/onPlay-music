@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:onPlay/store/song_store.dart';
+import 'package:onPlay/store/content/song_store.dart';
 import 'package:onPlay/widgets/components/layouts/songs_popup.dart';
 import 'package:provider/provider.dart';
 

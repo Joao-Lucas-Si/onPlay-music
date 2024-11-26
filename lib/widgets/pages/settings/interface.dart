@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:onPlay/constants/themes/purple.dart';
 import 'package:onPlay/enums/colors/color_palette.dart';
 import 'package:onPlay/enums/colors/color_theme.dart';
-import 'package:onPlay/enums/card_type.dart';
+import 'package:onPlay/enums/card_style.dart';
 import 'package:onPlay/enums/player/controls_type.dart';
 import 'package:onPlay/enums/player/picture_type.dart';
 import 'package:onPlay/enums/player/progress_type.dart';

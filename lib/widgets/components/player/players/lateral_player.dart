@@ -63,6 +63,8 @@ class LateralPlayer extends StatelessWidget {
                         return progressLateral(isVertical);
                       case PlayerElement.picture:
                         return TimeProgress(musicColor: musicColor);
+                      default :
+                        return TimeProgress(musicColor: musicColor);
                     }
                   }
 

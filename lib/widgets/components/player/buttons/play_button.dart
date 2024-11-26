@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:onPlay/enums/player/controls_type.dart';
 import 'package:onPlay/store/settings.dart';
 import 'package:onPlay/models/music_color.dart';
-import 'package:onPlay/services/player_service.dart';
 import 'package:onPlay/store/player_store.dart';
 import 'package:provider/provider.dart';
 
@@ -13,16 +12,15 @@ class PlayButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final playerStore = Provider.of<PlayerStore>(context);
-    final player = Provider.of<PlayerService>(context);
     final settings = Provider.of<Settings>(context);
     final interfaceSettings = settings.interface;
 
     return InkWell(
         onTap: () {
           if (playerStore.paused) {
-            player.play();
+            playerStore.player.play();
           } else {
-            player.pause();
+            playerStore.player.pause();
           }
         },
         child: DecoratedBox(

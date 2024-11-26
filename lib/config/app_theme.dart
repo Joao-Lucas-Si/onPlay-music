@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:onPlay/services/getBaseTheme.dart';
+import 'package:onPlay/services/colors/get_base_theme.dart';
 import 'package:onPlay/store/settings.dart';
 import 'package:onPlay/store/player_store.dart';
 import 'package:provider/provider.dart';
@@ -21,9 +21,7 @@ class _State extends State<AppTheme> {
     final baseTheme = getBaseTheme(settings.interface.baseTheme);
     final playerStore = Provider.of<PlayerStore>(context);
     final song = playerStore.playingSong;
-    final colors = song?.currentColors(
-        settings.interface.colorPalette, settings.interface.colorTheme,
-        context: context);
+    final colors = song?.currentColors(context);
     final primaryColor = (colors?.background ?? baseTheme.background);
     final secondaryColors = colors?.text ?? baseTheme.text;
     final tertiaryColor = colors?.other ?? baseTheme.other;

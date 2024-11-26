@@ -5,6 +5,8 @@ enum PlayerElement {
   position("position"),
   volume("volume"),
   controls("controls"),
+  artist("artist"),
+  album("album"),
   picture("picture");
 
   static PlayerElement fromString(String name) {

@@ -2,11 +2,9 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:onPlay/models/managers/box_manager.dart';
-import 'package:onPlay/models/managers/user_manager.dart';
 import 'package:onPlay/models/settings/settings.dart';
 import 'package:onPlay/models/user_profile.dart';
+import 'package:onPlay/store/user_store.dart';
 import 'package:provider/provider.dart';
 
 class UserForm extends StatefulWidget {
@@ -19,15 +17,11 @@ class UserForm extends StatefulWidget {
 class _UserfFormState extends State<UserForm> {
   var nameController = TextEditingController(text: "");
   UserProfile? user;
-  late UserManager userManager;
+  final data = UserProfile(name: "");
 
   @override
   void initState() {
     super.initState();
-    final managers = Provider.of<BoxManager>(context, listen: false);
-    userManager = managers.userManager;
-    user =
-        widget.newUser ? UserProfile(name: "") : userManager.getActiveProfile();
     if (widget.newUser) {
       user!.settings.target = DatabaseSettings(recentRange: 30);
     }
@@ -35,6 +29,8 @@ class _UserfFormState extends State<UserForm> {
 
   @override
   Widget build(BuildContext context) {
+    final userStore = Provider.of<UserStore>(context);
+    user = widget.newUser ? user : userStore.user;
     return Scaffold(
         appBar: AppBar(
             // leading: Center(
@@ -54,7 +50,7 @@ class _UserfFormState extends State<UserForm> {
                     onChanged: (value) {
                       setState(() {
                         user!.name = value;
-                        userManager.save(user!);
+                        userStore.saveUser(user!);
                       });
                     },
                     decoration: const InputDecoration(
@@ -85,6 +81,7 @@ class _UserfFormState extends State<UserForm> {
                             .readAsBytesSync();
                         setState(() {
                           user!.banner = image;
+                          userStore.saveUser(user!);
                         });
                       }
                     },
@@ -96,15 +93,15 @@ class _UserfFormState extends State<UserForm> {
                           )
                         : const Text("escolha uma image"),
                   ),
-                  TextButton(
-                      onPressed: () {
-                        userManager.save(user!);
-                        GoRouter.of(context).pop(UniqueKey());
-                      },
-                      child: const Text(
-                        "salvar",
-                        style: TextStyle(color: Colors.white),
-                      ))
+                  // TextButton(
+                  //     onPressed: () {
+                  //       userStore.saveUser(user!);
+                  //       GoRouter.of(context).pop(UniqueKey());
+                  //     },
+                  //     child: const Text(
+                  //       "salvar",
+                  //       style: TextStyle(color: Colors.white),
+                  //     ))
                 ],
               )
             : const Text("carregando"));

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:onPlay/enums/card_type.dart';
+import 'package:onPlay/enums/card_style.dart';
 import 'package:onPlay/models/artist.dart';
 import 'package:onPlay/store/settings.dart';
 import 'package:onPlay/widgets/components/cards/item/circular_card.dart';
@@ -24,7 +24,7 @@ class ArtistCard extends StatelessWidget {
         extra: Text(artist.songs.length.toString()),
         image: artist.picture,
         isColored: settings.interface.coloredArtistCard,
-        colors: artist.getColors(settings));
+        colors: artist.getColors(context));
     final style = settings.interface.artistCardStyle;
     return GestureDetector(
       onTap: () {

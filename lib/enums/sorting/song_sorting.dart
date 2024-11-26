@@ -1,3 +1,5 @@
+import 'package:onPlay/services/utils/get_enum_by_name.dart';
+
 enum SongSorting {
   name,
   year,
@@ -5,7 +7,6 @@ enum SongSorting {
   modificationDate,
   color;
 
-  static SongSorting fromString(String name) {
-    return SongSorting.values.firstWhere((sorting) => sorting.name == name);
-  }
+  static SongSorting fromString(String name) =>
+      getEnumByName(values: values, name: name);
 }

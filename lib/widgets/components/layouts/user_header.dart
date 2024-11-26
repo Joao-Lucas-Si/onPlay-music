@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:onPlay/models/managers/box_manager.dart';
+import 'package:onPlay/store/user_store.dart';
 import 'package:onPlay/widgets/components/user_avatar.dart';
 import 'package:provider/provider.dart';
 
@@ -9,11 +9,9 @@ class UserHeader extends StatelessWidget {
  
   @override
   Widget build(BuildContext context) {
-    final managers = Provider.of<BoxManager>(context, listen: false);
+    final store = Provider.of<UserStore>(context);
 
-    final userManager = managers.userManager;
-
-    final user = userManager.getActiveProfile();
+    final user = store.user;
 
     final colorSchema = Theme.of(context).colorScheme;
 

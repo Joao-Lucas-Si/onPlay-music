@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:onPlay/store/content/genre_store.dart';
 import 'package:onPlay/store/settings.dart';
-import 'package:onPlay/store/song_store.dart';
 import 'package:onPlay/widgets/components/cards/genre_card.dart';
 import 'package:provider/provider.dart';
 
@@ -11,18 +11,20 @@ class Genres extends StatefulWidget {
 }
 
 class _GenresState extends State<Genres> {
-  late SongStore store;
+  late GenreStore store;
 
   @override
   Widget build(BuildContext context) {
-    store = Provider.of<SongStore>(context);
+    store = Provider.of<GenreStore>(context);
     final genres = store.genres;
     final settings = Provider.of<Settings>(context);
-    final gridItems = settings.layout.albumGridItems;
+    final gridItems = settings.layout.genreGridItems;
     return Scaffold(
-      body: store.loading != ""
-          ? Text(store.loading)
-          : gridItems == 1
+      body:
+          // store.loading != ""
+          //     ? Text(store.loading)
+          //     :
+          (gridItems == 1
               ? ListView.builder(
                   itemCount: genres.length,
                   itemBuilder: (context, index) {
@@ -40,7 +42,7 @@ class _GenresState extends State<Genres> {
                     genre: genres[index],
                     key: ValueKey(genres[index].id),
                   ),
-                ),
+                )),
     );
   }
 }

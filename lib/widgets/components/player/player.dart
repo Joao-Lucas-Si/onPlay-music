@@ -54,9 +54,7 @@ class _PlayerState extends State<Player> {
           },
           itemBuilder: (context, index) {
             final song = playerStore.playlist[index];
-            final color = song.currentColors(
-                settings.interface.colorPalette, settings.interface.colorTheme,
-                context: context);
+            final color = song.currentColors(context);
             return interfaceSettings.pictureType == PictureType.background
                 ? (layoutSettings.containerStyle == ContainerStyle.lateral
                     ? LateralPlayer(song: song, musicColor: color)

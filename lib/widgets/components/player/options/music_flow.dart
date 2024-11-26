@@ -13,21 +13,21 @@ class MusicFlow extends StatelessWidget {
     return IconButton(
         onPressed: () {
           switch (playerStore.mode) {
-            case PlayModes.none:
-              playerStore.mode = PlayModes.replayMusic;
+            case PlayLoopMode.none:
+              playerStore.mode = PlayLoopMode.replayMusic;
               break;
-            case PlayModes.replayMusic:
-              playerStore.mode = PlayModes.replayPlaylist;
+            case PlayLoopMode.replayMusic:
+              playerStore.mode = PlayLoopMode.replayPlaylist;
               break;
-            case PlayModes.replayPlaylist:
-              playerStore.mode = PlayModes.none;
+            case PlayLoopMode.replayPlaylist:
+              playerStore.mode = PlayLoopMode.none;
               break;
           }
         },
         icon: Icon(
-          playerStore.mode == PlayModes.replayPlaylist
+          playerStore.mode == PlayLoopMode.replayPlaylist
               ? Icons.hourglass_full
-              : playerStore.mode == PlayModes.replayMusic
+              : playerStore.mode == PlayLoopMode.replayMusic
                   ? Icons.hourglass_bottom
                   : Icons.hourglass_empty,
           color: musicColor.text,

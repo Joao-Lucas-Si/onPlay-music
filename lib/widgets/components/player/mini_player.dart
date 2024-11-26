@@ -4,9 +4,8 @@ import 'package:onPlay/enums/colors/color_theme.dart';
 import 'package:onPlay/store/settings.dart';
 import 'package:onPlay/models/music_color.dart';
 import 'package:onPlay/services/notification_service.dart';
-import 'package:onPlay/services/player_service.dart';
 import 'package:onPlay/store/player_store.dart';
-import 'package:onPlay/store/song_store.dart';
+import 'package:onPlay/store/content/song_store.dart';
 import 'package:onPlay/widgets/components/player/buttons/next_button.dart';
 import 'package:onPlay/widgets/components/player/buttons/play_button.dart';
 import 'package:onPlay/widgets/components/player/buttons/previous_button.dart';
@@ -20,13 +19,11 @@ class MiniPlayer extends StatefulWidget {
 }
 
 class MiniPlayerState extends State<MiniPlayer> {
-  late PlayerService player;
   late SongStore store;
 
   @override
   Widget build(BuildContext context) {
     store = Provider.of<SongStore>(context);
-    player = Provider.of<PlayerService>(context);
     final settings = Provider.of<Settings>(context);
     final playerStore = Provider.of<PlayerStore>(context);
     final song = playerStore.playingSong!;
@@ -40,9 +37,7 @@ class MiniPlayerState extends State<MiniPlayer> {
 
     final colorScheme = Theme.of(context).colorScheme;
 
-    final colors = playerStore.playingSong?.currentColors(
-            settings.interface.colorPalette, settings.interface.colorTheme,
-            context: context) ??
+    final colors = playerStore.playingSong?.currentColors(context) ??
         MusicColor.create(
           palette: ColorPalette.normal,
           theme: ColorTheme.totalDark,

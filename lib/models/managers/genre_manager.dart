@@ -1,4 +1,4 @@
-import 'package:onPlay/database/objectbox.g.dart';
+import 'package:onPlay/database/objectbox.obx.dart';
 import 'package:onPlay/models/genre.dart';
 import 'package:onPlay/models/managers/base_manager.dart';
 

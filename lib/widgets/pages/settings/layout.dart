@@ -80,12 +80,18 @@ class LayoutSettingsScreen extends StatelessWidget {
               ),
               const Text("telas"),
               SizedBox(
-                height: layout.mainScreens.length * 65,
+                height: MainScreens.values
+                        .where((screen) =>
+                            !settings.layout.hiddenScreens.contains(screen))
+                        .length *
+                    65,
                 child: ReorderableListView(
                     onReorder: (oldIndex, newIndex) {
-                      layout.replaceMainScreens(oldIndex, newIndex);
+                      //layout.replaceMainScreens(oldIndex, newIndex);
                     },
-                    children: layout.mainScreens
+                    children: MainScreens.values
+                        .where((screen) =>
+                            !settings.layout.hiddenScreens.contains(screen))
                         .map((element) => Card(
                             elevation: 2,
                             key: ValueKey(element.name),
@@ -152,7 +158,10 @@ class LayoutSettingsScreen extends StatelessWidget {
               ),
               const Text("elementos do player"),
               SizedBox(
-                height: layout.lateralElements.length * 75,
+                height: (interface.pictureType == PictureType.background &&
+                        layout.containerStyle == ContainerStyle.lateral)
+                    ? layout.lateralElements.length * 75
+                    : layout.playerElements.length * 70,
                 child: (interface.pictureType == PictureType.background &&
                         layout.containerStyle == ContainerStyle.lateral)
                     ? Column(
@@ -212,13 +221,18 @@ class LayoutSettingsScreen extends StatelessWidget {
                           layout.playerElements = layout.playerElements;
                         },
                         children: layout.playerElements
-                            .map((element) => Card(
-                                elevation: 2,
+                            .map((element) => Dismissible(
+                                onDismissed: (direction) {
+                                  layout.removePlayerElement(element);
+                                },
                                 key: ValueKey(element.name),
-                                child: ListTile(
-                                    title: Text(
-                                  element.name,
-                                ))))
+                                child: Card(
+                                    elevation: 2,
+                                    key: ValueKey(element.name),
+                                    child: ListTile(
+                                        title: Text(
+                                      element.name,
+                                    )))))
                             .toList()),
               ),
               const Text("Tipo de controle de volume"),
@@ -257,6 +271,29 @@ class LayoutSettingsScreen extends StatelessWidget {
                   }
                 },
               ),
+              const Text("elementos ocultados"),
+              ...PlayerElement.values
+                  .where((element) => !layout.playerElements.contains(element))
+                  .map((element) => Dismissible(
+                      onDismissed: (direction) {
+                        layout.addPlayerElement(element);
+                      },
+                      secondaryBackground: Container(
+                        alignment: Alignment.centerRight,
+                        color: Colors.red,
+                        padding: const EdgeInsets.only(right: 10),
+                        child: const Text("desocultar"),
+                      ),
+                      background: Container(
+                        alignment: Alignment.centerLeft,
+                        color: Colors.red,
+                        padding: const EdgeInsets.only(left: 10),
+                        child: const Text("desocultar"),
+                      ),
+                      key: ValueKey(element.name),
+                      child: ListTile(
+                        title: Text(element.name),
+                      ))),
               const Text("estilos de player com imagem de fundo"),
               DropdownButton(
                 value: layout.containerStyle,

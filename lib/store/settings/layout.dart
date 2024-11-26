@@ -11,14 +11,7 @@ class LayoutSettings {
       _playlistGridItems = 1,
       _albumGridItems = 2;
   var _containerStyle = ContainerStyle.lateral;
-  var _mainScreens = [
-    MainScreens.home,
-    MainScreens.musics,
-    MainScreens.artists,
-    MainScreens.albums,
-    MainScreens.playlists,
-    MainScreens.genres,
-  ];
+
   List<MainScreens> _hiddenScreens = [];
 
   int get songGridItems => _songGridItems;
@@ -85,28 +78,14 @@ class LayoutSettings {
 
   List<MainScreens> get hiddenScreens => _hiddenScreens;
 
-  List<MainScreens> get mainScreens => _mainScreens;
-
-  replaceMainScreens(int oldIndex, int newIndex) {
-    if (newIndex > oldIndex) {
-      newIndex -= 1;
-    }
-    final screen = _mainScreens[oldIndex];
-    _mainScreens.removeAt(oldIndex);
-    _mainScreens.insert(newIndex, screen);
-    _mainScreens = _mainScreens;
-    _notify();
-  }
-
   hiddenScreen(MainScreens screen) {
     hiddenScreens.add(screen);
-    mainScreens.remove(screen);
+
     _notify();
   }
 
   showScreen(MainScreens screen) {
     hiddenScreens.remove(screen);
-    mainScreens.add(screen);
     _notify();
   }
 
@@ -131,6 +110,16 @@ class LayoutSettings {
 
   List<PlayerElement> get playerElements => _playerElements;
 
+  void addPlayerElement(PlayerElement element) {
+    _playerElements.add(element);
+    _notify();
+  }
+
+  void removePlayerElement(PlayerElement element) {
+    _playerElements.remove(element);
+    _notify();
+  }
+
   set playerElements(List<PlayerElement> value) {
     _playerElements = value;
     _notify();
@@ -153,7 +142,6 @@ class LayoutSettings {
 
       _genreGridItems = database.genreGridItems;
 
-      _mainScreens = database.mainScreens;
       _lateralElements = database.lateralElements
           .map((element) => LateralPlayerElement(
               element: element.element, position: element.position))

@@ -4,7 +4,7 @@ import 'package:metadata_god/metadata_god.dart';
 import 'package:onPlay/models/song.dart';
 import 'package:onPlay/services/files_service.dart';
 import 'package:onPlay/services/toast_service.dart';
-import 'package:onPlay/store/song_store.dart';
+import 'package:onPlay/store/content/song_store.dart';
 import 'package:provider/provider.dart';
 
 class SongForm extends StatefulWidget {
@@ -49,6 +49,20 @@ class _SongFormState extends State<SongForm> {
     final song = widget.song;
     final toastService = Provider.of<ToastService>(context);
     final songStore = Provider.of<SongStore>(context);
+
+    showSuccessMessage() {
+      toastService.showTextToast("alterações salvas com sucesso",
+          context: context);
+    }
+
+    back() {
+      GoRouter.of(context).pop();
+    }
+
+    showErrorMessage() {
+      toastService.showTextToast("Não foi possivel salvar as alterações",
+          context: context);
+    }
 
     return Scaffold(
       appBar: AppBar(),
@@ -96,47 +110,57 @@ class _SongFormState extends State<SongForm> {
                   ),
                   Center(
                     child: TextButton.icon(
-                      label: Text(
-                        "Salvar",
-                        style: TextStyle(
+                        label: Text(
+                          "Salvar",
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary),
+                        ),
+                        style: ButtonStyle(
+                            backgroundColor: WidgetStatePropertyAll(
+                                Theme.of(context).colorScheme.primary)),
+                        icon: Icon(Icons.save,
                             color: Theme.of(context).colorScheme.secondary),
-                      ),
-                      style: ButtonStyle(
-                          backgroundColor: WidgetStatePropertyAll(
-                              Theme.of(context).colorScheme.primary)),
-                      icon: Icon(Icons.save,
-                          color: Theme.of(context).colorScheme.secondary),
-                      onPressed: () async {
-                        final title = titleControl.value.text;
-                        final artist = artistControl.value.text;
-                        final album = albumControl.value.text;
-                        final genre = genreControl.value.text;
-                        final year = int.parse(yearControl.value.text);
-                        debugPrint("titulo: $title");
-                        debugPrint("artista: $artist");
-                        debugPrint("album: $album");
-                        debugPrint("genero: $genre");
-                        debugPrint("ano: $year");
-                        try {
-                          await FilesService.editMetadata(
-                              song.path,
-                              Metadata(
-                                  album: album,
-                                  artist: artist,
-                                  genre: genre,
-                                  title: title,
-                                  year: year));
-                          songStore.updateSong(song.path);
-                          toastService.showTextToast(
-                              "alterações salvas com sucesso",
-                              context: context);
-                          GoRouter.of(context).pop();
-                        } catch (e) {
-                          toastService.showTextToast(
-                              "Não foi possivel salvar as alterações");
-                        }
-                      },
-                    ),
+                        onPressed: () async {
+                          final title = titleControl.value.text;
+                          final artist = artistControl.value.text;
+                          final album = albumControl.value.text;
+                          final genre = genreControl.value.text;
+                          final year = int.parse(yearControl.value.text);
+                          debugPrint("titulo: $title");
+                          debugPrint("artista: $artist");
+                          debugPrint("album: $album");
+                          debugPrint("genero: $genre");
+                          debugPrint("ano: $year");
+
+                          if (song.isOnline) {
+                            songStore.updateOnlineSong(
+                                song: song,
+                                artist: artist,
+                                name: title,
+                                year: year,
+                                album: album,
+                                genre: genre);
+                            showSuccessMessage();
+                            back();
+                          } else {
+                            try {
+                              await FilesService.editMetadata(
+                                  song.path,
+                                  Metadata(
+                                      album: album,
+                                      artist: artist,
+                                      genre: genre,
+                                      title: title,
+                                      year: year));
+                              songStore.updateSong(song.path);
+                              showSuccessMessage();
+                              back();
+                            } catch (e) {
+                              debugPrint(e.toString());
+                              showErrorMessage();
+                            }
+                          }
+                        }),
                   )
                 ],
               ),

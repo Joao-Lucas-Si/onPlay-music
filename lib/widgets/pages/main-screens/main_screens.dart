@@ -3,13 +3,14 @@ import 'package:go_router/go_router.dart';
 import 'package:onPlay/enums/main_screens.dart';
 import 'package:onPlay/store/settings.dart';
 import 'package:onPlay/store/player_store.dart';
-import 'package:onPlay/store/song_store.dart';
+import 'package:onPlay/store/content/song_store.dart';
 import 'package:onPlay/widgets/components/layouts/songs_popup.dart';
 import 'package:onPlay/widgets/pages/main-screens/artists.dart';
 import 'package:onPlay/widgets/pages/main-screens/genres.dart';
 import 'package:onPlay/widgets/pages/home/home.dart';
 import 'package:onPlay/widgets/pages/main-screens/playlists.dart';
 import 'package:onPlay/widgets/pages/main-screens/albums.dart';
+import 'package:onPlay/widgets/pages/main-screens/youtube.dart';
 import 'package:onPlay/widgets/pages/player_screen.dart';
 import 'package:onPlay/widgets/pages/main-screens/songs.dart';
 import 'package:provider/provider.dart';
@@ -33,8 +34,8 @@ class _MainScreensState extends State<MainScreen> {
   }
 
   List<BottomNavigationBarItem> getBottomNavigationItems(
-      List<MainScreens> mainScreens) {
-    return mainScreens.map((screen) {
+      List<MainScreens> hiddenScreens) {
+    return MainScreens.values.where((screen) => !hiddenScreens.contains(screen)).map((screen) {
       switch (screen) {
         case MainScreens.home:
           return const BottomNavigationBarItem(
@@ -54,12 +55,17 @@ class _MainScreensState extends State<MainScreen> {
         case MainScreens.playlists:
           return const BottomNavigationBarItem(
               icon: Icon(Icons.playlist_play), label: "Playlist");
+        case MainScreens.youtube:
+          return const BottomNavigationBarItem(
+              icon: Icon(Icons.youtube_searched_for), label: "Youtube");
       }
     }).toList();
   }
 
-  List<Widget> getMainScreens(List<MainScreens> mainScreens) {
-    return mainScreens.map((screen) {
+  List<Widget> getMainScreens(List<MainScreens> hiddenScreens) {
+    return MainScreens.values
+        .where((screen) => !hiddenScreens.contains(screen))
+        .map((screen) {
       switch (screen) {
         case MainScreens.home:
           return const Home();
@@ -73,6 +79,8 @@ class _MainScreensState extends State<MainScreen> {
           return const Genres();
         case MainScreens.artists:
           return const Artists();
+        case MainScreens.youtube:
+          return const YoutubeScreen();
       }
     }).toList();
   }
@@ -93,7 +101,7 @@ class _MainScreensState extends State<MainScreen> {
         mouseCursor: MouseCursor.defer,
         unselectedItemColor: colorScheme.tertiary,
         selectedItemColor: colorScheme.secondary,
-        items: getBottomNavigationItems(settings.layout.mainScreens),
+        items: getBottomNavigationItems(settings.layout.hiddenScreens),
         onTap: (value) => {
           pageController.animateToPage(value,
               duration: const Duration(microseconds: 400), curve: Curves.ease)
@@ -137,7 +145,7 @@ class _MainScreensState extends State<MainScreen> {
                     currentPage = value;
                   })
                 },
-                children: getMainScreens(settings.layout.mainScreens),
+                children: getMainScreens(settings.layout.hiddenScreens),
                 // children: [
                 //   Home(),
                 //   Songs(),

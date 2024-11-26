@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/models/music_color.dart';
-import 'package:onPlay/store/volume_store.dart';
+import 'package:onPlay/store/device/volume_store.dart';
 import 'package:provider/provider.dart';
 
 class VolumeSteps extends StatelessWidget {

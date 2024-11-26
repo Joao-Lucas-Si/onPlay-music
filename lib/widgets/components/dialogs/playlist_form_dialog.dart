@@ -19,29 +19,49 @@ class PlaylistFormDialog extends StatelessWidget {
 
     final user = userManager.getActiveProfile();
 
+    final colors = Theme.of(context).colorScheme;
+
     return Dialog(
+        child: Padding(
+      padding: const EdgeInsets.all(20),
       child: Column(
         children: [
-          const Text("Nome"),
           TextFormField(
+            decoration: const InputDecoration(labelText: "Nome"),
             controller: nameController,
           ),
-          TextButton(
-              onPressed: () {
-                final playlist = Playlist(name: nameController.text);
-                playlist.user.target = user;
-                debugPrint(playlist.user.target?.name);
-                if (song != null) playlist.songs.add(song!);
-                user.playlists.add(playlist);
-                playlistManager.save(playlist);
-                userManager.save(user);
-                debugPrint(user.playlists.first.name);
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-              child: const Text("salvar"))
+          Wrap(
+            spacing: 10,
+            children: [
+              TextButton(
+                  onPressed: () {
+                    final playlist = Playlist(name: nameController.text);
+                    playlist.user.target = user;
+                    debugPrint(playlist.user.target?.name);
+                    if (song != null) playlist.songs.add(song!);
+                    user.playlists.add(playlist);
+                    playlistManager.save(playlist);
+                    userManager.save(user);
+                    debugPrint(user.playlists.first.name);
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    "salvar",
+                    style: TextStyle(color: colors.secondary),
+                  )),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    "cancelar",
+                    style: TextStyle(color: colors.secondary),
+                  ))
+            ],
+          )
         ],
       ),
-    );
+    ));
   }
 }

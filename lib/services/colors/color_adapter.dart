@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:onPlay/models/music_color.dart';
 import 'package:onPlay/services/colors/color_service.dart';
@@ -16,6 +15,16 @@ class ColorAdapter {
   final textTotalDark = 0.7;
   final otherTotalDark = 0.4;
 
+   Color toLighten(Color color, [double amount = .1]) {
+    // assert(amount >= 0 && amount <= 1);
+
+    final hsl = HSLColor.fromColor(color);
+    final hslLight =
+        hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
+
+    return hslLight.toColor();
+  }
+
   final ColorService colorService;
 
   ColorAdapter({required this.colorService});
@@ -23,7 +32,7 @@ class ColorAdapter {
   Color _toLight(Color color, double base) {
     final lightness = colorService.getLigthness(color);
     if (lightness < base) {
-      return colorService.toLighten(color, base - lightness);
+      return toLighten(color, base - lightness);
     }
     return color;
   }

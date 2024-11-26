@@ -3,9 +3,10 @@ import 'package:onPlay/enums/colors/color_palette.dart';
 import 'package:onPlay/enums/colors/color_schema_type.dart';
 import 'package:onPlay/enums/colors/color_theme.dart';
 import 'package:onPlay/enums/player/controls_type.dart';
-import 'package:onPlay/enums/card_type.dart';
+import 'package:onPlay/enums/card_style.dart';
 import 'package:onPlay/enums/player/picture_type.dart';
 import 'package:onPlay/enums/player/progress_type.dart';
+import 'package:onPlay/enums/player/relationship_style.dart';
 import 'package:onPlay/enums/player/title_type.dart';
 import 'package:onPlay/enums/themes.dart';
 
@@ -18,6 +19,7 @@ class DatabaseInterfaceSettings {
   bool showChangeTheme = true;
   bool showChangePalette = true;
   bool themeBasedOnTime = false;
+  int? themeChangeTimer;
   @Transient()
   ColorPalette colorPalette = ColorPalette.polychromatic;
   @Transient()
@@ -38,6 +40,26 @@ class DatabaseInterfaceSettings {
   TitleType titleType = TitleType.loop;
   @Transient()
   Themes baseTheme = Themes.purple;
+  @Transient()
+  RelationshipStyle albumRelationStyle = RelationshipStyle.image,
+      artistRelationStyle = RelationshipStyle.circleImage,
+      genreRelationStyle = RelationshipStyle.name;
+
+  String get dbAlbumRelationStyle => albumRelationStyle.name;
+  String get dbArtistRelationStyle => artistRelationStyle.name;
+  String get dbGenreRelationStyle => genreRelationStyle.name;
+
+  set dbAlbumRelationStyle(String name) {
+    albumRelationStyle = RelationshipStyle.fromString(name);
+  }
+
+  set dbArtistRelationStyle(String name) {
+    artistRelationStyle = RelationshipStyle.fromString(name);
+  }
+
+  set dbGenreRelationStyle(String name) {
+    genreRelationStyle = RelationshipStyle.fromString(name);
+  }
 
   bool coloredSongCard,
       coloredAlbumCard,
@@ -130,6 +152,7 @@ class DatabaseInterfaceSettings {
       required String dbColorTheme,
       required this.coloredAlbumCard,
       required this.coloredGenreCard,
+      this.themeChangeTimer,
       required this.coloredArtistCard,
       required this.coloredPlaylistCard,
       required this.coloredSongCard,
@@ -137,7 +160,13 @@ class DatabaseInterfaceSettings {
       required String dbAlbumCardStyle,
       required String dbGenreCardStyle,
       required String dbArtistCardStyle,
-      required String dbPlaylistCardStyle}) {
+      required String dbPlaylistCardStyle,
+      required String dbArtistRelationStyle,
+      required String dbAlbumRelationStyle,
+      required String dbGenreRelationStyle}) {
+    this.dbAlbumRelationStyle = dbAlbumRelationStyle;
+    this.dbArtistRelationStyle = dbArtistRelationStyle;
+    this.dbGenreRelationStyle = dbGenreRelationStyle;
     this.dbControlsType = dbControlsType;
     this.dbColorPalette = dbColorPalette;
     this.dbPictureType = dbPictureType;

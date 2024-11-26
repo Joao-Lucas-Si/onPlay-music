@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:onPlay/enums/song_action.dart';
 import 'package:onPlay/models/song.dart';
+import 'package:onPlay/services/files_service.dart';
 import 'package:onPlay/store/player_store.dart';
+import 'package:onPlay/store/content/song_store.dart';
 import 'package:onPlay/widgets/components/dialogs/playlist_dialog.dart';
 import 'package:onPlay/widgets/pages/song_form.dart';
 import 'package:provider/provider.dart';
@@ -15,31 +18,71 @@ class MusicPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final playerStore = Provider.of<PlayerStore>(context);
+    final songStore = Provider.of<SongStore>(context);
 
-    final items = [
-      _Item(content: "Editar", value: "edit"),
-      _Item(content: "adicionar na lista atual", value: "currentPlaylist"),
-      _Item(content: "adicionar na lista como próximo", value: "addAsNext"),
-      _Item(content: "adicionar a playlist", value: "addToPlaylist")
-    ];
+    final items = <_Item>[];
+    if (song.id != 0) {
+      items.addAll([
+        _Item(content: "Editar", value: SongAction.edit),
+        _Item(
+            content: "adicionar na lista atual",
+            value: SongAction.addToCurrentPlaylist),
+        _Item(
+            content: "adicionar na lista como próximo",
+            value: SongAction.addAsNext),
+        _Item(content: "adicionar a playlist", value: SongAction.addToPlaylist)
+      ]);
+
+      if (song.preferredColors.target?.id !=
+          song.getCurrentThemeColors(context).id) {
+        items.add(_Item(
+            content: "definir tema como padrão",
+            value: SongAction.defineAsPreferredColors));
+      }
+      if (song.preferredColors.target != null) {
+        items.add(_Item(
+            content: "retirar tema padrão",
+            value: SongAction.removePreferredColors));
+      }
+    }
+
+    if (song.isOnline && song.id == 0) {
+      items.add(_Item(content: "Salvar", value: SongAction.save));
+      items.add(_Item(content: "Baixar", value: SongAction.download));
+    }
+
     return PopupMenuButton(
         // iconSize: 5,
         iconColor: color,
         onSelected: (value) {
           switch (value) {
-            case "edit":
+            case SongAction.save:
+              songStore.saveOnlineSong(song);
+              break;
+            case SongAction.edit:
               GoRouter.of(context).push(SongForm.url, extra: song);
               break;
-            case "currentPlaylist":
+            case SongAction.addToCurrentPlaylist:
               playerStore.addSong(song);
               break;
-            case "addAsNext":
+            case SongAction.addAsNext:
               playerStore.addSongToNext(song);
               break;
-            case "addToPlaylist":
+            case SongAction.download:
+              FilesService.writeAudioFile(song, context);
+              break;
+            case SongAction.addToPlaylist:
               showDialog(
                   context: context,
                   builder: (context) => PlaylistDialog(song: song));
+              break;
+            case SongAction.defineAsPreferredColors:
+              song.preferredColors.target = song.getCurrentThemeColors(context);
+              songStore.save(song);
+              break;
+            case SongAction.removePreferredColors:
+              song.preferredColors.target = null;
+              songStore.save(song);
               break;
           }
         },
@@ -52,7 +95,7 @@ class MusicPopup extends StatelessWidget {
 
 class _Item {
   String content;
-  String value;
+  SongAction value;
 
   _Item({required this.content, required this.value});
 }

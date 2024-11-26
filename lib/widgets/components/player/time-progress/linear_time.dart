@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/models/music_color.dart';
-import 'package:onPlay/services/player_service.dart';
 import 'package:onPlay/store/player_store.dart';
 import 'package:onPlay/widgets/components/player/time-progress/toMinutes.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +21,7 @@ class _LinearTimeState extends State<LinearTime> {
   @override
   Widget build(BuildContext context) {
     final playerStore = Provider.of<PlayerStore>(context);
-    final player = Provider.of<PlayerService>(context);
+    
     final musicColor = widget.musicColor;
     final song = playerStore.playingSong!;
     var musicPosition = seconds != null
@@ -35,7 +34,7 @@ class _LinearTimeState extends State<LinearTime> {
           onChangeEnd: (value) {
             final seconds =
                 ((playerStore.playingSong?.duration ?? 0) * value).floor();
-            player.setPosition(seconds);
+            playerStore.player.seek(seconds);
             setState(() {
               this.seconds = null;
             });

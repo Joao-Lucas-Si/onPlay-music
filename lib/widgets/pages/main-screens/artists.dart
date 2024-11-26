@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/models/artist.dart';
+import 'package:onPlay/store/content/artist_store.dart';
 import 'package:onPlay/store/settings.dart';
-import 'package:onPlay/store/song_store.dart';
 import 'package:onPlay/widgets/components/cards/artist_card.dart';
 import 'package:provider/provider.dart';
 
@@ -12,23 +12,26 @@ class Artists extends StatefulWidget {
 }
 
 class _ArtistsState extends State<Artists> {
-  late SongStore store;
+  late ArtistStore store;
 
   List<Artist> get artists {
     List<Artist> artists = List.from(store.artists);
 
-    return store.artistOrder == "desc" ? artists.reversed.toList() : artists;
+    //return store.artistOrder == "desc" ? artists.reversed.toList() : artists;
+    return artists;
   }
 
   @override
   Widget build(BuildContext context) {
-    store = Provider.of<SongStore>(context);
+    store = Provider.of<ArtistStore>(context);
     final settings = Provider.of<Settings>(context);
-    final gridItems = settings.layout.songGridItems;
+    final gridItems = settings.layout.artistGridItems;
     return Scaffold(
-      body: store.loading != ""
-          ? Text(store.loading)
-          : (gridItems == 1
+      body:
+          // store.loading != ""
+          //     ? Text(store.loading)
+          //     :
+          (gridItems == 1
               ? ListView.builder(
                   itemCount: artists.length,
                   itemBuilder: (context, index) {

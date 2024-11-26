@@ -1,26 +1,24 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:onPlay/models/song.dart';
+import 'package:onPlay/services/audio/adapters/audio_players_adapter.dart';
 
-enum PlayModes {
-  none("none"),
-  replayPlaylist("replayPlaylist"),
-  replayMusic("replayMusic");
-
-  final String name;
-
-  const PlayModes(this.name);
-}
+enum PlayLoopMode { none, replayPlaylist, replayMusic }
 
 class PlayerStore extends ChangeNotifier {
-  List<Song> _playlist = [];
+  BuildContext context;
+
+  late final player = AudioPlayersAdapter(context,
+     listenPosition: (seconds) {
+    position = seconds;
+  }, notify: () {
+    notifyListeners();
+  });
   int? _currentSong;
   var _position = 0;
   var _velocity = 1.0;
   final velocityStep = 0.5;
   final maxVelocity = 5;
-  var _paused = false;
-  var _mode = PlayModes.none;
+  var _mode = PlayLoopMode.none;
 
   double get velocity => _velocity;
 
@@ -29,33 +27,34 @@ class PlayerStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get paused => _paused;
+  bool get paused => player.paused;
 
-  set mode(PlayModes mode) {
+  set mode(PlayLoopMode mode) {
     _mode = mode;
+    player.loopMode = mode;
     notifyListeners();
   }
 
-  PlayModes get mode => _mode;
+  PlayLoopMode get mode => _mode;
 
-  List<Song> get playlist => _playlist;
+  List<Song> get playlist => player.playlist;
 
   addSong(Song song) {
-    _playlist.add(song);
+    player.playlist.add(song);
     notifyListeners();
   }
 
   addSongToNext(Song song) {
-    _playlist.insert((_currentSong ?? 0) + 1, song);
+    player.playlist.insert((_currentSong ?? 0) + 1, song);
     notifyListeners();
   }
 
   set playlist(List<Song> playlist) {
-    _playlist = playlist;
-    if (_playlist.isEmpty) {
+    player.playlist = playlist;
+    if (player.playlist.isEmpty) {
       _currentSong = null;
     } else {
-      mudarMusica = true;
+      //mudarMusica = true;
       _currentSong = 0;
     }
     notifyListeners();
@@ -68,86 +67,39 @@ class PlayerStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  int? get currentSong => _currentSong;
+  int? get currentSong => player.currentSong;
 
   set currentSong(int? song) {
     _position = 0;
     _currentSong = song;
-    mudarMusica = true;
+    //mudarMusica = true;
     notifyListeners();
   }
 
   Song? get playingSong =>
-      _currentSong != null ? _playlist[_currentSong!] : null;
+      player.currentSong != -1 ? player.playlist[_currentSong!] : null;
 
   reset() {
-    _playlist = [];
-    _currentSong = null;
-    _paused = false;
+    player.playlist = [];
+
+    player.paused = false;
 
     notifyListeners();
   }
 
-  bool get hasNext =>
-      _currentSong != null && _currentSong! < _playlist.length - 1;
+  bool get hasNext => player.hasNext;
 
   runNext() {
-    if (hasNext) {
-      mudarMusica = true;
-      _currentSong = _currentSong! + 1;
-    }
+    player.runNext();
     notifyListeners();
   }
 
-  bool get hasPrevious => _currentSong != null && _currentSong! > 0;
+  bool get hasPrevious => player.hasPrevious;
 
   runPrevious() {
-    if (hasPrevious) {
-      mudarMusica = true;
-      _currentSong = _currentSong! - 1;
-    }
+    player.runPrevious();
     notifyListeners();
   }
 
-  onPause() {
-    _paused = true;
-
-    notifyListeners();
-  }
-
-  onPlay() {
-    _paused = false;
-    notifyListeners();
-  }
-
-  var mudarMusica = false;
-
-  onComplete() {
-    if (_currentSong != null && !mudarMusica) {
-      switch (mode) {
-        case PlayModes.none:
-          if (_currentSong! < _playlist.length - 1) {
-            runNext();
-          } else {
-            _currentSong = null;
-          }
-          break;
-        case PlayModes.replayMusic:
-          _currentSong = _currentSong;
-          break;
-        case PlayModes.replayPlaylist:
-          if (_currentSong! < _playlist.length - 1) {
-            runNext();
-          } else {
-            _currentSong = 0;
-          }
-          break;
-      }
-      _position = 0;
-      mudarMusica = true;
-      notifyListeners();
-    }
-  }
-
-  onRun() {}
+  PlayerStore(this.context);
 }

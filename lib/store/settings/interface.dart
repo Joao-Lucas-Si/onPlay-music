@@ -3,9 +3,10 @@ import 'package:onPlay/enums/colors/color_palette.dart';
 import 'package:onPlay/enums/colors/color_schema_type.dart';
 import 'package:onPlay/enums/colors/color_theme.dart';
 import 'package:onPlay/enums/player/controls_type.dart';
-import 'package:onPlay/enums/card_type.dart';
+import 'package:onPlay/enums/card_style.dart';
 import 'package:onPlay/enums/player/picture_type.dart';
 import 'package:onPlay/enums/player/progress_type.dart';
+import 'package:onPlay/enums/player/relationship_style.dart';
 import 'package:onPlay/enums/player/title_type.dart';
 import 'package:onPlay/enums/themes.dart';
 import 'package:onPlay/models/settings/interface.dart';
@@ -29,6 +30,28 @@ class InterfaceSettings {
       _albumCardStyle = CardStyle.image,
       _genreCardStyle = CardStyle.image,
       _playlistCardStyle = CardStyle.image;
+  RelationshipStyle _albumRelationStyle = RelationshipStyle.image,
+      _artistRelationStyle = RelationshipStyle.circleImage,
+      _genreRelationStyle = RelationshipStyle.name;
+
+  RelationshipStyle get artistRelationStyle => _artistRelationStyle;
+  RelationshipStyle get albumRelationStyle => _albumRelationStyle;
+  RelationshipStyle get genreRelationStyle => _genreRelationStyle;
+
+  set artistRelationStyle(RelationshipStyle value) {
+    _artistRelationStyle = value;
+    _notify();
+  }
+
+  set albumRelationStyle(RelationshipStyle value) {
+    _albumRelationStyle = value;
+    _notify();
+  }
+
+  set genreRelationStyle(RelationshipStyle value) {
+    _genreRelationStyle = value;
+    _notify();
+  }
 
   ColorTheme _colorTheme = ColorTheme.totalDark;
   ProgressType _progressType = ProgressType.linear;

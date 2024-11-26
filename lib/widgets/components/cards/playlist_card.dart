@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:onPlay/enums/card_type.dart';
+import 'package:onPlay/enums/card_style.dart';
 import 'package:onPlay/models/playlist.dart';
 import 'package:onPlay/store/settings.dart';
 import 'package:onPlay/widgets/components/cards/item/circular_card.dart';
@@ -24,7 +24,7 @@ class PlaylistCard extends StatelessWidget {
         isInGrid: settings.layout.playlistGridItems > 1,
         extra: Text(playlist.songs.length.toString()),
         isColored: settings.interface.coloredPlaylistCard,
-        colors: playlist.getColors(settings));
+        colors: playlist.getColors(context));
     final style = settings.interface.playlistCardStyle;
 
     return GestureDetector(

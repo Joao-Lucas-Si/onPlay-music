@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/models/music_color.dart';
-import 'package:onPlay/services/player_service.dart';
 import 'package:onPlay/store/player_store.dart';
 import 'package:onPlay/widgets/components/player/time-progress/toMinutes.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +10,6 @@ class SkipTime extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final playerStore = Provider.of<PlayerStore>(context);
-    final player = Provider.of<PlayerService>(context);
 
     return Wrap(
       spacing: 10,
@@ -21,9 +19,9 @@ class SkipTime extends StatelessWidget {
         IconButton(
             onPressed: () {
               if (playerStore.position > 15) {
-                player.setPosition(playerStore.position - 15);
+                playerStore.player.seek(playerStore.position - 15);
               } else {
-                player.setPosition(0);
+                playerStore.player.seek(0);
               }
             },
             icon: Icon(
@@ -47,9 +45,9 @@ class SkipTime extends StatelessWidget {
             onPressed: () {
               if (playerStore.position + 15 <
                   (playerStore.playingSong?.duration ?? 0)) {
-                player.setPosition(playerStore.position + 15);
+                playerStore.player.seek(playerStore.position + 15);
               } else if (playerStore.playingSong?.duration != null) {
-                player.setPosition(playerStore.playingSong!.duration!);
+                playerStore.player.seek(playerStore.playingSong!.duration!);
               }
             },
             icon: Icon(Icons.navigate_next, color: musicColor.text)),

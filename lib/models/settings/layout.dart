@@ -26,24 +26,6 @@ class DatabaseLayoutSettings {
   var containerStyle = ContainerStyle.lateral;
 
   @Transient()
-  var mainScreens = [
-    MainScreens.home,
-    MainScreens.musics,
-    MainScreens.artists,
-    MainScreens.albums,
-    MainScreens.playlists,
-    MainScreens.genres,
-  ];
-
-  List<String> get dbMainScreens =>
-      mainScreens.map((screen) => screen.name).toList();
-
-  set dbMainScreens(List<String> screens) {
-    mainScreens =
-        screens.map((screen) => MainScreens.fromString(screen)).toList();
-  }
-
-  @Transient()
   List<MainScreens> hiddenScreens = [];
 
   List<String> get dbHiddenScreens =>

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onPlay/enums/sorting/song_sorting.dart';
-import 'package:onPlay/store/song_store.dart';
+import 'package:onPlay/store/content/song_store.dart';
 import 'package:provider/provider.dart';
 
 class SongsPopup extends StatefulWidget {

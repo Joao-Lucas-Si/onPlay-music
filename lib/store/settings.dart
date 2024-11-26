@@ -4,10 +4,12 @@ import 'package:onPlay/models/settings/interface.dart';
 import 'package:onPlay/models/settings/layout.dart';
 import 'package:onPlay/models/settings/settings.dart';
 import 'package:onPlay/models/settings/share.dart';
+import 'package:onPlay/models/settings/source.dart';
 import 'package:onPlay/store/settings/interface.dart';
 import 'package:onPlay/store/settings/layout.dart' as lay;
 import 'package:onPlay/store/settings/player.dart';
 import 'package:onPlay/store/settings/share.dart';
+import 'package:onPlay/store/settings/source.dart';
 import 'package:provider/provider.dart';
 
 class Settings extends ChangeNotifier {
@@ -17,7 +19,7 @@ class Settings extends ChangeNotifier {
 
   var recentRange = 30;
 
-  InterfaceSettings get interface => _Interface;
+  InterfaceSettings get interface => _interface;
 
   PlayerSettings get player => _player;
 
@@ -25,8 +27,11 @@ class Settings extends ChangeNotifier {
 
   lay.LayoutSettings get layout => _layout;
 
-  late InterfaceSettings _Interface;
+  SourceSettings get source => _source;
+
+  late InterfaceSettings _interface;
   late lay.LayoutSettings _layout;
+  late SourceSettings _source;
   late ShareSettings _share;
   late PlayerSettings _player;
 
@@ -45,7 +50,7 @@ class Settings extends ChangeNotifier {
     final layoutManager = managers.layoutManager;
     final manager = managers.settingsManager;
 
-    _Interface = InterfaceSettings(
+    _interface = InterfaceSettings(
         notify: (data) {
           notify();
           final showChangePalette = data.showChangePalette;
@@ -67,7 +72,10 @@ class Settings extends ChangeNotifier {
             :coloredGenreCard,
             :coloredSongCard,
             :coloredAlbumCard,
-            :coloredPlaylistCard
+            :coloredPlaylistCard,
+            :albumRelationStyle,
+            :genreRelationStyle,
+            :artistRelationStyle
           ) = data;
 
           final interface = settings.interface.target ??
@@ -92,6 +100,9 @@ class Settings extends ChangeNotifier {
                 coloredGenreCard: coloredGenreCard,
                 coloredPlaylistCard: coloredPlaylistCard,
                 coloredSongCard: coloredSongCard,
+                dbAlbumRelationStyle: albumRelationStyle.name,
+                dbGenreRelationStyle: genreRelationStyle.name,
+                dbArtistRelationStyle: artistRelationStyle.name,
               );
           interface.showChangePalette = showChangePalette;
           interface.showChangeTheme = showChangeTheme;
@@ -113,6 +124,9 @@ class Settings extends ChangeNotifier {
           interface.coloredArtistCard = coloredArtistCard;
           interface.coloredPlaylistCard = coloredPlaylistCard;
           interface.coloredGenreCard = coloredGenreCard;
+          interface.albumRelationStyle = albumRelationStyle;
+          interface.artistRelationStyle = artistRelationStyle;
+          interface.genreRelationStyle = genreRelationStyle;
 
           settings.interface.target = interface;
 
@@ -128,7 +142,6 @@ class Settings extends ChangeNotifier {
           final layout = settings.layout.target ?? DatabaseLayoutSettings();
           layout.containerStyle = data.containerStyle;
           layout.hiddenScreens = data.hiddenScreens;
-          layout.mainScreens = data.mainScreens;
           // layout.lateralElements.clear();
           // layout.lateralElements.addAll(data.lateralElements.map((lateral) => LateralPlayer))
           layout.playerElements = data.playerElements;
@@ -164,6 +177,16 @@ class Settings extends ChangeNotifier {
         },
         database: settings.share.target);
     _player = PlayerSettings(notify: notify, database: settings.player.target);
+    _source = SourceSettings(
+        notify: (data) {
+          final source = settings.source.target ?? DatabaseSourceSettings();
+
+          source.invidiousInstances = data.invidiousInstances;
+
+          settings.source.target = source;
+          manager.save(settings);
+        },
+        database: settings.source.target);
     notify();
   }
 
