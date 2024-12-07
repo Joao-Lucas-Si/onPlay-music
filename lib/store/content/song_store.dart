@@ -216,6 +216,7 @@ class SongStore extends ChangeNotifier {
   }
 
   Future<bool> _getDataFromDb() async {
+    debugPrint(_songManager.count().toString());
     if (_songManager.count() == 0) {
       return false;
     } else {

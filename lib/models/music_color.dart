@@ -31,9 +31,6 @@ class MusicColor extends Serializable {
       return "#${(color.value).toRadixString(16).padLeft(6, '0').toUpperCase().substring(2)}";
     }
 
-    debugPrint(text.value.toString());
-    debugPrint(toHex(text));
-
     return {
       "background": toHex(background),
       "text": toHex(text),

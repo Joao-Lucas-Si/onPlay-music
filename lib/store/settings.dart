@@ -44,7 +44,7 @@ class Settings extends ChangeNotifier {
     final managers = Provider.of<BoxManager>(context, listen: false);
     final user = managers.userManager.getActiveProfile();
     final settings = user.settings.target ?? DatabaseSettings(recentRange: 30);
-    debugPrint(user.settings.target?.interface.target?.colorTheme.name);
+
     final interfaceManager = managers.interfaceManager;
     final shareManager = managers.shareManager;
     final layoutManager = managers.layoutManager;
@@ -130,7 +130,7 @@ class Settings extends ChangeNotifier {
 
           settings.interface.target = interface;
 
-          debugPrint(settings.interface.target?.colorTheme.name);
+       
 
           interfaceManager.save(interface);
           manager.save(settings);

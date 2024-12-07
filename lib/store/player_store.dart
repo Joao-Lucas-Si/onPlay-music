@@ -7,8 +7,7 @@ enum PlayLoopMode { none, replayPlaylist, replayMusic }
 class PlayerStore extends ChangeNotifier {
   BuildContext context;
 
-  late final player = AudioPlayersAdapter(context,
-     listenPosition: (seconds) {
+  late final player = AudioPlayersAdapter(context, listenPosition: (seconds) {
     position = seconds;
   }, notify: () {
     notifyListeners();
@@ -72,6 +71,7 @@ class PlayerStore extends ChangeNotifier {
   set currentSong(int? song) {
     _position = 0;
     _currentSong = song;
+    player.currentSong = song ?? -1;
     //mudarMusica = true;
     notifyListeners();
   }

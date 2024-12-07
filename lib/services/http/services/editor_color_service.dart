@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:onPlay/constants/endpoints/color_extension_endpoints.dart';
 import 'package:onPlay/dtos/json/editor_colors_dto.dart';
 import 'package:onPlay/store/settings.dart';
@@ -15,7 +14,7 @@ class EditorColorService {
   sendColors(EditorColorsDto colors) async {
     for (var url in settings.share.editorUrls) {
       request = HttpRequest(url, EditorColorsDto.fromJson);
-      debugPrint(colors.toJson().toString());
+      
       request.postRequestWithoutResponse(
           ColorExtensionEndpoints.changeTheme, colors);
     }

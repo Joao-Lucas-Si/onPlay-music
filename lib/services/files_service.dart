@@ -19,7 +19,7 @@ class FilesService {
     if (FilesService.permission) {
       return FilesService.permission;
     }
-    final permission = await Permission.storage.request();
+    final permission = await Permission.manageExternalStorage.request();
     FilesService.permission = permission.isGranted;
     return permission.isGranted;
   }

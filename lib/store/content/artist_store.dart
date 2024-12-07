@@ -88,11 +88,8 @@ class ArtistStore extends ChangeNotifier {
   }
 
   void _addArtist(Artist artist) {
-    debugPrint((!_artists.contains(artist)).toString());
     if (!_artists.contains(artist)) {
-      debugPrint(artist.toString());
       _artists.add(artist);
-      debugPrint(_artists.toString());
     }
   }
 }

@@ -77,14 +77,14 @@ class AlbumStore extends ChangeNotifier {
   }
 
   Album _extractFromName(String name, String artistName) {
-    debugPrint("album");
+  
     final albumName = name.trim() == "" ? "desconhecido" : name;
     var album = _albums.firstWhereOrNull((value) =>
         value.name.toLowerCase() == albumName.toLowerCase() &&
         artistName.toLowerCase() == value.artist.target?.name.toLowerCase());
 
     album ??= Album(name: albumName);
-    debugPrint(album.name);
+
     if (album.artist.target == null) {
       final artist = _artistStore.artists.firstWhereOrNull(
           (artist) => artist.name.toLowerCase() == artistName.toLowerCase());
@@ -96,7 +96,7 @@ class AlbumStore extends ChangeNotifier {
   }
 
   Album extractAlbumFromSong(Song song, {String? name, String? artist}) {
-    debugPrint(name);
+
     var album = (name != null && artist != null)
         ? _extractFromName(name, artist)
         : (song.isOnline
