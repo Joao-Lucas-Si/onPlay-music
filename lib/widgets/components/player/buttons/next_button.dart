@@ -10,7 +10,10 @@ class NextButton extends StatelessWidget {
   final bool isInMiniPlayer;
   final MusicColor musicColor;
   const NextButton(
-      {this.isSmall = false, this.isInMiniPlayer = false, super.key, required this.musicColor});
+      {this.isSmall = false,
+      this.isInMiniPlayer = false,
+      super.key,
+      required this.musicColor});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +22,7 @@ class NextButton extends StatelessWidget {
     final interfaceSettings = settings.interface;
 
     return playerStore.hasNext
-        ? InkWell(
+        ? GestureDetector(
             onTap: () {
               playerStore.runNext();
             },

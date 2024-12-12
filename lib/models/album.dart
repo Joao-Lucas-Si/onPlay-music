@@ -7,6 +7,9 @@ import 'package:onPlay/models/music_color.dart';
 import 'package:onPlay/models/song.dart';
 import 'package:objectbox/objectbox.dart';
 import 'package:collection/collection.dart';
+import 'package:onPlay/services/colors/get_base_theme.dart';
+import 'package:onPlay/store/settings.dart';
+import "package:provider/provider.dart";
 
 @Entity()
 class Album {
@@ -19,8 +22,7 @@ class Album {
       songs.firstWhereOrNull((song) => song.picture != null)?.picture;
 
   MusicColor getColors(BuildContext context) =>
-      songs.firstWhereOrNull((song) => song.picture != null)?.currentColors(context) ??
-      purpleTheme;
+      songs.firstWhereOrNull((song) => song.picture != null)?.currentColors(context) ?? getBaseTheme(context.read<Settings>().interface.baseTheme);
 
   final artist = ToOne<Artist>();
 

@@ -541,14 +541,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.9.0"
-  json_serializable:
-    dependency: "direct dev"
-    description:
-      name: json_serializable
-      sha256: c2fcb3920cf2b6ae6845954186420fca40bc0a8abcc84903b7801f17d7050d7c
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.9.0"
   just_audio:
     dependency: "direct main"
     description:
@@ -690,6 +682,14 @@ packages:
     description:
       name: objectbox_flutter_libs
       sha256: c91350bbbce5e6c2038255760b5be988faead004c814f833c2cd137445c6ae70
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.3"
+  objectbox_generator:
+    dependency: "direct dev"
+    description:
+      name: objectbox_generator
+      sha256: "96da521f2cef455cd524f8854e31d64495c50711ad5f1e2cf3142a8e527bc75f"
       url: "https://pub.dev"
     source: hosted
     version: "4.0.3"
@@ -917,6 +917,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+  pointycastle:
+    dependency: transitive
+    description:
+      name: pointycastle
+      sha256: "4be0097fcf3fd3e8449e53730c631200ebc7b88016acecab2b0da2f0149222fe"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.9.1"
   pool:
     dependency: transitive
     description:
@@ -1058,14 +1066,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.0"
-  source_helper:
-    dependency: transitive
-    description:
-      name: source_helper
-      sha256: "6adebc0006c37dd63fe05bca0a929b99f06402fc95aa35bf36d67f5c06de01fd"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.3.4"
   source_span:
     dependency: transitive
     description:

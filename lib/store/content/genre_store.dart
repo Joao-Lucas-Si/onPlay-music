@@ -98,7 +98,5 @@ class GenreStore extends ChangeNotifier {
 
   void saveAll() {
     _manager.saveAll(_genres);
-    _genres = _manager.getAll();
-    notifyListeners();
   }
 }

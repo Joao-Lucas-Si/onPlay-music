@@ -7,6 +7,9 @@ import 'package:onPlay/models/song.dart';
 import 'package:onPlay/models/album.dart';
 import 'package:objectbox/objectbox.dart';
 import 'package:collection/collection.dart';
+import "package:provider/provider.dart";
+import 'package:onPlay/services/colors/get_base_theme.dart';
+import 'package:onPlay/store/settings.dart';
 
 @Entity()
 class Artist {
@@ -19,9 +22,10 @@ class Artist {
       songs.firstWhereOrNull((song) => song.picture != null)?.picture;
   @Transient()
   MusicColor getColors(BuildContext context) =>
-      songs.firstWhereOrNull((song) => song.picture != null)?.currentColors(
-          context) ??
-      purpleTheme;
+      songs
+          .firstWhereOrNull((song) => song.picture != null)
+          ?.currentColors(context) ??
+      getBaseTheme(context.read<Settings>().interface.baseTheme);
 
   @Backlink("artist")
   final songs = ToMany<Song>();

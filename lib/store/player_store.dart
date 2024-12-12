@@ -34,6 +34,16 @@ class PlayerStore extends ChangeNotifier {
     notifyListeners();
   }
 
+  void play() {
+    player.play();
+    notifyListeners();
+  }
+
+  void pause() {
+    player.pause();
+    notifyListeners();
+  }
+
   PlayLoopMode get mode => _mode;
 
   List<Song> get playlist => player.playlist;
@@ -77,7 +87,7 @@ class PlayerStore extends ChangeNotifier {
   }
 
   Song? get playingSong =>
-      player.currentSong != -1 ? player.playlist[_currentSong!] : null;
+      player.currentSong != -1 ? player.playlist[player.currentSong] : null;
 
   reset() {
     player.playlist = [];

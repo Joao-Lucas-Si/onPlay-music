@@ -159,6 +159,7 @@ class ColorPaletteGenerator {
     other ??= purpleTheme.other;
     icon ??= purpleTheme.icon;
     inactive ??= purpleTheme.inactive;
+    
     return MusicColor.create(
         background: background,
         theme: colorTheme,

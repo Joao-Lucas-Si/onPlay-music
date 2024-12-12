@@ -22,11 +22,10 @@ class Song {
   String? pictureMimeType;
   int? duration;
   int? year;
+  @Property(type: PropertyType.date)
   DateTime? modified;
-
   bool isOnline;
-
-  @Property(type: PropertyType.byteVector)
+  //@Property(type: PropertyType.byteVector)
   Uint8List? picture;
 
   // no fields
@@ -40,9 +39,7 @@ class Song {
   final artist = ToOne<Artist>();
   final album = ToOne<Album>();
   final genre = ToOne<Genre>();
-
   final preferredColors = ToOne<MusicColor>();
-
   final colors = ToMany<MusicColor>();
 
   SongMetadata generateMetadata() => SongMetadata(
@@ -76,7 +73,6 @@ class Song {
       this.pictureMimeType,
       this.isOnline = false,
       required this.duration,
-      
       required this.modified,
       required this.year});
 

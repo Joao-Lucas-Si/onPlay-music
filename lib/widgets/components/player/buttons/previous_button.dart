@@ -20,7 +20,7 @@ class PreviousButton extends StatelessWidget {
     final settings = Provider.of<Settings>(context);
     final interfaceSettings = settings.interface;
     return playerStore.hasPrevious
-        ? InkWell(
+        ? GestureDetector(
             onTap: () {
               playerStore.runPrevious();
             },

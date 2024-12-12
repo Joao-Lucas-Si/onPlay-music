@@ -5,9 +5,9 @@ import 'package:onPlay/store/player_store.dart';
 
 abstract class AudioPlayerServiceAdapter {
   BuildContext context;
+  int position = 0;
   AudioPlayerServiceAdapter(this.context,
-      {required this.listenPosition,
-      required this.notify});
+      {required this.listenPosition, required this.notify});
   @protected
   void Function() notify;
 
@@ -54,7 +54,7 @@ abstract class AudioPlayerServiceAdapter {
 
   bool get hasPrevious => currentSong != 0;
 
-  bool get hasNext => currentSong != -1 && currentSong < playlist.length;
+  bool get hasNext => currentSong != -1 && currentSong < playlist.length - 1;
 
   @protected
   Future<String> getOnlineAudio(Song song) async {

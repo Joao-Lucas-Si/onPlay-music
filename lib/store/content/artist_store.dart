@@ -79,8 +79,6 @@ class ArtistStore extends ChangeNotifier {
   void saveAll() {
     debugPrint(_artists.toString());
     _manager.saveAll(_artists);
-    _artists = _manager.getAll();
-    notifyListeners();
   }
 
   void getFromDb() {

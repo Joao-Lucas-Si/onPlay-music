@@ -180,6 +180,7 @@ class FilesService {
         picture: metadata.image,
         title: metadata.title ?? p.basenameWithoutExtension(file.path));
     song.colors.addAll(await colorService.getAllColorFromSong(song));
+    debugPrint(song.colors.length.toString());
     return song;
   }
 

@@ -21,12 +21,22 @@ class BaseManager<Entity> {
     return box.putAsync(entity);
   }
 
-  save(Entity artist) {
+  void save(Entity artist) {
     box.put(artist);
   }
 
-  saveAll(List<Entity> artists) {
-    box.putMany(artists);
+  void saveAll(List<Entity> entities) {
+    box.putMany(entities);
+  }
+
+  void saveAllManually(List<Entity> entities) {
+    for (final entity in entities) {
+      save(entity);
+    }
+  }
+
+  Future<void> saveAllAsync(List<Entity> artists) async {
+    box.putManyAsync(artists);
   }
 
   removeAll() {

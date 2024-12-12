@@ -15,21 +15,6 @@ class ColorService {
   late Settings settings;
   late ColorPaletteGenerator colorPaletteGenerator = ColorPaletteGenerator();
 
-
-  Color toDarken(Color color, [double amount = .1]) {
-    // assert(amount >= 0 && amount <= 1);
-
-    final hsl = HSLColor.fromColor(color);
-    final hslDark = hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
-
-    return hslDark.toColor();
-  }
-  
-  double getLigthness(Color color) {
-    final hsl = HSLColor.fromColor(color);
-    return hsl.lightness;
-  }
-
   Future<PaletteGenerator?> getColorInfo(Uint8List? imageData) async {
     if (imageData != null) {
       final paletteGenerator = await PaletteGenerator.fromImageProvider(
@@ -40,9 +25,9 @@ class ColorService {
     return null;
   }
 
-  Future<MusicColor> getMusicColorFromSong(PaletteGenerator? colorInfo,
+  Future<MusicColor> getMusicColorFromSong(PaletteGenerator colorInfo,
       ColorPalette palette, ColorTheme theme) async {
-    final colorAdapter = ColorAdapter(colorService: this);
+    final colorAdapter = ColorAdapter();
     final defaultValue = MusicColor.create(
         background: purpleTheme.background,
         text: purpleTheme.text,
@@ -53,13 +38,12 @@ class ColorService {
         theme: theme);
 
     var value = defaultValue;
-    if (colorInfo != null) {
-      value = palette == ColorPalette.polychromatic
-          ? colorPaletteGenerator.getPolychromaticPallete(colorInfo, theme)
-          : palette == ColorPalette.monocromatic
-              ? colorPaletteGenerator.getMonocromaticPalette(colorInfo, theme)
-              : colorPaletteGenerator.getNormalPalette(colorInfo, theme);
-    }
+
+    value = palette == ColorPalette.polychromatic
+        ? colorPaletteGenerator.getPolychromaticPallete(colorInfo, theme)
+        : palette == ColorPalette.monocromatic
+            ? colorPaletteGenerator.getMonocromaticPalette(colorInfo, theme)
+            : colorPaletteGenerator.getNormalPalette(colorInfo, theme);
 
     value = theme == ColorTheme.totalDark
         ? colorAdapter.toTotalDarkTheme(value)
@@ -73,10 +57,14 @@ class ColorService {
   Future<List<MusicColor>> getAllColorFromSong(Song song) async {
     final colors = <MusicColor>[];
     final colorInfo = await getColorInfo(song.picture);
-    for (final theme in ColorTheme.values) {
-      for (final palette in ColorPalette.values) {
-        song.colors.add(await getMusicColorFromSong(
-            colorInfo, palette, theme));
+    if (colorInfo == null && song.picture != null) {
+      debugPrint("estranho isso ai");
+    }
+    if (colorInfo != null) {
+      for (final theme in ColorTheme.values) {
+        for (final palette in ColorPalette.values) {
+          colors.add(await getMusicColorFromSong(colorInfo, palette, theme));
+        }
       }
     }
     return colors;

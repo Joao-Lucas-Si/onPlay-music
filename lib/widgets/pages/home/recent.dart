@@ -8,7 +8,7 @@ import 'package:onPlay/widgets/pages/home/home.dart';
 import 'package:provider/provider.dart';
 
 class Recents extends StatelessWidget {
-  const Recents({super.key});
+  Recents({super.key});
   late final SongStore songStore;
   late final Settings settings;
   static const route = "recents";

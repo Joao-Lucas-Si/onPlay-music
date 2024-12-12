@@ -15,12 +15,13 @@ class PlayButton extends StatelessWidget {
     final settings = Provider.of<Settings>(context);
     final interfaceSettings = settings.interface;
 
-    return InkWell(
+    return GestureDetector(
         onTap: () {
+          debugPrint("pause");
           if (playerStore.paused) {
-            playerStore.player.play();
+            playerStore.play();
           } else {
-            playerStore.player.pause();
+            playerStore.pause();
           }
         },
         child: DecoratedBox(

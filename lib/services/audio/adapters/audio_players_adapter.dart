@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
 import 'package:onPlay/dtos/json/editor_colors_dto.dart';
 import 'package:onPlay/models/song.dart';
 import 'package:onPlay/services/audio/audio_player_service_adapter.dart';
@@ -44,7 +45,7 @@ class AudioPlayersAdapter extends AudioPlayerServiceAdapter {
     } else {
       _instance.play(DeviceFileSource(song.path));
     }
-    
+
     EditorColorService(context.read<Settings>()).sendColors(
         EditorColorsDto.fromMusicColor(
             colors: song.currentColors(context),
@@ -55,7 +56,10 @@ class AudioPlayersAdapter extends AudioPlayerServiceAdapter {
 
   void _listenPosition() {
     _instance.onPositionChanged.listen((event) {
-      listenPosition(event.inSeconds);
+      if (event.inSeconds != position) {
+        position = event.inSeconds;
+        listenPosition(event.inSeconds);
+      }
       // if (store!.position != event.inSeconds) {
       //   store!.position = event.inSeconds;
       // }

@@ -29,8 +29,7 @@ class AlbumStore extends ChangeNotifier {
 
   void saveAll() {
     _manager.saveAll(_albums);
-    _albums = _manager.getAll();
-    notifyListeners();
+
   }
 
   void removeAll() {

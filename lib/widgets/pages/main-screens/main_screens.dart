@@ -35,7 +35,9 @@ class _MainScreensState extends State<MainScreen> {
 
   List<BottomNavigationBarItem> getBottomNavigationItems(
       List<MainScreens> hiddenScreens) {
-    return MainScreens.values.where((screen) => !hiddenScreens.contains(screen)).map((screen) {
+    return MainScreens.values
+        .where((screen) => !hiddenScreens.contains(screen))
+        .map((screen) {
       switch (screen) {
         case MainScreens.home:
           return const BottomNavigationBarItem(
@@ -55,9 +57,9 @@ class _MainScreensState extends State<MainScreen> {
         case MainScreens.playlists:
           return const BottomNavigationBarItem(
               icon: Icon(Icons.playlist_play), label: "Playlist");
-        case MainScreens.youtube:
-          return const BottomNavigationBarItem(
-              icon: Icon(Icons.youtube_searched_for), label: "Youtube");
+        // case MainScreens.youtube:
+        //   return const BottomNavigationBarItem(
+        //       icon: Icon(Icons.youtube_searched_for), label: "Youtube");
       }
     }).toList();
   }
@@ -79,8 +81,8 @@ class _MainScreensState extends State<MainScreen> {
           return const Genres();
         case MainScreens.artists:
           return const Artists();
-        case MainScreens.youtube:
-          return const YoutubeScreen();
+        // case MainScreens.youtube:
+        //   return const YoutubeScreen();
       }
     }).toList();
   }

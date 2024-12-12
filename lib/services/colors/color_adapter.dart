@@ -15,7 +15,7 @@ class ColorAdapter {
   final textTotalDark = 0.7;
   final otherTotalDark = 0.4;
 
-   Color toLighten(Color color, [double amount = .1]) {
+  Color toLighten(Color color, [double amount = .1]) {
     // assert(amount >= 0 && amount <= 1);
 
     final hsl = HSLColor.fromColor(color);
@@ -25,12 +25,22 @@ class ColorAdapter {
     return hslLight.toColor();
   }
 
-  final ColorService colorService;
+  Color toDarken(Color color, [double amount = .1]) {
+    // assert(amount >= 0 && amount <= 1);
 
-  ColorAdapter({required this.colorService});
+    final hsl = HSLColor.fromColor(color);
+    final hslDark = hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
+
+    return hslDark.toColor();
+  }
+
+  double getLigthness(Color color) {
+    final hsl = HSLColor.fromColor(color);
+    return hsl.lightness;
+  }
 
   Color _toLight(Color color, double base) {
-    final lightness = colorService.getLigthness(color);
+    final lightness = getLigthness(color);
     if (lightness < base) {
       return toLighten(color, base - lightness);
     }
@@ -38,14 +48,14 @@ class ColorAdapter {
   }
 
   Color _toDark(Color color, double base) {
-    final lightness = colorService.getLigthness(color);
+    final lightness = getLigthness(color);
     if (base < lightness) {
-      color = colorService.toDarken(color, lightness - base);
+      color = toDarken(color, lightness - base);
     }
     return color;
   }
 
-  toLightTheme(MusicColor colors) {
+  MusicColor toLightTheme(MusicColor colors) {
     var background = colors.background;
     var text = colors.text;
     var other = colors.other;
@@ -67,7 +77,7 @@ class ColorAdapter {
     return colors;
   }
 
-  toTotalDarkTheme(MusicColor colors) {
+  MusicColor toTotalDarkTheme(MusicColor colors) {
     var background = colors.background;
     var text = colors.text;
     var other = colors.other;

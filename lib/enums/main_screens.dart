@@ -4,7 +4,7 @@ enum MainScreens {
   artists("artists"),
   albums("albums"),
   genres("genres"),
-  youtube("youtube"),
+  // youtube("youtube"),
   playlists("playlists");
 
   final String name;

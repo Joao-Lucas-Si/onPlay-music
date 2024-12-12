@@ -220,6 +220,7 @@ class SongStore extends ChangeNotifier {
     if (_songManager.count() == 0) {
       return false;
     } else {
+      debugPrint("extraindo");
       _songs = _songManager.getAll();
       _albumStore.getFromDb();
       _artistStore.getFromDb();
@@ -236,18 +237,24 @@ class SongStore extends ChangeNotifier {
     _genreStore.removeEmpty();
   }
 
-  _saveToDb() {
-    _songManager.removeAll();
-    _albumStore.removeAll();
-    _artistStore.removeAll();
-    _genreStore.removeAll();
-    _songManager.saveAll(_songs);
-    _genreStore.saveAll();
-    _albumStore.saveAll();
+  _saveToDb() async {
+    debugPrint("chegou");
+    //_songManager.removeAll();
+    // _albumStore.removeAll();
+    // _artistStore.removeAll();
+    // _genreStore.removeAll();
+    //_songManager.saveAll(List.from(songs));
+    // _genreStore.saveAll();
+    // _albumStore.saveAll();
     _artistStore.saveAll();
-    _songs = _songManager.getAll();
 
-    notifyListeners();
+    debugPrint("chegou");
+
+    // _songs = _songManager.getAll();
+    // _genreStore.getFromDb();
+    // _albumStore.getFromDb();
+    // _artistStore.getFromDb();
+    // notifyListeners();
   }
 
   _saveOneToDb(Song song) {
@@ -262,6 +269,7 @@ class SongStore extends ChangeNotifier {
   }
 
   _getDataFromFiles() {
+    _songManager.removeAll();
     _songs = [];
     _artistStore.removeAll();
     _genreStore.removeAll();
@@ -270,14 +278,17 @@ class SongStore extends ChangeNotifier {
     FilesService.getAllMusics(_setLoading).then((songs) async {
       _songs = songs;
 
-      debugPrint(songs.map((song) => song.artist.target).toString());
-
       _artistStore.extractAllArtists(songs);
-      debugPrint(_artistStore.artists.toString());
+      debugPrint(songs.length.toString());
+      debugPrint(_artistStore.artists.length.toString());
       _genreStore.extractAllGenres(songs);
+      debugPrint(songs.length.toString());
+      debugPrint(_artistStore.artists.length.toString());
+      debugPrint(_genreStore.genres.length.toString());
       _albumStore.extractAllAlbums(songs);
-
-      debugPrint(songs.map((song) => song.artist.target).toString());
+      debugPrint(songs.length.toString());
+      debugPrint(_artistStore.artists.length.toString());
+      debugPrint(_albumStore.albums.length.toString());
 
       await _saveToDb();
     });
